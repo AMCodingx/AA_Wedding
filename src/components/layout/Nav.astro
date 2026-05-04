@@ -1,0 +1,82 @@
+---
+import { useTranslations, type Locale } from '~/i18n';
+import { href, type RouteKey } from '~/lib/url';
+
+interface Props {
+  locale: Locale;
+  current?: RouteKey;
+}
+
+const { locale, current } = Astro.props;
+const t = useTranslations(locale);
+
+interface Item {
+  key: RouteKey;
+  label: string;
+}
+
+const items: Item[] = [
+  { key: 'home', label: t('nav.home') },
+  { key: 'wedding', label: t('nav.wedding') },
+  { key: 'travel', label: t('nav.travel') },
+  { key: 'rsvp', label: t('nav.rsvp') },
+];
+---
+
+<nav class="nav" aria-label={t('nav.menu')}>
+  <ul class="nav__list">
+    {
+      items.map((item) => (
+        <li>
+          <a
+            class="nav__link"
+            href={href(locale, item.key)}
+            aria-current={item.key === current ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .nav__list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .nav__link {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    font-size: var(--fs-sm);
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      color var(--dur-fast) var(--ease-out);
+  }
+
+  .nav__link:hover {
+    background: var(--surface);
+  }
+
+  .nav__link[aria-current='page'] {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  @media (max-width: 720px) {
+    .nav__list {
+      gap: var(--space-1);
+    }
+    .nav__link {
+      padding: var(--space-2);
+      font-size: var(--fs-xs);
+    }
+  }
+</style>

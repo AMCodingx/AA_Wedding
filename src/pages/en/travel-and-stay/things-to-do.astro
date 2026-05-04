@@ -1,0 +1,36 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Section from '~/components/ui/Section.astro';
+import ThingsToDo from '~/features/travel/ThingsToDo.astro';
+import { useTranslations } from '~/i18n';
+
+const locale = 'en' as const;
+const t = useTranslations(locale);
+---
+
+<PageLayout
+  locale={locale}
+  routeKey="travelThings"
+  title={t('travel.things.title')}
+  description={t('travel.intro')}
+>
+  <Section tone="shell" spacing="lg" width="narrow">
+    <header class="page-header stack-sm">
+      <h1>{t('travel.things.title')}</h1>
+      <p>{t('travel.intro')}</p>
+    </header>
+  </Section>
+
+  <Section tone="elevated" spacing="lg">
+    <ThingsToDo locale={locale} />
+  </Section>
+</PageLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+  }
+  .page-header p {
+    color: var(--text-muted);
+  }
+</style>

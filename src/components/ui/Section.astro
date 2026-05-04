@@ -1,0 +1,73 @@
+---
+interface Props {
+  id?: string;
+  /** Background tone — picks from the design tokens. */
+  tone?: 'shell' | 'mist' | 'sand' | 'sea' | 'elevated';
+  /** Vertical rhythm. */
+  spacing?: 'sm' | 'md' | 'lg';
+  /** Constrains inner width. */
+  width?: 'narrow' | 'default';
+  class?: string;
+}
+
+const {
+  id,
+  tone = 'shell',
+  spacing = 'lg',
+  width = 'default',
+  class: className = '',
+} = Astro.props;
+
+const classes = ['section', `section--${tone}`, `section--${spacing}`, className]
+  .filter(Boolean)
+  .join(' ');
+const containerClass = width === 'narrow' ? 'container container--narrow' : 'container';
+---
+
+<section id={id} class={classes}>
+  <div class={containerClass}>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    width: 100%;
+  }
+  .section--shell {
+    background: var(--bg);
+    color: var(--text);
+  }
+  .section--mist {
+    background: var(--surface);
+    color: var(--text);
+  }
+  .section--sand {
+    background: var(--warm);
+    color: var(--text);
+  }
+  .section--sea {
+    background: var(--accent);
+    color: var(--text-on-accent);
+  }
+  .section--elevated {
+    background: var(--bg-elevated);
+    color: var(--text);
+  }
+
+  .section--sm {
+    padding-block: var(--space-8);
+  }
+  .section--md {
+    padding-block: var(--space-12);
+  }
+  .section--lg {
+    padding-block: var(--space-16);
+  }
+
+  @media (min-width: 768px) {
+    .section--lg {
+      padding-block: var(--space-24);
+    }
+  }
+</style>

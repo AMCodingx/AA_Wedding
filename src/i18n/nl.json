@@ -1,0 +1,63 @@
+{
+  "site.title": "Onze Bruiloft",
+  "site.tagline": "Een feest aan de Caribische zee",
+
+  "nav.home": "Home",
+  "nav.wedding": "De Bruiloft",
+  "nav.travel": "Reizen & Verblijf",
+  "nav.rsvp": "RSVP",
+  "nav.skip": "Naar inhoud",
+  "nav.menu": "Menu",
+  "nav.close": "Sluiten",
+
+  "lang.label": "Taal",
+
+  "home.hero.cta.rsvp": "Bevestig je komst",
+  "home.hero.cta.details": "Bekijk details",
+  "home.weather.label": "nu",
+  "home.weather.loading": "—",
+  "home.countdown.label": "Nog",
+  "home.countdown.days": "dagen",
+  "home.countdown.hours": "uren",
+  "home.countdown.minutes": "min",
+  "home.countdown.seconds": "sec",
+
+  "wedding.title": "De Bruiloft",
+  "wedding.intro": "We zouden het geweldig vinden als je erbij bent.",
+  "wedding.date.title": "Datum & tijd",
+  "wedding.date.ceremony": "Ceremonie",
+  "wedding.date.reception": "Receptie",
+  "wedding.location.title": "Locatie",
+  "wedding.location.area": "Een strand bij Porto Marie",
+  "wedding.location.region": "Curaçao",
+  "wedding.location.detail": "De exacte plek delen we dichter bij de datum.",
+  "wedding.faq.title": "Extra informatie en FAQ",
+  "wedding.faq.intro": "De antwoorden op wat ons het meest gevraagd wordt.",
+
+  "travel.title": "Reizen & Verblijf",
+  "travel.intro": "Zodat je net zoveel van het eiland kunt genieten als wij.",
+  "travel.places.title": "Accommodatie",
+  "travel.things.title": "Wat te doen",
+  "travel.tabs.activities": "Activiteiten",
+  "travel.tabs.culture": "Cultuur",
+  "travel.tabs.food": "Eten",
+  "travel.tabs.beaches": "Stranden",
+
+  "rsvp.title": "Bevestig je komst",
+  "rsvp.intro": "Geen formulier — gewoon een berichtje.",
+
+  "rsvp.note.headline": "Stuur ons een bericht",
+  "rsvp.note.lead": "Geen formulier, geen knop om aan te klikken. Een appje is genoeg.",
+  "rsvp.note.checklist.intro": "Vermeld in je bericht:",
+  "rsvp.note.item1": "Of je komt.",
+  "rsvp.note.item2": "Eventuele dieetwensen (vegetarisch, allergieën, enz.).",
+  "rsvp.note.item3": "Wil je met onze pendelbus mee? Vertel waar je verblijft en we plannen een ophaalmoment.",
+
+  "rsvp.directive.before": "Stuur ",
+  "rsvp.directive.between": " of ",
+  "rsvp.directive.after": " een tekstje of appje.",
+
+  "footer.madeWith": "Met liefde gemaakt",
+  "footer.contact": "Contact",
+  "footer.copyright": "© 2027"
+}

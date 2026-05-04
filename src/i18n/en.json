@@ -1,0 +1,63 @@
+{
+  "site.title": "Our Wedding",
+  "site.tagline": "A celebration on the Caribbean coast",
+
+  "nav.home": "Home",
+  "nav.wedding": "The Wedding",
+  "nav.travel": "Travel & Stay",
+  "nav.rsvp": "RSVP",
+  "nav.skip": "Skip to content",
+  "nav.menu": "Menu",
+  "nav.close": "Close",
+
+  "lang.label": "Language",
+
+  "home.hero.cta.rsvp": "RSVP",
+  "home.hero.cta.details": "See details",
+  "home.weather.label": "now",
+  "home.weather.loading": "—",
+  "home.countdown.label": "In",
+  "home.countdown.days": "days",
+  "home.countdown.hours": "hours",
+  "home.countdown.minutes": "min",
+  "home.countdown.seconds": "sec",
+
+  "wedding.title": "The Wedding",
+  "wedding.intro": "We'd love to have you with us on this special day.",
+  "wedding.date.title": "Date & time",
+  "wedding.date.ceremony": "Ceremony",
+  "wedding.date.reception": "Reception",
+  "wedding.location.title": "Venue",
+  "wedding.location.area": "A beach near Porto Marie",
+  "wedding.location.region": "Curaçao",
+  "wedding.location.detail": "We'll share the exact spot closer to the date.",
+  "wedding.faq.title": "Extra info & FAQ",
+  "wedding.faq.intro": "Answers to the things you're most likely to wonder.",
+
+  "travel.title": "Travel & Stay",
+  "travel.intro": "So you can enjoy the island as much as we do.",
+  "travel.places.title": "Where to stay",
+  "travel.things.title": "Things to do",
+  "travel.tabs.activities": "Activities",
+  "travel.tabs.culture": "Culture",
+  "travel.tabs.food": "Food",
+  "travel.tabs.beaches": "Beaches",
+
+  "rsvp.title": "RSVP",
+  "rsvp.intro": "No form — just send us a message.",
+
+  "rsvp.note.headline": "Text us to RSVP",
+  "rsvp.note.lead": "No form, no link to fill in. A message is enough.",
+  "rsvp.note.checklist.intro": "When you message, tell us:",
+  "rsvp.note.item1": "Whether you're coming.",
+  "rsvp.note.item2": "Any dietary wishes (vegetarian, allergies, the usual).",
+  "rsvp.note.item3": "If you'd like a seat in our shuttle, mention where you're staying — we'll plan the pickup.",
+
+  "rsvp.directive.before": "Send ",
+  "rsvp.directive.between": " or ",
+  "rsvp.directive.after": " a text or a WhatsApp.",
+
+  "footer.madeWith": "Made with love",
+  "footer.contact": "Contact",
+  "footer.copyright": "© 2027"
+}

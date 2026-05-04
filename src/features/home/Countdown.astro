@@ -1,0 +1,171 @@
+---
+/**
+ * Countdown — single-piece clock face.
+ *
+ * Server-rendered with the snapshot at build time, then a tiny
+ * inline script ticks it client-side. Static fallback ensures it's
+ * never blank if JS is disabled.
+ */
+import { useTranslations, type Locale } from '~/i18n';
+import { countdownTo } from '~/lib/date';
+import { WEDDING } from '~/lib/wedding';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const target = WEDDING.ceremonyAt;
+const initial = countdownTo(target);
+
+const segments = [
+  { id: 'days', label: t('home.countdown.days'), value: initial.days, pad: 0 },
+  { id: 'hours', label: t('home.countdown.hours'), value: initial.hours, pad: 2 },
+  { id: 'minutes', label: t('home.countdown.minutes'), value: initial.minutes, pad: 2 },
+  { id: 'seconds', label: t('home.countdown.seconds'), value: initial.seconds, pad: 2 },
+] as const;
+
+const display = (n: number, pad: number) => (pad ? String(n).padStart(pad, '0') : String(n));
+---
+
+<section class="countdown" aria-label={t('home.countdown.label')}>
+  <p class="countdown__label">{t('home.countdown.label')}</p>
+
+  <ol class="clock" data-target={target.toISOString()}>
+    {
+      segments.map((seg) => (
+        <li class="clock__seg">
+          <span class="clock__num" data-segment={seg.id} data-pad={seg.pad}>
+            {display(seg.value, seg.pad)}
+          </span>
+          <span class="clock__unit">{seg.label}</span>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLOListElement>('.clock');
+  if (root) {
+    const target = new Date(root.dataset.target!).getTime();
+    const cells = root.querySelectorAll<HTMLElement>('[data-segment]');
+
+    const display = (n: number, pad: number) => {
+      const v = Math.max(0, n);
+      return pad ? String(v).padStart(pad, '0') : String(v);
+    };
+
+    const tick = () => {
+      const diff = Math.max(0, target - Date.now());
+      const totalSeconds = Math.floor(diff / 1000);
+      const v = {
+        days: Math.floor(totalSeconds / 86_400),
+        hours: Math.floor((totalSeconds % 86_400) / 3_600),
+        minutes: Math.floor((totalSeconds % 3_600) / 60),
+        seconds: totalSeconds % 60,
+      };
+      cells.forEach((cell) => {
+        const key = cell.dataset.segment as keyof typeof v | undefined;
+        if (!key) return;
+        const pad = Number(cell.dataset.pad ?? 0);
+        cell.textContent = display(v[key], pad);
+      });
+    };
+
+    tick();
+    setInterval(tick, 1000);
+  }
+</script>
+
+<style>
+  .countdown {
+    text-align: center;
+  }
+
+  .countdown__label {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    color: var(--text-muted);
+    margin: 0 0 var(--space-4);
+    line-height: 1;
+  }
+
+  /* —— Single clock-face surface with auto-sized segments. —— */
+  .clock {
+    display: inline-grid;
+    /* Each segment sizes to its own content so 3-digit days fit cleanly. */
+    grid-auto-flow: column;
+    grid-auto-columns: auto;
+    align-items: stretch;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-3) var(--space-2);
+    list-style: none;
+    margin: 0 auto;
+    max-width: 100%;
+    /* Lets the inner segments shrink/grow without wrapping. */
+    overflow: hidden;
+  }
+
+  .clock__seg {
+    position: relative;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    align-items: end;
+    justify-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) clamp(var(--space-3), 1vw + var(--space-2), var(--space-6));
+    min-width: 0;
+  }
+
+  /* Hairline divider between segments — never on the first. */
+  .clock__seg + .clock__seg::before {
+    content: '';
+    position: absolute;
+    inset: 18% auto 18% 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .clock__num {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.1rem + 4.5vw, 3.75rem);
+    font-weight: 400;
+    line-height: 0.95;
+    color: var(--accent);
+    /* Reklame Script is proportional — no tabular nums available. */
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+
+  .clock__unit {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: var(--fs-xs);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    line-height: 1;
+  }
+
+  /* Compact mode for very narrow screens — keeps the clock-like feel,
+     just tightens spacing without ever wrapping or clipping. */
+  @media (max-width: 420px) {
+    .clock {
+      padding: var(--space-2) var(--space-1);
+      width: 100%;
+    }
+    .clock__seg {
+      padding-inline: var(--space-2);
+      gap: var(--space-1);
+    }
+    .clock__unit {
+      letter-spacing: 0.1em;
+    }
+  }
+</style>

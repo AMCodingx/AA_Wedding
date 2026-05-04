@@ -1,0 +1,84 @@
+---
+import Icon from '~/components/ui/Icon.astro';
+import { useTranslations, type Locale } from '~/i18n';
+import { formatLongDate, formatTime } from '~/lib/date';
+import { WEDDING } from '~/lib/wedding';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<article class="wedding-date stack">
+  <header class="wedding-date__header">
+    <Icon name="calendar" size={28} />
+    <h2>{t('wedding.date.title')}</h2>
+  </header>
+
+  <p class="wedding-date__day">
+    {formatLongDate(WEDDING.ceremonyAt, locale)}
+  </p>
+
+  <dl class="wedding-date__schedule">
+    <div>
+      <dt>{t('wedding.date.ceremony')}</dt>
+      <dd>{formatTime(WEDDING.ceremonyAt, locale)}</dd>
+    </div>
+    <div>
+      <dt>{t('wedding.date.reception')}</dt>
+      <dd>{formatTime(WEDDING.receptionAt, locale)}</dd>
+    </div>
+  </dl>
+</article>
+
+<style>
+  .wedding-date__header {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--accent);
+  }
+  .wedding-date__header h2 {
+    color: var(--text);
+  }
+
+  .wedding-date__day {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    color: var(--text);
+  }
+
+  .wedding-date__schedule {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 540px) {
+    .wedding-date__schedule {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .wedding-date__schedule div {
+    padding: var(--space-4);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+  .wedding-date__schedule dt {
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .wedding-date__schedule dd {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    margin: 0;
+    margin-block-start: var(--space-1);
+    color: var(--text);
+  }
+</style>

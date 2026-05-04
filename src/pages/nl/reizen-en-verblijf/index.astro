@@ -1,0 +1,84 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Section from '~/components/ui/Section.astro';
+import Card from '~/components/ui/Card.astro';
+import Icon from '~/components/ui/Icon.astro';
+import { useTranslations } from '~/i18n';
+import { href } from '~/lib/url';
+
+const locale = 'nl' as const;
+const t = useTranslations(locale);
+---
+
+<PageLayout
+  locale={locale}
+  routeKey="travel"
+  title={t('travel.title')}
+  description={t('travel.intro')}
+>
+  <Section tone="shell" spacing="lg" width="narrow">
+    <header class="page-header stack-sm">
+      <h1>{t('travel.title')}</h1>
+      <p>{t('travel.intro')}</p>
+    </header>
+  </Section>
+
+  <Section tone="elevated" spacing="lg">
+    <ul class="travel-grid">
+      <li>
+        <Card href={href(locale, 'travelPlaces')} elevation="sm" class="travel-card">
+          <span class="travel-card__icon">
+            <Icon name="bed" size={26} />
+          </span>
+          <h2>{t('travel.places.title')}</h2>
+          <p>Hotels, appartementen en boerderijhuisjes die wij aanraden.</p>
+        </Card>
+      </li>
+      <li>
+        <Card href={href(locale, 'travelThings')} elevation="sm" class="travel-card">
+          <span class="travel-card__icon">
+            <Icon name="sun" size={26} />
+          </span>
+          <h2>{t('travel.things.title')}</h2>
+          <p>Activiteiten, cultuur, eten en stranden.</p>
+        </Card>
+      </li>
+    </ul>
+  </Section>
+</PageLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+  }
+  .page-header p {
+    color: var(--text-muted);
+  }
+  .travel-grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) {
+    .travel-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .travel-card h2 {
+    font-size: var(--fs-lg);
+    margin: var(--space-3) 0 var(--space-2);
+  }
+  .travel-card p {
+    color: var(--text-muted);
+  }
+  .travel-card__icon {
+    display: inline-flex;
+    width: 3rem;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: var(--radius-md);
+  }
+</style>

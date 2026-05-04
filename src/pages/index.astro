@@ -1,0 +1,44 @@
+---
+/**
+ * Root URL → pick a locale.
+ *
+ * In static output we can't read Accept-Language, so the build emits a
+ * tiny HTML page that redirects on the client based on either a saved
+ * preference (localStorage) or the browser's language. Bots fall back
+ * to the default-locale via the meta refresh.
+ */
+import { DEFAULT_LOCALE, LOCALES } from '~/i18n/locales';
+const fallback = `/${DEFAULT_LOCALE}/`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Wedding</title>
+    <meta http-equiv="refresh" content={`0; url=${fallback}`} />
+    <link rel="canonical" href={fallback} />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <script is:inline define:vars={{ locales: LOCALES, fallback, key: 'wedding.locale' }}>
+      try {
+        const saved = localStorage.getItem(key);
+        if (saved && locales.includes(saved)) {
+          window.location.replace(`/${saved}/`);
+        } else {
+          const browser = (navigator.language || '').slice(0, 2).toLowerCase();
+          const target = locales.includes(browser) ? `/${browser}/` : fallback;
+          window.location.replace(target);
+        }
+      } catch {
+        window.location.replace(fallback);
+      }
+    </script>
+    <noscript>
+      <p>
+        <a href={fallback}>Continue</a>
+      </p>
+    </noscript>
+  </body>
+</html>

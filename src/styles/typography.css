@@ -1,0 +1,99 @@
+/* ============================================================
+ * Typography
+ *   Titles      → Reklame Script Regular (display)
+ *   Subtitles   → Poppins SemiBold (600)
+ *   Body        → Poppins ExtraLight (200)
+ *
+ * Self-host the WOFF2 files in /public/fonts/. The @font-face
+ * declarations below are the contract.
+ * ============================================================ */
+
+@font-face {
+  font-family: 'Reklame Script';
+  src: url('/fonts/reklame-script-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('/fonts/poppins-variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-display:
+    'Reklame Script', 'Brush Script MT', 'Segoe Script', cursive;
+  --font-subtitle:
+    'Poppins', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-body: var(--font-subtitle);
+
+  --weight-body: 200;     /* Poppins ExtraLight */
+  --weight-subtitle: 600; /* Poppins SemiBold */
+}
+
+html {
+  font-family: var(--font-body);
+  font-size: 100%;
+  font-weight: var(--weight-body);
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.05;
+  color: var(--text);
+}
+
+h1 {
+  font-size: var(--fs-2xl);
+}
+h2 {
+  font-size: var(--fs-xl);
+}
+h3 {
+  font-size: var(--fs-lg);
+}
+
+/* h4 is a "subtitle" — Poppins SemiBold, slightly tracked. */
+h4 {
+  font-family: var(--font-subtitle);
+  font-weight: var(--weight-subtitle);
+  font-size: var(--fs-base);
+  letter-spacing: 0.01em;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+p {
+  font-size: var(--fs-base);
+  color: var(--text);
+}
+
+small {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  transition: text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+a:hover {
+  text-decoration-color: var(--text);
+}

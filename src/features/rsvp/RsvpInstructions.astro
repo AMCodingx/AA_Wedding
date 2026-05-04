@@ -1,0 +1,221 @@
+---
+import { useTranslations, type Locale } from '~/i18n';
+import { WEDDING } from '~/lib/wedding';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const items = [t('rsvp.note.item1'), t('rsvp.note.item2'), t('rsvp.note.item3')] as const;
+---
+
+<section class="note">
+  <header class="note__head">
+    <h2 class="note__headline">{t('rsvp.note.headline')}</h2>
+    <p class="note__lead">{t('rsvp.note.lead')}</p>
+  </header>
+
+  <div class="note__body">
+    <p class="note__cue">{t('rsvp.note.checklist.intro')}</p>
+
+    <ol class="checklist">
+      {
+        items.map((text, i) => (
+          <li class="checklist__item">
+            <span class="checklist__num" aria-hidden="true">{i + 1}</span>
+            <span class="checklist__text">{text}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <p class="directive">
+    <span class="directive__txt">{t('rsvp.directive.before')}</span>
+    <span class="directive__name">{WEDDING.couple.partnerOne}</span>
+    <span class="directive__txt">{t('rsvp.directive.between')}</span>
+    <span class="directive__name">{WEDDING.couple.partnerTwo}</span>
+    <span class="directive__txt">{t('rsvp.directive.after')}</span>
+  </p>
+
+  <svg class="note__leaf" viewBox="0 0 120 200" aria-hidden="true" focusable="false">
+    <g class="note__leaf-g">
+      <path
+        d="M60 4
+           C 28 28, 16 80, 30 130
+           C 36 152, 50 178, 60 196
+           C 70 178, 84 152, 90 130
+           C 104 80, 92 28, 60 4 Z"
+      />
+      <path d="M60 14 L60 188" />
+      <path d="M60 36 C 46 44, 38 60, 32 80" />
+      <path d="M60 36 C 74 44, 82 60, 88 80" />
+      <path d="M60 64 C 44 76, 36 96, 32 116" />
+      <path d="M60 64 C 76 76, 84 96, 88 116" />
+      <path d="M60 96 C 46 108, 40 128, 38 148" />
+      <path d="M60 96 C 74 108, 80 128, 82 148" />
+    </g>
+  </svg>
+</section>
+
+<style>
+  .note {
+    position: relative;
+    isolation: isolate;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-lg);
+    padding: var(--space-12) var(--space-8);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .note::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse at 0% 0%, var(--c-shell) 0%, transparent 40%),
+      radial-gradient(ellipse at 100% 100%, var(--accent-soft) 0%, transparent 45%),
+      var(--bg-elevated);
+    opacity: 0.9;
+  }
+
+  .note__leaf {
+    position: absolute;
+    inset: auto -20px -10px auto;
+    width: 9rem;
+    height: auto;
+    z-index: -1;
+    color: var(--accent);
+    opacity: 0.13;
+    transform: rotate(18deg);
+    pointer-events: none;
+  }
+  .note__leaf-g {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* —— Headline —— */
+  .note__head {
+    margin-block-end: var(--space-8);
+  }
+
+  .note__headline {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.4rem + 3vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  .note__lead {
+    font-family: var(--font-body);
+    font-weight: var(--weight-body);
+    font-size: var(--fs-lg);
+    color: var(--text);
+    line-height: 1.5;
+    max-width: 36ch;
+    margin: var(--space-4) auto 0;
+  }
+
+  /* —— Body / checklist —— */
+  .note__body {
+    max-width: 38rem;
+    margin-inline: auto;
+    text-align: left;
+  }
+
+  .note__cue {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: var(--fs-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--text-muted);
+    text-align: center;
+    margin-block-end: var(--space-6);
+  }
+  .note__cue::before,
+  .note__cue::after {
+    content: '';
+    display: inline-block;
+    width: 2.5rem;
+    height: 1px;
+    background: currentColor;
+    vertical-align: middle;
+    margin-inline: var(--space-3);
+    opacity: 0.4;
+  }
+
+  .checklist {
+    display: grid;
+    gap: var(--space-5);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .checklist__item {
+    display: grid;
+    grid-template-columns: 3.25rem 1fr;
+    align-items: baseline;
+    gap: var(--space-4);
+  }
+
+  .checklist__num {
+    font-family: var(--font-display);
+    font-size: 3.5rem;
+    line-height: 0.9;
+    font-weight: 400;
+    color: var(--accent);
+    text-align: center;
+    transform: translateY(0.1em);
+    opacity: 0.9;
+  }
+
+  .checklist__text {
+    font-family: var(--font-body);
+    font-weight: var(--weight-body);
+    font-size: var(--fs-base);
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  /* —— Directive sentence — replaces the old contact cards —— */
+  .directive {
+    margin: var(--space-12) auto 0;
+    max-width: 32ch;
+    font-family: var(--font-body);
+    font-weight: var(--weight-body);
+    font-size: var(--fs-lg);
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .directive__txt {
+    /* Whitespace-significant — preserve the leading/trailing spaces. */
+    white-space: pre-wrap;
+  }
+
+  .directive__name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.4em;
+    color: var(--accent);
+    line-height: 1;
+    /* Lift slightly so the script glyph sits on the same baseline. */
+    display: inline-block;
+    transform: translateY(0.06em);
+  }
+</style>

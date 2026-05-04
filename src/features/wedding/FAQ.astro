@@ -1,0 +1,77 @@
+---
+import Accordion from '~/components/ui/Accordion.astro';
+import { FAQ_ENTRIES } from './faq.data';
+import { FAQ_CATEGORY_LABELS, type FaqCategory } from './faq.types';
+import { useTranslations, type Locale } from '~/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const grouped = FAQ_ENTRIES.reduce<Record<FaqCategory, typeof FAQ_ENTRIES>>(
+  (acc, entry) => {
+    (acc[entry.category] ||= []).push(entry);
+    return acc;
+  },
+  {} as Record<FaqCategory, typeof FAQ_ENTRIES>,
+);
+
+const categoryOrder: FaqCategory[] = ['stay', 'kids', 'attire', 'transport', 'other'];
+---
+
+<div class="stack faq">
+  <header class="faq__header">
+    <h2>{t('wedding.faq.title')}</h2>
+    <p>{t('wedding.faq.intro')}</p>
+  </header>
+
+  {
+    categoryOrder.map((cat) => {
+      const entries = grouped[cat];
+      if (!entries?.length) return null;
+      return (
+        <section class="faq__category" aria-labelledby={`faq-cat-${cat}`}>
+          <h3 id={`faq-cat-${cat}`} class="faq__category-title">
+            {FAQ_CATEGORY_LABELS[cat][locale]}
+          </h3>
+          <div>
+            {entries.map((entry) => (
+              <Accordion group={`faq-${cat}`}>
+                <Fragment slot="title">
+                  <span id={entry.id}>{entry.question[locale]}</span>
+                </Fragment>
+                <p>{entry.answer[locale]}</p>
+              </Accordion>
+            ))}
+          </div>
+        </section>
+      );
+    })
+  }
+</div>
+
+<style>
+  .faq__header {
+    text-align: center;
+    margin-block-end: var(--space-8);
+  }
+  .faq__header p {
+    color: var(--text-muted);
+    margin-block-start: var(--space-3);
+  }
+
+  .faq__category + .faq__category {
+    margin-block-start: var(--space-12);
+  }
+
+  .faq__category-title {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-weight: 500;
+    color: var(--accent);
+    margin-block-end: var(--space-4);
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Section from '~/components/ui/Section.astro';
+import Hero from '~/features/home/Hero.astro';
+import Countdown from '~/features/home/Countdown.astro';
+import { useTranslations } from '~/i18n';
+
+const locale = 'nl' as const;
+const t = useTranslations(locale);
+---
+
+<PageLayout
+  locale={locale}
+  routeKey="home"
+  title={t('site.title')}
+  description={t('site.tagline')}
+>
+  <Hero locale={locale} />
+
+  <Section tone="shell" spacing="lg">
+    <Countdown locale={locale} />
+  </Section>
+</PageLayout>

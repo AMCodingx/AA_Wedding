@@ -1,0 +1,243 @@
+---
+import { Image } from 'astro:assets';
+import Button from '~/components/ui/Button.astro';
+import IslandWeather from './IslandWeather.astro';
+import couplePhoto from '~/assets/hero/couple.jpg';
+import { useTranslations, type Locale } from '~/i18n';
+import { href } from '~/lib/url';
+import { formatLongDate } from '~/lib/date';
+import { WEDDING } from '~/lib/wedding';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const dateLabel = formatLongDate(WEDDING.ceremonyAt, locale);
+---
+
+<section class="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+
+  <div class="container hero__inner">
+    <figure class="hero__media">
+      <Image
+        src={couplePhoto}
+        alt={`${WEDDING.couple.partnerOne} & ${WEDDING.couple.partnerTwo}`}
+        widths={[400, 600, 900, 1200]}
+        sizes="(min-width: 1024px) 28rem, (min-width: 720px) 22rem, 70vw"
+        loading="eager"
+        decoding="async"
+        format="avif"
+        quality={78}
+        class="hero__photo"
+      />
+    </figure>
+
+    <div class="hero__text">
+      <h1 class="hero__title">
+        <span>{WEDDING.couple.partnerOne}</span>
+        <span class="hero__amp">&amp;</span>
+        <span>{WEDDING.couple.partnerTwo}</span>
+      </h1>
+
+      <p class="hero__date">{dateLabel}</p>
+
+      <div class="hero__weather">
+        <IslandWeather locale={locale} />
+      </div>
+
+      <p class="hero__venue">{WEDDING.venue.region}</p>
+
+      <div class="hero__cta">
+        <Button variant="primary" size="lg" href={href(locale, 'rsvp')}>
+          {t('home.hero.cta.rsvp')}
+        </Button>
+        <Button variant="outline" size="lg" href={href(locale, 'wedding')}>
+          {t('home.hero.cta.details')}
+        </Button>
+      </div>
+    </div>
+  </div>
+
+  <svg class="hero__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,64 C240,112 480,16 720,48 C960,80 1200,112 1440,64 L1440,120 L0,120 Z"></path>
+  </svg>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding-block: var(--space-16) var(--space-16);
+    color: var(--text);
+  }
+
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse at 20% 0%, var(--c-sand) 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 100%, var(--c-sea-soft) 0%, transparent 55%),
+      linear-gradient(180deg, var(--c-shell) 0%, var(--c-mist) 100%);
+  }
+
+  .hero__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+  }
+
+  /* —— Photo —— */
+  .hero__media {
+    margin: 0;
+    width: min(20rem, 70vw);
+    transform: rotate(-1.5deg);
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .hero__media:hover {
+    transform: rotate(0deg);
+  }
+
+  .hero__photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+    /* Polaroid-ish white margin + soft shadow + hairline */
+    padding: var(--space-2);
+    box-shadow:
+      0 1px 0 rgba(31, 58, 56, 0.04) inset,
+      0 18px 40px -12px rgba(31, 58, 56, 0.28),
+      0 4px 10px -2px rgba(31, 58, 56, 0.12);
+  }
+
+  /* —— Text column —— */
+  .hero__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    max-width: 28rem;
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-2xl);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-block-start: var(--space-3);
+  }
+
+  .hero__title > span {
+    display: inline-block;
+  }
+
+  .hero__amp {
+    font-style: italic;
+    color: var(--accent);
+    margin-inline: 0.15em;
+  }
+
+  .hero__date {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-style: italic;
+    color: var(--text);
+    margin-block-start: var(--space-1);
+  }
+
+  .hero__weather {
+    margin-block-start: var(--space-2);
+    /* Reserve a tiny minimum so the layout doesn't jitter when the
+       loading dash is replaced by the live value. */
+    min-height: 2.4rem;
+  }
+
+  .hero__venue {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    margin-block-start: var(--space-1);
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-block-start: var(--space-6);
+    justify-content: center;
+  }
+
+  .hero__wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 80px;
+    display: block;
+    fill: var(--bg);
+  }
+
+  /* —— Two columns on tablet+ —— */
+  @media (min-width: 768px) {
+    .hero {
+      padding-block: var(--space-24) var(--space-24);
+    }
+
+    .hero__inner {
+      grid-template-columns: minmax(0, 22rem) minmax(0, 32rem);
+      gap: var(--space-16);
+      align-items: center;
+      text-align: left;
+      justify-items: stretch;
+    }
+
+    .hero__media {
+      width: 100%;
+      max-width: 22rem;
+      justify-self: end;
+    }
+
+    .hero__text {
+      align-items: flex-start;
+      max-width: none;
+    }
+
+    .hero__title {
+      font-size: clamp(3rem, 1.8rem + 4.5vw, 5rem);
+    }
+
+    .hero__weather {
+      margin-block-start: var(--space-3);
+    }
+
+    .hero__cta {
+      justify-content: flex-start;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero__inner {
+      grid-template-columns: minmax(0, 26rem) minmax(0, 36rem);
+      gap: var(--space-24);
+    }
+    .hero__media {
+      max-width: 26rem;
+    }
+  }
+</style>

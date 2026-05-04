@@ -1,0 +1,116 @@
+---
+import { useTranslations, type Locale } from '~/i18n';
+import { href } from '~/lib/url';
+import { WEDDING } from '~/lib/wedding';
+import Icon from '~/components/ui/Icon.astro';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="footer__monogram" aria-hidden="true">
+        {WEDDING.couple.partnerOne[0]}<span>&amp;</span>{WEDDING.couple.partnerTwo[0]}
+      </span>
+      <p>{WEDDING.couple.partnerOne} & {WEDDING.couple.partnerTwo}</p>
+    </div>
+
+    <nav class="footer__links" aria-label="Footer">
+      <a href={href(locale, 'wedding')}>{t('nav.wedding')}</a>
+      <a href={href(locale, 'travel')}>{t('nav.travel')}</a>
+      <a href={href(locale, 'rsvp')}>{t('nav.rsvp')}</a>
+    </nav>
+
+    <p class="footer__made">
+      <Icon name="heart" size={14} />
+      <span>{t('footer.madeWith')}</span>
+      <span aria-hidden="true">·</span>
+      <span>© {year}</span>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: auto;
+    padding-block: var(--space-12);
+    background: var(--surface);
+    color: var(--text);
+    border-top: 1px solid var(--border);
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+    align-items: center;
+    text-align: center;
+  }
+
+  @media (min-width: 720px) {
+    .footer__inner {
+      grid-template-columns: 1fr auto 1fr;
+      text-align: left;
+    }
+    .footer__made {
+      justify-self: end;
+    }
+  }
+
+  .footer__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    justify-self: center;
+  }
+
+  @media (min-width: 720px) {
+    .footer__brand {
+      justify-self: start;
+    }
+  }
+
+  .footer__monogram {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    color: var(--accent);
+    line-height: 1;
+  }
+  .footer__monogram span {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .footer__links {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+    font-size: var(--fs-sm);
+  }
+
+  .footer__links a {
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .footer__links a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+  }
+
+  .footer__made {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+  }
+</style>

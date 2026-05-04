@@ -1,0 +1,36 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Section from '~/components/ui/Section.astro';
+import RsvpInstructions from '~/features/rsvp/RsvpInstructions.astro';
+import { useTranslations } from '~/i18n';
+
+const locale = 'es' as const;
+const t = useTranslations(locale);
+---
+
+<PageLayout
+  locale={locale}
+  routeKey="rsvp"
+  title={t('rsvp.title')}
+  description={t('rsvp.intro')}
+>
+  <Section tone="shell" spacing="lg" width="narrow">
+    <header class="page-header stack-sm">
+      <h1>{t('rsvp.title')}</h1>
+      <p>{t('rsvp.intro')}</p>
+    </header>
+  </Section>
+
+  <Section tone="elevated" spacing="md" width="narrow">
+    <RsvpInstructions locale={locale} />
+  </Section>
+</PageLayout>
+
+<style>
+  .page-header {
+    text-align: center;
+  }
+  .page-header p {
+    color: var(--text-muted);
+  }
+</style>

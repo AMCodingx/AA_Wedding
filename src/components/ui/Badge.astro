@@ -1,0 +1,45 @@
+---
+interface Props {
+  tone?: 'sea' | 'sand' | 'mist' | 'outline';
+  class?: string;
+}
+
+const { tone = 'sea', class: className = '' } = Astro.props;
+---
+
+<span class:list={['badge', `badge--${tone}`, className]}>
+  <slot />
+</span>
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-pill);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    border: 1px solid transparent;
+  }
+  .badge--sea {
+    background: var(--accent-soft);
+    color: var(--text);
+  }
+  .badge--sand {
+    background: var(--warm);
+    color: var(--text);
+  }
+  .badge--mist {
+    background: var(--surface);
+    color: var(--text);
+  }
+  .badge--outline {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border-strong);
+  }
+</style>

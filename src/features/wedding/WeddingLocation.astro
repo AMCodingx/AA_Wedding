@@ -1,0 +1,114 @@
+---
+import Icon from '~/components/ui/Icon.astro';
+import { useTranslations, type Locale } from '~/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<article class="location stack">
+  <header class="location__header">
+    <Icon name="pin" size={28} />
+    <h2>{t('wedding.location.title')}</h2>
+  </header>
+
+  <div class="location__body">
+    <div>
+      <p class="location__name">{t('wedding.location.area')}</p>
+      <p class="location__region">{t('wedding.location.region')}</p>
+      <p class="location__detail">{t('wedding.location.detail')}</p>
+    </div>
+
+    <div class="location__map" aria-hidden="true">
+      <svg viewBox="0 0 200 140" preserveAspectRatio="none">
+        <rect class="map__sand" width="200" height="140"></rect>
+        <path class="map__foam" d="M0 90 C40 70 80 110 120 80 S180 60 200 80 L200 140 L0 140 Z"></path>
+        <path class="map__sea" d="M0 100 C40 80 80 120 120 90 S180 70 200 90 L200 140 L0 140 Z"></path>
+        <circle class="map__pin-halo" cx="105" cy="60" r="22"></circle>
+        <circle class="map__pin-halo" cx="105" cy="60" r="14"></circle>
+        <circle class="map__pin" cx="105" cy="60" r="6"></circle>
+      </svg>
+    </div>
+  </div>
+</article>
+
+<style>
+  .location__header {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--accent);
+  }
+  .location__header h2 {
+    color: var(--text);
+  }
+
+  .location__body {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 720px) {
+    .location__body {
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+    }
+  }
+
+  .location__name {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    color: var(--text);
+    margin: 0;
+    line-height: 1.05;
+  }
+  .location__region {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--fs-xs);
+    margin-block: var(--space-2) var(--space-4);
+  }
+  .location__detail {
+    color: var(--text-muted);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .location__map {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    aspect-ratio: 200 / 140;
+  }
+  .location__map svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .map__sand {
+    fill: var(--c-mist);
+  }
+  .map__foam {
+    fill: var(--c-sea-soft);
+  }
+  .map__sea {
+    fill: var(--c-sea);
+    opacity: 0.7;
+  }
+  .map__pin {
+    fill: var(--accent);
+  }
+  .map__pin-halo {
+    fill: var(--accent);
+    opacity: 0.18;
+  }
+</style>

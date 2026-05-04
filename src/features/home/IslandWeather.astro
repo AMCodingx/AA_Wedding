@@ -1,0 +1,92 @@
+---
+/**
+ * Live Curaçao temperature — pure typography.
+ *
+ * No pill, no icon. Server-renders an em-dash placeholder, replaces it
+ * client-side via Open-Meteo (free, no key). On error the widget hides
+ * itself instead of falling back to a misleading number.
+ */
+import { useTranslations, type Locale } from '~/i18n';
+import { WEDDING } from '~/lib/wedding';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const { lat, lng } = WEDDING.venue.coordinates;
+const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current=temperature_2m&temperature_unit=celsius`;
+---
+
+<p class="weather" data-weather-endpoint={endpoint} data-state="loading">
+  <span class="weather__value" data-weather-value>{t('home.weather.loading')}</span>
+  <span class="weather__cue">{t('home.weather.label')}</span>
+</p>
+
+<script>
+  const node = document.querySelector<HTMLElement>('.weather');
+  if (node) {
+    const url = node.dataset.weatherEndpoint!;
+    const valueEl = node.querySelector<HTMLElement>('[data-weather-value]')!;
+
+    (async () => {
+      try {
+        const res = await fetch(url, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = (await res.json()) as { current?: { temperature_2m?: number } };
+        const temp = data.current?.temperature_2m;
+        if (typeof temp !== 'number') throw new Error('no temperature');
+        valueEl.textContent = `${Math.round(temp)}°`;
+        node.dataset.state = 'ready';
+      } catch {
+        // Hide gracefully rather than showing a fallback fiction.
+        node.dataset.state = 'error';
+      }
+    })();
+  }
+</script>
+
+<style>
+  .weather {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    line-height: 1;
+    transition: opacity var(--dur-base) var(--ease-out);
+  }
+
+  .weather[data-state='loading'] {
+    opacity: 0.4;
+  }
+
+  .weather[data-state='error'] {
+    opacity: 0;
+    pointer-events: none;
+    /* Reserve no space — collapses cleanly when the API can't be reached. */
+    height: 0;
+    overflow: hidden;
+  }
+
+  .weather__value {
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-weight: 400;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .weather__cue {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    line-height: 1;
+  }
+</style>
