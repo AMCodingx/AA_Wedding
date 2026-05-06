@@ -1,0 +1,4 @@
+# Cloudflare Pages redirects.
+# The site is a static multi-page Astro build, so no SPA fallback is needed.
+# Root locale routing is handled by dist/index.html (JS + meta refresh),
+# so do NOT add `/ -> /nl/` here — it would bypass the locale detector.
