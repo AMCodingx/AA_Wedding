@@ -2,18 +2,14 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-import cloudflare from "@astrojs/cloudflare";
-
 const SITE = 'https://wedding.example.com';
 
 export default defineConfig({
   site: SITE,
   trailingSlash: 'always',
-
   build: {
     inlineStylesheets: 'auto',
   },
-
   i18n: {
     defaultLocale: 'nl',
     locales: ['nl', 'es', 'en'],
@@ -22,7 +18,6 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
-
   integrations: [
     sitemap({
       // The root `/` is a client-side locale redirect — exclude it.
@@ -33,16 +28,11 @@ export default defineConfig({
       },
     }),
   ],
-
   image: {
     service: { entrypoint: 'astro/assets/services/sharp' },
   },
-
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'viewport',
   },
-
-  output: "hybrid",
-  adapter: cloudflare()
 });
