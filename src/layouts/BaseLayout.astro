@@ -61,14 +61,27 @@ const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+    {/*
+      Preload the two fonts that actually power the design — display
+      script for headings and the variable Poppins for body. These match
+      the @font-face rules in styles/typography.css. (The previous
+      preloads pointed to fraunces-variable.woff2 and inter-variable.woff2
+      which weren't installed, costing two 404s on the critical path.)
+    */}
     <link
       rel="preload"
-      href="/fonts/fraunces-variable.woff2"
+      href="/fonts/reklame-script-regular.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
-    <link rel="preload" href="/fonts/inter-variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href="/fonts/poppins-variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     {
       preloadImage && (

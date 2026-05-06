@@ -14,9 +14,17 @@ const items = [t('rsvp.note.item1'), t('rsvp.note.item2'), t('rsvp.note.item3')]
 
 <section class="note">
   <header class="note__head">
-    <h2 class="note__headline">{t('rsvp.note.headline')}</h2>
-    <p class="note__lead">{t('rsvp.note.lead')}</p>
+    <h1 class="note__kicker">{t('rsvp.directive.title')}</h1>
+    <span class="note__rule" aria-hidden="true"><span class="note__rule-dot"></span></span>
   </header>
+
+  <p class="directive">
+    <span class="directive__txt">{t('rsvp.directive.before')}</span>
+    <span class="directive__name">{WEDDING.couple.partnerOne}</span>
+    <span class="directive__txt">{t('rsvp.directive.between')}</span>
+    <span class="directive__name">{WEDDING.couple.partnerTwo}</span>
+    <span class="directive__txt">{t('rsvp.directive.after')}</span>
+  </p>
 
   <div class="note__body">
     <p class="note__cue">{t('rsvp.note.checklist.intro')}</p>
@@ -32,14 +40,6 @@ const items = [t('rsvp.note.item1'), t('rsvp.note.item2'), t('rsvp.note.item3')]
       }
     </ol>
   </div>
-
-  <p class="directive">
-    <span class="directive__txt">{t('rsvp.directive.before')}</span>
-    <span class="directive__name">{WEDDING.couple.partnerOne}</span>
-    <span class="directive__txt">{t('rsvp.directive.between')}</span>
-    <span class="directive__name">{WEDDING.couple.partnerTwo}</span>
-    <span class="directive__txt">{t('rsvp.directive.after')}</span>
-  </p>
 
   <svg class="note__leaf" viewBox="0 0 120 200" aria-hidden="true" focusable="false">
     <g class="note__leaf-g">
@@ -105,28 +105,78 @@ const items = [t('rsvp.note.item1'), t('rsvp.note.item2'), t('rsvp.note.item3')]
     stroke-linejoin: round;
   }
 
-  /* —— Headline —— */
+  /* —— Kicker title (editorial label) —— */
   .note__head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
     margin-block-end: var(--space-8);
   }
 
-  .note__headline {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 1.4rem + 3vw, 3.4rem);
-    font-weight: 400;
-    line-height: 1;
+  .note__kicker {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: var(--fs-sm);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
     color: var(--accent);
+    /* Optical balance for the wide tracking — pull the centred line right. */
+    padding-inline-start: 0.34em;
     margin: 0;
+    line-height: 1;
   }
 
-  .note__lead {
+  .note__rule {
+    position: relative;
+    display: block;
+    width: clamp(3rem, 12vw, 4.5rem);
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      var(--border-strong) 20%,
+      var(--border-strong) 80%,
+      transparent 100%
+    );
+  }
+
+  .note__rule-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  /* —— Directive: the dominant statement —— */
+  .directive {
+    margin: 0 auto var(--space-12);
+    max-width: 22ch;
     font-family: var(--font-body);
     font-weight: var(--weight-body);
-    font-size: var(--fs-lg);
+    font-size: clamp(1.35rem, 1.05rem + 1.4vw, 2rem);
+    line-height: 1.45;
     color: var(--text);
-    line-height: 1.5;
-    max-width: 36ch;
-    margin: var(--space-4) auto 0;
+    text-wrap: balance;
+  }
+
+  .directive__txt {
+    /* Whitespace-significant — preserve the leading/trailing spaces. */
+    white-space: pre-wrap;
+  }
+
+  .directive__name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.4em;
+    color: var(--accent);
+    line-height: 1;
+    /* Lift slightly so the script glyph sits on the same baseline. */
+    display: inline-block;
+    transform: translateY(0.06em);
   }
 
   /* —— Body / checklist —— */
@@ -190,32 +240,5 @@ const items = [t('rsvp.note.item1'), t('rsvp.note.item2'), t('rsvp.note.item3')]
     font-size: var(--fs-base);
     line-height: 1.6;
     color: var(--text);
-  }
-
-  /* —— Directive sentence — replaces the old contact cards —— */
-  .directive {
-    margin: var(--space-12) auto 0;
-    max-width: 32ch;
-    font-family: var(--font-body);
-    font-weight: var(--weight-body);
-    font-size: var(--fs-lg);
-    line-height: 1.5;
-    color: var(--text);
-  }
-
-  .directive__txt {
-    /* Whitespace-significant — preserve the leading/trailing spaces. */
-    white-space: pre-wrap;
-  }
-
-  .directive__name {
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 1.4em;
-    color: var(--accent);
-    line-height: 1;
-    /* Lift slightly so the script glyph sits on the same baseline. */
-    display: inline-block;
-    transform: translateY(0.06em);
   }
 </style>

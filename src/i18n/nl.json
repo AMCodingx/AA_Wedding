@@ -46,16 +46,15 @@
   "rsvp.title": "Bevestig je komst",
   "rsvp.intro": "Geen formulier — gewoon een berichtje.",
 
-  "rsvp.note.headline": "Stuur ons een bericht",
-  "rsvp.note.lead": "Geen formulier, geen knop om aan te klikken. Een appje is genoeg.",
   "rsvp.note.checklist.intro": "Vermeld in je bericht:",
   "rsvp.note.item1": "Of je komt.",
   "rsvp.note.item2": "Eventuele dieetwensen (vegetarisch, allergieën, enz.).",
   "rsvp.note.item3": "Wil je met onze pendelbus mee? Vertel waar je verblijft en we plannen een ophaalmoment.",
 
+  "rsvp.directive.title": "Voor je RSVP",
   "rsvp.directive.before": "Stuur ",
   "rsvp.directive.between": " of ",
-  "rsvp.directive.after": " een tekstje of appje.",
+  "rsvp.directive.after": " een bericht.",
 
   "footer.madeWith": "Met liefde gemaakt",
   "footer.contact": "Contact",

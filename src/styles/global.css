@@ -53,6 +53,15 @@
   border: 0;
 }
 
+/* Lock body scroll while the mobile nav sheet is open. The Nav island
+   toggles `is-nav-open` on <html>; we keep the rule global so it works
+   regardless of where Nav mounts. */
+html.is-nav-open,
+html.is-nav-open body {
+  overflow: hidden;
+  touch-action: none;
+}
+
 /* Subtle decorative wave used as a section divider — pure CSS, no asset. */
 .wave {
   --wave-color: var(--c-sea-soft);

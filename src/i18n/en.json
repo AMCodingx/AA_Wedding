@@ -46,16 +46,15 @@
   "rsvp.title": "RSVP",
   "rsvp.intro": "No form — just send us a message.",
 
-  "rsvp.note.headline": "Text us to RSVP",
-  "rsvp.note.lead": "No form, no link to fill in. A message is enough.",
   "rsvp.note.checklist.intro": "When you message, tell us:",
   "rsvp.note.item1": "Whether you're coming.",
   "rsvp.note.item2": "Any dietary wishes (vegetarian, allergies, the usual).",
-  "rsvp.note.item3": "If you'd like a seat in our shuttle, mention where you're staying — we'll plan the pickup.",
+  "rsvp.note.item3": "If you'd like a seat in our shuttle, mention where you're staying, we'll plan the pickup.",
 
+  "rsvp.directive.title": "To RSVP",
   "rsvp.directive.before": "Send ",
   "rsvp.directive.between": " or ",
-  "rsvp.directive.after": " a text or a WhatsApp.",
+  "rsvp.directive.after": " a message.",
 
   "footer.madeWith": "Made with love",
   "footer.contact": "Contact",

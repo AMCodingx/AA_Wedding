@@ -22,13 +22,10 @@ const items: Item[] = [
   { key: 'rsvp', label: t('nav.rsvp') },
 ];
 
-// Roman numerals for the mobile sheet — no extra translation strings,
-// purely decorative numbering that matches the wedding's editorial feel.
 const numerals = ['i', 'ii', 'iii', 'iv'] as const;
 ---
 
 <nav class="nav" aria-label={t('nav.menu')}>
-  {/* Desktop: inline list — visible at >= 720px */}
   <ul class="nav__list">
     {
       items.map((item) => (
@@ -45,8 +42,7 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     }
   </ul>
 
-  {/* Mobile: hamburger → slide-down sheet — visible at < 720px */}
-  <details class="nav__drawer">
+  <details class="nav__drawer" data-nav-drawer>
     <summary class="nav__toggle" aria-label={t('nav.menu')}>
       <span class="nav__bars" aria-hidden="true">
         <span></span>
@@ -54,7 +50,9 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
       </span>
     </summary>
 
-    <div class="nav__sheet" role="presentation">
+    <div class="nav__backdrop" data-nav-backdrop aria-hidden="true"></div>
+
+    <div class="nav__sheet" role="dialog" aria-modal="true" aria-label={t('nav.menu')}>
       <ul class="nav__sheet-list">
         {
           items.map((item, i) => (
@@ -91,12 +89,97 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
   </details>
 </nav>
 
+{/*
+  Progressive enhancement: smooth close, focus management, body lock,
+  Escape-to-close, backdrop tap. Without this script the <details>
+  still works — open/close just snaps instead of animating out.
+  Inline so it executes before paint and doesn't block.
+*/}
+<script is:inline>
+  (() => {
+    const drawer = document.querySelector('[data-nav-drawer]');
+    if (!drawer) return;
+
+    const summary = drawer.querySelector('summary');
+    const backdrop = drawer.querySelector('[data-nav-backdrop]');
+    const sheet = drawer.querySelector('.nav__sheet');
+    const firstLink = drawer.querySelector('.nav__sheet-link');
+    const root = document.documentElement;
+
+    let lastFocus = null;
+
+    const close = () => {
+      if (!drawer.open || drawer.dataset.closing) return;
+      drawer.dataset.closing = '';
+      const done = () => {
+        delete drawer.dataset.closing;
+        drawer.open = false;
+        root.classList.remove('is-nav-open');
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      };
+      // Wait for the sheet's exit animation; fall back to a timeout so we
+      // can never strand the drawer in a half-closed state.
+      let settled = false;
+      const onEnd = () => {
+        if (settled) return;
+        settled = true;
+        sheet.removeEventListener('animationend', onEnd);
+        done();
+      };
+      sheet.addEventListener('animationend', onEnd);
+      setTimeout(onEnd, 320);
+    };
+
+    const open = () => {
+      lastFocus = document.activeElement;
+      root.classList.add('is-nav-open');
+      // Defer focus to next frame so the sheet has rendered.
+      requestAnimationFrame(() => firstLink && firstLink.focus({ preventScroll: true }));
+    };
+
+    summary.addEventListener('click', (e) => {
+      if (drawer.open) {
+        e.preventDefault();
+        close();
+      }
+    });
+
+    // <details> only fires `toggle` after open changes — use it to run
+    // open-side side-effects without racing the click handler.
+    drawer.addEventListener('toggle', () => {
+      if (drawer.open) open();
+    });
+
+    backdrop.addEventListener('click', close);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && drawer.open) {
+        e.preventDefault();
+        close();
+      }
+    });
+
+    // Resize past the desktop breakpoint while the menu is open: the
+    // drawer becomes display:none, so reset state instantly to avoid
+    // stranding the body scroll-lock or focus.
+    const mq = window.matchMedia('(min-width: 720px)');
+    const onMq = (e) => {
+      if (e.matches && drawer.open) {
+        delete drawer.dataset.closing;
+        drawer.open = false;
+        root.classList.remove('is-nav-open');
+      }
+    };
+    mq.addEventListener('change', onMq);
+  })();
+</script>
+
 <style>
   .nav {
     display: contents;
   }
 
-  /* ——————————————————————————— Desktop list ——————————————————————————— */
+  /* —————————————————— Desktop list —————————————————— */
   .nav__list {
     display: none;
     align-items: center;
@@ -109,32 +192,46 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
   .nav__link {
     display: inline-block;
     padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-pill);
     text-decoration: none;
     color: var(--text);
     font-weight: 500;
     font-size: var(--fs-sm);
     white-space: nowrap;
-    transition:
-      background var(--dur-fast) var(--ease-out),
-      color var(--dur-fast) var(--ease-out);
-  }
-
-  .nav__link:hover {
-    background: var(--surface);
+    /* No hover or click affordance — the underline carries the state. */
   }
 
   .nav__link[aria-current='page'] {
-    color: var(--accent);
-    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 6px;
   }
 
-  /* ——————————————————————————— Mobile drawer ——————————————————————————— */
+  /* Keep keyboard users oriented — focus ring is preserved. */
+  .nav__link:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* —————————————————— Toggle —————————————————— */
   .nav__drawer {
     position: relative;
   }
 
+  /* Lift the whole drawer above the header while it's animating, so the
+     sheet's gradient can flow continuously under the (transparent) header
+     and the toggle stays the topmost interactive surface. */
+  .nav__drawer[open],
+  .nav__drawer[data-closing] {
+    z-index: calc(var(--z-overlay) + 1);
+  }
+
   .nav__toggle {
+    position: relative;
+    /* Above the sheet within the drawer's stacking context — keeps the
+       button visually anchored "on top of" the menu it produces. */
+    z-index: 3;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -147,16 +244,27 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     list-style: none;
     color: var(--text);
     transition:
+      transform var(--dur-fast) var(--ease-out),
       border-color var(--dur-fast) var(--ease-out),
-      background var(--dur-fast) var(--ease-out);
+      background var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out),
+      color var(--dur-base) var(--ease-out);
   }
 
+  /* Tactile click feedback — quick squish on press, springs back. */
+  .nav__toggle:active {
+    transform: scale(0.92);
+    transition-duration: 80ms;
+  }
   .nav__toggle::-webkit-details-marker {
     display: none;
   }
-
   .nav__toggle:hover {
     border-color: var(--border-strong);
+  }
+  .nav__toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .nav__bars {
@@ -164,7 +272,6 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     width: 20px;
     height: 14px;
   }
-
   .nav__bars span {
     position: absolute;
     left: 0;
@@ -177,9 +284,6 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
       top var(--dur-base) var(--ease-out),
       width var(--dur-base) var(--ease-out);
   }
-
-  /* Two-line hamburger — feels lighter and more editorial than the
-     usual three. The lower bar sits at 2/3, leaving generous air. */
   .nav__bars span:nth-child(1) {
     top: 4px;
   }
@@ -191,9 +295,8 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
   .nav__drawer[open] .nav__toggle {
     border-color: var(--accent);
     background: var(--accent-soft);
-    color: var(--text);
+    box-shadow: 0 6px 16px -6px rgba(31, 58, 56, 0.25);
   }
-
   .nav__drawer[open] .nav__bars span:nth-child(1) {
     top: 7px;
     transform: rotate(45deg);
@@ -203,25 +306,63 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     width: 100%;
     transform: rotate(-45deg);
   }
+  /* Reverse the X back into bars while closing animation plays. */
+  .nav__drawer[data-closing] .nav__bars span:nth-child(1) {
+    top: 4px;
+    transform: rotate(0);
+  }
+  .nav__drawer[data-closing] .nav__bars span:nth-child(2) {
+    top: 10px;
+    width: 70%;
+    transform: rotate(0);
+  }
 
-  /* ——————————————————————————— Sheet panel ——————————————————————————— */
+  /* —————————————————— Backdrop —————————————————— */
+  .nav__backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: rgba(31, 58, 56, 0.32);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    animation: nav-backdrop-in var(--dur-base) var(--ease-out) both;
+  }
+  .nav__drawer[data-closing] .nav__backdrop {
+    animation: nav-backdrop-out 240ms var(--ease-out) both;
+  }
+  @keyframes nav-backdrop-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes nav-backdrop-out {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  /* —————————————————— Sheet —————————————————— */
   .nav__sheet {
     position: fixed;
-    inset: var(--header-h) 0 auto 0;
-    z-index: var(--z-overlay);
-    padding-block: var(--space-6) var(--space-8);
+    /* Extend to the very top so the gradient flows under the (now
+       transparent) header — the menu reads as one continuous surface
+       that the toggle button sits on, not a panel below it. */
+    inset: 0 0 auto 0;
+    z-index: 2;
+    /* Pad the header zone so menu items begin below the toggle. */
+    padding-block: calc(var(--header-h) + var(--space-4)) var(--space-8);
     background:
       radial-gradient(ellipse at 100% 0%, var(--c-sea-soft) 0%, transparent 60%),
       radial-gradient(ellipse at 0% 100%, var(--c-sand) 0%, transparent 55%),
       linear-gradient(180deg, var(--c-shell) 0%, var(--c-mist) 100%);
     border-bottom: 1px solid var(--border);
     box-shadow: var(--shadow-lg);
-    /* Slide+fade in. Origin at top so it appears to drop from the header. */
-    transform-origin: top center;
-    animation: nav-sheet-in var(--dur-base) var(--ease-out) both;
+    /* Origin sits at the toggle button's center so the bloom radiates
+       from the hamburger — the menu feels generated by the button. */
+    --origin-x: calc(100% - var(--space-6) - 22px);
+    --origin-y: calc(var(--header-h) / 2);
+    will-change: clip-path, opacity;
+    animation: nav-sheet-in 380ms var(--ease-out) both;
   }
 
-  /* Decorative wave at the bottom of the sheet — echoes the hero wave. */
   .nav__sheet::after {
     content: '';
     position: absolute;
@@ -235,14 +376,30 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     pointer-events: none;
   }
 
+  .nav__drawer[data-closing] .nav__sheet {
+    animation: nav-sheet-out 280ms var(--ease-in-out) both;
+  }
+
+  /* Circular clip grows from the button → menu blooms from the toggle.
+     150% radius guarantees full coverage even on tall viewports. */
   @keyframes nav-sheet-in {
     from {
-      opacity: 0;
-      transform: translateY(-8px);
+      opacity: 0.6;
+      clip-path: circle(0% at var(--origin-x) var(--origin-y));
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      clip-path: circle(150% at var(--origin-x) var(--origin-y));
+    }
+  }
+  @keyframes nav-sheet-out {
+    from {
+      opacity: 1;
+      clip-path: circle(150% at var(--origin-x) var(--origin-y));
+    }
+    to {
+      opacity: 0;
+      clip-path: circle(0% at var(--origin-x) var(--origin-y));
     }
   }
 
@@ -257,20 +414,35 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
   .nav__sheet-item {
     border-bottom: 1px dashed var(--border);
     opacity: 0;
-    transform: translateY(8px);
-    animation: nav-item-in var(--dur-base) var(--ease-out) forwards;
-    /* Staggered reveal of menu items. */
-    animation-delay: calc(80ms + var(--i, 0) * 60ms);
+    transform: translateY(10px);
+    animation: nav-item-in 360ms var(--ease-out) forwards;
+    /* Stagger 1→4 on open. */
+    animation-delay: calc(80ms + var(--i, 0) * 55ms);
   }
-
   .nav__sheet-item:last-child {
     border-bottom: 0;
+  }
+
+  /* Reverse stagger on close — top item leaves first. */
+  .nav__drawer[data-closing] .nav__sheet-item {
+    animation: nav-item-out 200ms var(--ease-in-out) forwards;
+    animation-delay: calc(var(--i, 0) * 25ms);
   }
 
   @keyframes nav-item-in {
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+  @keyframes nav-item-out {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-6px);
     }
   }
 
@@ -284,10 +456,14 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     color: var(--text);
     transition: color var(--dur-fast) var(--ease-out);
   }
-
   .nav__sheet-link:hover,
   .nav__sheet-link:focus-visible {
     color: var(--accent);
+  }
+  .nav__sheet-link:focus-visible {
+    outline: none;
+    background: color-mix(in srgb, var(--accent-soft) 35%, transparent);
+    border-radius: var(--radius-md);
   }
 
   .nav__sheet-num {
@@ -297,7 +473,6 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     color: var(--text-muted);
     width: 1.5rem;
     line-height: 1;
-    /* Numerals look more refined slightly raised against the script label. */
     align-self: center;
     text-align: right;
   }
@@ -315,13 +490,12 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     align-self: center;
     transition:
       color var(--dur-fast) var(--ease-out),
-      transform var(--dur-fast) var(--ease-out);
+      transform var(--dur-base) var(--ease-out);
   }
-
   .nav__sheet-link:hover .nav__sheet-arrow,
   .nav__sheet-link:focus-visible .nav__sheet-arrow {
     color: var(--accent);
-    transform: translateX(3px);
+    transform: translateX(4px);
   }
 
   .nav__sheet-link[aria-current='page'] .nav__sheet-num,
@@ -329,7 +503,23 @@ const numerals = ['i', 'ii', 'iii', 'iv'] as const;
     color: var(--accent);
   }
 
-  /* ——————————————————————————— Breakpoints ——————————————————————————— */
+  /* —————————————————— Reduced motion —————————————————— */
+  @media (prefers-reduced-motion: reduce) {
+    .nav__backdrop,
+    .nav__sheet,
+    .nav__sheet-item,
+    .nav__bars span,
+    .nav__sheet-arrow {
+      animation: none !important;
+      transition: none !important;
+    }
+    .nav__sheet-item {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* —————————————————— Breakpoints —————————————————— */
   @media (min-width: 720px) {
     .nav__list {
       display: flex;

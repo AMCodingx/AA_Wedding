@@ -46,16 +46,15 @@
   "rsvp.title": "Confirma tu asistencia",
   "rsvp.intro": "Sin formularios — un mensaje y listo.",
 
-  "rsvp.note.headline": "Escríbenos para confirmar",
-  "rsvp.note.lead": "Sin formularios, sin enlaces. Con un mensaje basta.",
   "rsvp.note.checklist.intro": "Cuéntanos en tu mensaje:",
   "rsvp.note.item1": "Si vas a venir.",
   "rsvp.note.item2": "Restricciones alimentarias (vegetariano, alergias, etc.).",
   "rsvp.note.item3": "Si quieres usar nuestro transporte, dinos dónde te alojas y te recogemos.",
 
-  "rsvp.directive.before": "Mándale a ",
+  "rsvp.directive.title": "Para confirmar",
+  "rsvp.directive.before": "Escríbele a ",
   "rsvp.directive.between": " o a ",
-  "rsvp.directive.after": " un mensaje o un WhatsApp.",
+  "rsvp.directive.after": " un mensaje.",
 
   "footer.madeWith": "Hecho con cariño",
   "footer.contact": "Contacto",

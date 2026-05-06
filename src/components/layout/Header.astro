@@ -38,6 +38,19 @@ const t = useTranslations(locale);
     backdrop-filter: saturate(140%) blur(8px);
     -webkit-backdrop-filter: saturate(140%) blur(8px);
     border-bottom: 1px solid var(--border);
+    transition:
+      background var(--dur-base) var(--ease-out),
+      border-bottom-color var(--dur-base) var(--ease-out);
+  }
+
+  /* When the mobile nav sheet is open the sheet itself fills the header
+     area with its gradient — let the chrome dissolve so the toggle and
+     the menu read as one continuous surface. */
+  :global(html.is-nav-open) .header {
+    background: transparent;
+    border-bottom-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .header__inner {
