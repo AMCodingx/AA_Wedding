@@ -5,8 +5,9 @@
 
 export const WEDDING = {
   // Curaçao is AST (UTC-4), no DST.
-  ceremonyAt: new Date('2027-03-20T16:00:00-04:00'),
-  receptionAt: new Date('2027-03-20T18:30:00-04:00'),
+  ceremonyAt: new Date('2027-03-20T17:30:00-04:00'),
+  cocktailAt: new Date('2027-03-20T18:00:00-04:00'),
+  receptionAt: new Date('2027-03-20T19:00:00-04:00'),
 
   venue: {
     /** What the hero shows. */

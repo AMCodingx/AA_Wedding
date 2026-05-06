@@ -8,6 +8,9 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+
+/** Porto Marie position on the 1024×1024 map image, as percentages from top-left. */
+const VENUE = { x: 25, y: 43 };
 ---
 
 <article class="location stack">
@@ -23,18 +26,99 @@ const t = useTranslations(locale);
       <p class="location__detail">{t('wedding.location.detail')}</p>
     </div>
 
-    <div class="location__map" aria-hidden="true">
-      <svg viewBox="0 0 200 140" preserveAspectRatio="none">
-        <rect class="map__sand" width="200" height="140"></rect>
-        <path class="map__foam" d="M0 90 C40 70 80 110 120 80 S180 60 200 80 L200 140 L0 140 Z"></path>
-        <path class="map__sea" d="M0 100 C40 80 80 120 120 90 S180 70 200 90 L200 140 L0 140 Z"></path>
-        <circle class="map__pin-halo" cx="105" cy="60" r="22"></circle>
-        <circle class="map__pin-halo" cx="105" cy="60" r="14"></circle>
-        <circle class="map__pin" cx="105" cy="60" r="6"></circle>
-      </svg>
-    </div>
+    <figure class="location__map-frame">
+      <button
+        type="button"
+        class="location__map"
+        data-map-trigger
+        aria-label={t('wedding.location.zoom')}
+      >
+        <img
+          src="/images/curacao-map.png"
+          alt={t('wedding.location.mapAlt')}
+          width="1024"
+          height="1024"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <span class="map__markers" aria-hidden="true">
+          <span
+            class="map__marker map__marker--venue"
+            style={`left:${VENUE.x}%;top:${VENUE.y}%`}
+          >
+            <span class="map__halo"></span>
+            <span class="map__dot"></span>
+          </span>
+        </span>
+
+        <span class="map__zoom-hint" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9V3h6 M21 9V3h-6 M3 15v6h6 M21 15v6h-6"></path>
+          </svg>
+          <span>{t('wedding.location.zoom')}</span>
+        </span>
+      </button>
+      <figcaption class="location__caption">
+        {t('wedding.location.island')}
+      </figcaption>
+    </figure>
   </div>
 </article>
+
+<dialog class="map-dialog" data-map-dialog aria-label={t('wedding.location.mapAlt')}>
+  <button
+    type="button"
+    class="map-dialog__close"
+    data-map-close
+    aria-label={t('wedding.location.close')}
+  >
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6 6l12 12 M18 6L6 18"></path>
+    </svg>
+  </button>
+
+  <figure class="map-dialog__inner">
+    <div class="map-dialog__canvas">
+      <img
+        src="/images/curacao-map.png"
+        alt={t('wedding.location.mapAlt')}
+        width="1024"
+        height="1024"
+        decoding="async"
+      />
+
+      <span class="map__markers map__markers--lg" aria-hidden="true">
+        <span
+          class="map__marker map__marker--venue"
+          style={`left:${VENUE.x}%;top:${VENUE.y}%`}
+        >
+          <span class="map__halo"></span>
+          <span class="map__dot"></span>
+        </span>
+      </span>
+    </div>
+    <figcaption class="map-dialog__caption">
+      {t('wedding.location.island')}
+    </figcaption>
+  </figure>
+</dialog>
+
+<script>
+  const trigger = document.querySelector<HTMLButtonElement>('[data-map-trigger]');
+  const dialog = document.querySelector<HTMLDialogElement>('[data-map-dialog]');
+  const closeBtn = document.querySelector<HTMLButtonElement>('[data-map-close]');
+
+  trigger?.addEventListener('click', () => {
+    if (typeof dialog?.showModal === 'function') dialog.showModal();
+    else dialog?.setAttribute('open', '');
+  });
+  closeBtn?.addEventListener('click', () => dialog?.close());
+  dialog?.addEventListener('click', (event) => {
+    // Click on the backdrop (the dialog element itself) closes it.
+    if (event.target === dialog) dialog.close();
+  });
+</script>
 
 <style>
   .location__header {
@@ -82,33 +166,223 @@ const t = useTranslations(locale);
     margin: 0;
   }
 
+  .location__map-frame {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
   .location__map {
+    position: relative;
+    border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     overflow: hidden;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
-    aspect-ratio: 200 / 140;
+    box-shadow: var(--shadow-md);
+    background: var(--bg-elevated);
+    aspect-ratio: 1 / 1;
+    padding: 0;
+    cursor: zoom-in;
+    transition:
+      transform var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out);
   }
-  .location__map svg {
+  .location__map:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+  .location__map:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+  .location__map img {
     width: 100%;
     height: 100%;
     display: block;
+    object-fit: cover;
   }
-  .map__sand {
-    fill: var(--c-mist);
+
+  .map__zoom-hint {
+    position: absolute;
+    inset-block-end: var(--space-3);
+    inset-inline-end: var(--space-3);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    background: var(--bg-elevated);
+    color: var(--accent);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.65rem;
+    box-shadow: var(--shadow-sm);
+    opacity: 0.92;
   }
-  .map__foam {
-    fill: var(--c-sea-soft);
+
+  /* —— Markers ————————————————————————————————————— */
+
+  .map__markers {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
   }
-  .map__sea {
-    fill: var(--c-sea);
-    opacity: 0.7;
+
+  .map__marker {
+    position: absolute;
+    inline-size: 0;
+    block-size: 0;
+    color: var(--accent);
   }
-  .map__pin {
-    fill: var(--accent);
+
+  .map__dot {
+    --size: 14px;
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    inline-size: var(--size);
+    block-size: var(--size);
+    background: var(--accent);
+    border: 2px solid var(--bg-elevated);
+    border-radius: 50%;
+    box-shadow: 0 1px 4px rgba(31, 58, 56, 0.4);
+    transform: translate(-50%, -50%);
   }
-  .map__pin-halo {
-    fill: var(--accent);
-    opacity: 0.18;
+
+  .map__halo {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    inline-size: 30px;
+    block-size: 30px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0.28;
+    transform: translate(-50%, -50%);
+    animation: pin-pulse 2.4s var(--ease-in-out) infinite;
+  }
+
+  @keyframes pin-pulse {
+    0% {
+      transform: translate(-50%, -50%) scale(0.45);
+      opacity: 0.4;
+    }
+    70% {
+      transform: translate(-50%, -50%) scale(1.6);
+      opacity: 0;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(1.6);
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .map__halo {
+      animation: none;
+      opacity: 0.18;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  .location__caption {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--fs-xs);
+    text-align: center;
+  }
+
+  /* —— Lightbox dialog ——————————————————————————— */
+
+  .map-dialog {
+    --map-size: min(92vw, 86vh, 60rem);
+    margin: auto;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--text);
+    inline-size: var(--map-size);
+    max-block-size: 96vh;
+    inset: 0;
+  }
+  .map-dialog::backdrop {
+    background: rgba(31, 58, 56, 0.7);
+    backdrop-filter: blur(6px);
+  }
+
+  .map-dialog__inner {
+    position: relative;
+    margin: 0;
+    inline-size: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .map-dialog__canvas {
+    position: relative;
+    /* Square — both dims pinned to the same min() so the percentage-positioned
+       marker aligns with the image content (no letterboxing). */
+    inline-size: var(--map-size);
+    block-size: var(--map-size);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-lg);
+  }
+  .map-dialog__canvas img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .map__markers--lg .map__dot {
+    --size: 18px;
+  }
+  .map__markers--lg .map__halo {
+    inline-size: 44px;
+    block-size: 44px;
+  }
+
+  .map-dialog__close {
+    position: absolute;
+    inset-block-start: var(--space-3);
+    inset-inline-end: var(--space-3);
+    z-index: 1;
+    inline-size: 40px;
+    block-size: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-elevated);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .map-dialog__close:hover {
+    transform: rotate(90deg);
+    color: var(--accent);
+  }
+  .map-dialog__close:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .map-dialog__caption {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    color: var(--c-shell);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: var(--fs-xs);
+    text-align: center;
   }
 </style>

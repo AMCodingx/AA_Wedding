@@ -20,24 +20,29 @@ const grouped = FAQ_ENTRIES.reduce<Record<FaqCategory, typeof FAQ_ENTRIES>>(
 );
 
 const categoryOrder: FaqCategory[] = ['stay', 'kids', 'attire', 'transport', 'other'];
+const visibleCategories = categoryOrder.filter((c) => grouped[c]?.length);
 ---
 
-<div class="stack faq">
-  <header class="faq__header">
-    <h2>{t('wedding.faq.title')}</h2>
-    <p>{t('wedding.faq.intro')}</p>
-  </header>
+<div class="faq">
+  <h1 class="visually-hidden">{t('wedding.faq.title')}</h1>
 
   {
-    categoryOrder.map((cat) => {
-      const entries = grouped[cat];
-      if (!entries?.length) return null;
+    visibleCategories.map((cat, idx) => {
+      const entries = grouped[cat]!;
+      const num = String(idx + 1).padStart(2, '0');
       return (
         <section class="faq__category" aria-labelledby={`faq-cat-${cat}`}>
-          <h3 id={`faq-cat-${cat}`} class="faq__category-title">
-            {FAQ_CATEGORY_LABELS[cat][locale]}
-          </h3>
-          <div>
+          <header class="faq__cat-head">
+            <span class="faq__cat-num" aria-hidden="true">
+              {num}
+            </span>
+            <span class="faq__cat-rule" aria-hidden="true" />
+            <h2 id={`faq-cat-${cat}`} class="faq__cat-title">
+              {FAQ_CATEGORY_LABELS[cat][locale]}
+            </h2>
+          </header>
+
+          <div class="faq__list">
             {entries.map((entry) => (
               <Accordion group={`faq-${cat}`}>
                 <Fragment slot="title">
@@ -54,24 +59,75 @@ const categoryOrder: FaqCategory[] = ['stay', 'kids', 'attire', 'transport', 'ot
 </div>
 
 <style>
-  .faq__header {
-    text-align: center;
-    margin-block-end: var(--space-8);
-  }
-  .faq__header p {
-    color: var(--text-muted);
-    margin-block-start: var(--space-3);
+  .visually-hidden {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
-  .faq__category + .faq__category {
-    margin-block-start: var(--space-12);
+  .faq {
+    display: grid;
+    gap: var(--space-12);
   }
 
-  .faq__category-title {
-    font-family: var(--font-display);
-    font-size: var(--fs-lg);
-    font-weight: 500;
+  .faq__category {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .faq__cat-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    column-gap: var(--space-4);
+    row-gap: var(--space-2);
+  }
+
+  .faq__cat-num {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.24em;
     color: var(--accent);
-    margin-block-end: var(--space-4);
+    /* Optical lift so the numeral sits on the same baseline as the title kicker. */
+    line-height: 1;
+  }
+
+  .faq__cat-rule {
+    block-size: 1px;
+    background: var(--c-sand);
+    align-self: center;
+    transform: translateY(-2px);
+  }
+
+  .faq__cat-title {
+    grid-column: 1 / -1;
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: var(--fs-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: var(--text);
+    margin: 0;
+    padding-inline-start: calc(var(--space-8) + var(--space-1));
+    /* Vertically nudge so it reads as the chapter title under the rule */
+    margin-block-start: var(--space-1);
+  }
+
+  .faq__list {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 540px) {
+    .faq__cat-title {
+      font-size: var(--fs-base);
+    }
   }
 </style>
