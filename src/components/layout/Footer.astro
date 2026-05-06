@@ -19,7 +19,6 @@ const year = new Date().getFullYear();
       <span class="footer__monogram" aria-hidden="true">
         {WEDDING.couple.partnerOne[0]}<span>&amp;</span>{WEDDING.couple.partnerTwo[0]}
       </span>
-      <p>{WEDDING.couple.partnerOne} & {WEDDING.couple.partnerTwo}</p>
     </div>
 
     <nav class="footer__links" aria-label="Footer">
@@ -29,10 +28,11 @@ const year = new Date().getFullYear();
     </nav>
 
     <p class="footer__made">
-      <Icon name="heart" size={14} />
-      <span>{t('footer.madeWith')}</span>
-      <span aria-hidden="true">·</span>
-      <span>© {year}</span>
+      <span class="footer__made-line">
+        <Icon name="heart" size={14} />
+        <span>{t('footer.madeWith')}</span>
+      </span>
+      <span class="footer__year">© {year}</span>
     </p>
   </div>
 </footer>
@@ -106,11 +106,40 @@ const year = new Date().getFullYear();
     text-decoration-color: var(--accent);
   }
 
+  /* Stacked on mobile: heart + label on one line, year on a quieter
+     second line. Centered as a grid item — inline-flex children would
+     otherwise hug the start of the grid cell. */
   .footer__made {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    justify-self: center;
+  }
+
+  .footer__made-line {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+  }
+
+  .footer__year {
+    font-size: var(--fs-xs);
+    letter-spacing: 0.08em;
+    opacity: 0.8;
+  }
+
+  @media (min-width: 720px) {
+    .footer__made {
+      flex-direction: row;
+      gap: var(--space-3);
+      justify-self: end;
+    }
+    .footer__year {
+      letter-spacing: 0;
+    }
   }
 </style>

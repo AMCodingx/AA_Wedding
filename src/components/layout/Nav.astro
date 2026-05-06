@@ -21,9 +21,14 @@ const items: Item[] = [
   { key: 'travel', label: t('nav.travel') },
   { key: 'rsvp', label: t('nav.rsvp') },
 ];
+
+// Roman numerals for the mobile sheet — no extra translation strings,
+// purely decorative numbering that matches the wedding's editorial feel.
+const numerals = ['i', 'ii', 'iii', 'iv'] as const;
 ---
 
 <nav class="nav" aria-label={t('nav.menu')}>
+  {/* Desktop: inline list — visible at >= 720px */}
   <ul class="nav__list">
     {
       items.map((item) => (
@@ -39,13 +44,66 @@ const items: Item[] = [
       ))
     }
   </ul>
+
+  {/* Mobile: hamburger → slide-down sheet — visible at < 720px */}
+  <details class="nav__drawer">
+    <summary class="nav__toggle" aria-label={t('nav.menu')}>
+      <span class="nav__bars" aria-hidden="true">
+        <span></span>
+        <span></span>
+      </span>
+    </summary>
+
+    <div class="nav__sheet" role="presentation">
+      <ul class="nav__sheet-list">
+        {
+          items.map((item, i) => (
+            <li class="nav__sheet-item" style={`--i:${i}`}>
+              <a
+                class="nav__sheet-link"
+                href={href(locale, item.key)}
+                aria-current={item.key === current ? 'page' : undefined}
+              >
+                <span class="nav__sheet-num" aria-hidden="true">{numerals[i]}</span>
+                <span class="nav__sheet-label">{item.label}</span>
+                <svg
+                  class="nav__sheet-arrow"
+                  width="22"
+                  height="22"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M5 12h14 M13 6l6 6-6 6"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </details>
 </nav>
 
 <style>
+  .nav {
+    display: contents;
+  }
+
+  /* ——————————————————————————— Desktop list ——————————————————————————— */
   .nav__list {
-    display: flex;
+    display: none;
     align-items: center;
     gap: var(--space-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
   .nav__link {
@@ -56,6 +114,7 @@ const items: Item[] = [
     color: var(--text);
     font-weight: 500;
     font-size: var(--fs-sm);
+    white-space: nowrap;
     transition:
       background var(--dur-fast) var(--ease-out),
       color var(--dur-fast) var(--ease-out);
@@ -70,13 +129,213 @@ const items: Item[] = [
     font-weight: 600;
   }
 
-  @media (max-width: 720px) {
-    .nav__list {
-      gap: var(--space-1);
+  /* ——————————————————————————— Mobile drawer ——————————————————————————— */
+  .nav__drawer {
+    position: relative;
+  }
+
+  .nav__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    cursor: pointer;
+    list-style: none;
+    color: var(--text);
+    transition:
+      border-color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
+  }
+
+  .nav__toggle::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav__toggle:hover {
+    border-color: var(--border-strong);
+  }
+
+  .nav__bars {
+    position: relative;
+    width: 20px;
+    height: 14px;
+  }
+
+  .nav__bars span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    border-radius: var(--radius-pill);
+    transition:
+      transform var(--dur-base) var(--ease-out),
+      top var(--dur-base) var(--ease-out),
+      width var(--dur-base) var(--ease-out);
+  }
+
+  /* Two-line hamburger — feels lighter and more editorial than the
+     usual three. The lower bar sits at 2/3, leaving generous air. */
+  .nav__bars span:nth-child(1) {
+    top: 4px;
+  }
+  .nav__bars span:nth-child(2) {
+    top: 10px;
+    width: 70%;
+  }
+
+  .nav__drawer[open] .nav__toggle {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--text);
+  }
+
+  .nav__drawer[open] .nav__bars span:nth-child(1) {
+    top: 7px;
+    transform: rotate(45deg);
+  }
+  .nav__drawer[open] .nav__bars span:nth-child(2) {
+    top: 7px;
+    width: 100%;
+    transform: rotate(-45deg);
+  }
+
+  /* ——————————————————————————— Sheet panel ——————————————————————————— */
+  .nav__sheet {
+    position: fixed;
+    inset: var(--header-h) 0 auto 0;
+    z-index: var(--z-overlay);
+    padding-block: var(--space-6) var(--space-8);
+    background:
+      radial-gradient(ellipse at 100% 0%, var(--c-sea-soft) 0%, transparent 60%),
+      radial-gradient(ellipse at 0% 100%, var(--c-sand) 0%, transparent 55%),
+      linear-gradient(180deg, var(--c-shell) 0%, var(--c-mist) 100%);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    /* Slide+fade in. Origin at top so it appears to drop from the header. */
+    transform-origin: top center;
+    animation: nav-sheet-in var(--dur-base) var(--ease-out) both;
+  }
+
+  /* Decorative wave at the bottom of the sheet — echoes the hero wave. */
+  .nav__sheet::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 18px;
+    background:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'><path d='M0,40 C240,72 480,8 720,32 C960,56 1200,72 1440,40 L1440,80 L0,80 Z' fill='%23F6EBDF'/></svg>")
+        bottom / 100% 100% no-repeat;
+    pointer-events: none;
+  }
+
+  @keyframes nav-sheet-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
     }
-    .nav__link {
-      padding: var(--space-2);
-      font-size: var(--fs-xs);
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nav__sheet-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 var(--space-6);
+    max-width: 32rem;
+    margin-inline: auto;
+  }
+
+  .nav__sheet-item {
+    border-bottom: 1px dashed var(--border);
+    opacity: 0;
+    transform: translateY(8px);
+    animation: nav-item-in var(--dur-base) var(--ease-out) forwards;
+    /* Staggered reveal of menu items. */
+    animation-delay: calc(80ms + var(--i, 0) * 60ms);
+  }
+
+  .nav__sheet-item:last-child {
+    border-bottom: 0;
+  }
+
+  @keyframes nav-item-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .nav__sheet-link {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding: var(--space-4) var(--space-2);
+    text-decoration: none;
+    color: var(--text);
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+
+  .nav__sheet-link:hover,
+  .nav__sheet-link:focus-visible {
+    color: var(--accent);
+  }
+
+  .nav__sheet-num {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    width: 1.5rem;
+    line-height: 1;
+    /* Numerals look more refined slightly raised against the script label. */
+    align-self: center;
+    text-align: right;
+  }
+
+  .nav__sheet-label {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.4rem + 3.2vw, 2.75rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  .nav__sheet-arrow {
+    color: var(--text-muted);
+    align-self: center;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .nav__sheet-link:hover .nav__sheet-arrow,
+  .nav__sheet-link:focus-visible .nav__sheet-arrow {
+    color: var(--accent);
+    transform: translateX(3px);
+  }
+
+  .nav__sheet-link[aria-current='page'] .nav__sheet-num,
+  .nav__sheet-link[aria-current='page'] .nav__sheet-label {
+    color: var(--accent);
+  }
+
+  /* ——————————————————————————— Breakpoints ——————————————————————————— */
+  @media (min-width: 720px) {
+    .nav__list {
+      display: flex;
+    }
+    .nav__drawer {
+      display: none;
     }
   }
 </style>
