@@ -44,11 +44,11 @@ const dateLabel = formatLongDate(WEDDING.ceremonyAt, locale);
 
       <p class="hero__date">{dateLabel}</p>
 
+      <p class="hero__venue">{WEDDING.venue.region}</p>
+
       <div class="hero__weather">
         <IslandWeather locale={locale} />
       </div>
-
-      <p class="hero__venue">{WEDDING.venue.region}</p>
 
       <div class="hero__cta">
         <Button variant="primary" size="lg" href={href(locale, 'rsvp')}>
@@ -152,7 +152,7 @@ const dateLabel = formatLongDate(WEDDING.ceremonyAt, locale);
   .hero__date {
     font-family: var(--font-display);
     font-size: var(--fs-lg);
-    font-style: italic;
+    font-weight: 400;
     color: var(--text);
     margin-block-start: var(--space-1);
   }

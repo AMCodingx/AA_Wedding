@@ -11,29 +11,11 @@ export function localePath(locale: Locale, path = ''): string {
  * always go through this map instead of hard-coding strings.
  */
 export const ROUTES = {
-  home: { nl: '', es: '', en: '' },
+  home:    { nl: '', es: '', en: '' },
   wedding: { nl: 'de-bruiloft', es: 'la-boda', en: 'the-wedding' },
-  weddingFaq: {
-    nl: 'de-bruiloft/faq',
-    es: 'la-boda/faq',
-    en: 'the-wedding/faq',
-  },
-  travel: {
-    nl: 'reizen-en-verblijf',
-    es: 'viaje-y-alojamiento',
-    en: 'travel-and-stay',
-  },
-  travelPlaces: {
-    nl: 'reizen-en-verblijf/accommodatie',
-    es: 'viaje-y-alojamiento/donde-alojarse',
-    en: 'travel-and-stay/where-to-stay',
-  },
-  travelThings: {
-    nl: 'reizen-en-verblijf/activiteiten',
-    es: 'viaje-y-alojamiento/que-hacer',
-    en: 'travel-and-stay/things-to-do',
-  },
-  rsvp: { nl: 'rsvp', es: 'confirmar', en: 'rsvp' },
+  tips:    { nl: 'onze-tips', es: 'nuestros-consejos', en: 'our-tips' },
+  faq:     { nl: 'faq', es: 'faq', en: 'faq' },
+  rsvp:    { nl: 'rsvp', es: 'confirmar', en: 'rsvp' },
 } as const;
 
 export type RouteKey = keyof typeof ROUTES;

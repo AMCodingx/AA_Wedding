@@ -4,13 +4,13 @@ import Section from '~/components/ui/Section.astro';
 import FAQ from '~/features/wedding/FAQ.astro';
 import { useTranslations } from '~/i18n';
 
-const locale = 'en' as const;
+const locale = 'es' as const;
 const t = useTranslations(locale);
 ---
 
 <PageLayout
   locale={locale}
-  routeKey="weddingFaq"
+  routeKey="faq"
   title={t('wedding.faq.title')}
   description={t('wedding.faq.intro')}
 >

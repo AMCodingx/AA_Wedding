@@ -16,23 +16,18 @@ const VENUE = { x: 25, y: 43 };
 <article class="location stack">
   <header class="location__header">
     <Icon name="pin" size={28} />
-    <h2>{t('wedding.location.title')}</h2>
+    <h2 class="location__title">{t('wedding.location.title')}</h2>
   </header>
 
-  <div class="location__body">
-    <div>
-      <p class="location__name">{t('wedding.location.area')}</p>
-      <p class="location__region">{t('wedding.location.region')}</p>
-      <p class="location__detail">{t('wedding.location.detail')}</p>
-    </div>
+  <p class="location__name">{t('wedding.location.area')}</p>
 
-    <figure class="location__map-frame">
-      <button
-        type="button"
-        class="location__map"
-        data-map-trigger
-        aria-label={t('wedding.location.zoom')}
-      >
+  <figure class="location__map-frame">
+    <button
+      type="button"
+      class="location__map"
+      data-map-trigger
+      aria-label={t('wedding.location.zoom')}
+    >
         <img
           src="/images/curacao-map.png"
           alt={t('wedding.location.mapAlt')}
@@ -58,12 +53,8 @@ const VENUE = { x: 25, y: 43 };
           </svg>
           <span>{t('wedding.location.zoom')}</span>
         </span>
-      </button>
-      <figcaption class="location__caption">
-        {t('wedding.location.island')}
-      </figcaption>
-    </figure>
-  </div>
+    </button>
+  </figure>
 </article>
 
 <dialog class="map-dialog" data-map-dialog aria-label={t('wedding.location.mapAlt')}>
@@ -98,9 +89,6 @@ const VENUE = { x: 25, y: 43 };
         </span>
       </span>
     </div>
-    <figcaption class="map-dialog__caption">
-      {t('wedding.location.island')}
-    </figcaption>
   </figure>
 </dialog>
 
@@ -122,25 +110,20 @@ const VENUE = { x: 25, y: 43 };
 
 <style>
   .location__header {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-3);
     color: var(--accent);
   }
-  .location__header h2 {
-    color: var(--text);
-  }
 
-  .location__body {
-    display: grid;
-    gap: var(--space-6);
-    grid-template-columns: 1fr;
-  }
-  @media (min-width: 720px) {
-    .location__body {
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-    }
+  .location__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-xl);
+    font-weight: 400;
+    color: var(--text);
+    line-height: 1;
+    margin: 0;
   }
 
   .location__name {
@@ -149,21 +132,7 @@ const VENUE = { x: 25, y: 43 };
     color: var(--text);
     margin: 0;
     line-height: 1.05;
-  }
-  .location__region {
-    font-family: var(--font-subtitle);
-    font-weight: var(--weight-subtitle);
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: var(--fs-xs);
-    margin-block: var(--space-2) var(--space-4);
-  }
-  .location__detail {
-    color: var(--text-muted);
-    font-size: var(--fs-sm);
-    line-height: 1.55;
-    margin: 0;
+    text-align: center;
   }
 
   .location__map-frame {
@@ -171,6 +140,7 @@ const VENUE = { x: 25, y: 43 };
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
+    width: 100%;
   }
 
   .location__map {
@@ -180,7 +150,7 @@ const VENUE = { x: 25, y: 43 };
     overflow: hidden;
     box-shadow: var(--shadow-md);
     background: var(--bg-elevated);
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 3;
     padding: 0;
     cursor: zoom-in;
     transition:

@@ -8,8 +8,8 @@ Read me before touching code. The full design rationale lives in
 - **Tooling.** Use **Bun**, not npm/pnpm. `bun install`, `bun run dev`.
 - **Never hardcode colors, sizes, or spacing.** Reference CSS vars from
   `src/styles/tokens.css`. If you need a new token, add it there first.
-- **Never hardcode strings.** Add the key to `src/i18n/es.json` (the
-  type-source) and `nl.json`, then use `t('your.key')`.
+- **Never hardcode strings.** Add the key to `src/i18n/nl.json` (the
+  type-source — `TKey = keyof typeof nl`) and `es.json` + `en.json`, then use `t('your.key')`.
 - **Never hardcode hrefs.** Use `href(locale, 'routeKey')` from
   `src/lib/url.ts`. Adding a new page = one entry in the `ROUTES` map.
 - **Components are dumb, features are smart.** `src/components/ui/*`
@@ -23,10 +23,10 @@ Read me before touching code. The full design rationale lives in
 | You want to…                         | Edit                                      |
 |--------------------------------------|-------------------------------------------|
 | Add a new FAQ item                   | `src/features/wedding/faq.data.ts`        |
-| Add a new place to stay              | `src/features/travel/places.data.ts`      |
-| Add a "things to do" highlight       | `src/features/travel/places.data.ts`      |
+| Add / edit a tip                     | `src/features/tips/tips.data.ts`          |
+| Add a tip category photo             | `src/assets/our_tips/<category>/`         |
 | Change wedding date / venue          | `src/lib/wedding.ts`                      |
-| Change a button label                | `src/i18n/{es,nl}.json`                   |
+| Change a button label                | `src/i18n/{nl,es,en}.json`               |
 | Add a new colour                     | `src/styles/tokens.css` (+ `styles.ts`)   |
 | Add a new icon                       | `src/components/ui/Icon.astro` paths map  |
 | Add a new page                       | `src/pages/<locale>/...` + `ROUTES` entry |

@@ -18,11 +18,12 @@ interface Item {
 const items: Item[] = [
   { key: 'home', label: t('nav.home') },
   { key: 'wedding', label: t('nav.wedding') },
-  { key: 'travel', label: t('nav.travel') },
+  { key: 'tips', label: t('nav.tips') },
   { key: 'rsvp', label: t('nav.rsvp') },
+  { key: 'faq', label: t('nav.faq') },
 ];
 
-const numerals = ['i', 'ii', 'iii', 'iv'] as const;
+const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
 ---
 
 <nav class="nav" aria-label={t('nav.menu')}>

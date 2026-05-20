@@ -1,0 +1,39 @@
+---
+import PageLayout from '~/layouts/PageLayout.astro';
+import Section from '~/components/ui/Section.astro';
+import Tips from '~/features/tips/Tips.astro';
+import { useTranslations } from '~/i18n';
+
+const locale = 'nl' as const;
+const t = useTranslations(locale);
+---
+
+<PageLayout
+  locale={locale}
+  routeKey="tips"
+  title={t('tips.title')}
+  description={t('tips.intro')}
+>
+  <Section tone="shell" spacing="md" width="narrow">
+    <header class="tips-header">
+      <h1>{t('tips.title')}</h1>
+      <p>{t('tips.intro')}</p>
+    </header>
+  </Section>
+
+  <Section tone="elevated" spacing="md">
+    <Tips locale={locale} />
+  </Section>
+</PageLayout>
+
+<style>
+  .tips-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .tips-header p {
+    color: var(--text-muted);
+    max-width: 52ch;
+  }
+</style>

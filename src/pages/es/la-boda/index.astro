@@ -1,11 +1,9 @@
 ---
 import PageLayout from '~/layouts/PageLayout.astro';
 import Section from '~/components/ui/Section.astro';
-import Button from '~/components/ui/Button.astro';
 import WeddingDate from '~/features/wedding/WeddingDate.astro';
 import WeddingLocation from '~/features/wedding/WeddingLocation.astro';
 import { useTranslations } from '~/i18n';
-import { href } from '~/lib/url';
 
 const locale = 'es' as const;
 const t = useTranslations(locale);
@@ -17,34 +15,10 @@ const t = useTranslations(locale);
   title={t('wedding.title')}
   description={t('wedding.intro')}
 >
-  <Section tone="elevated" spacing="md" width="narrow">
+  <Section tone="elevated" spacing="lg" width="narrow" class="beach-pattern">
     <WeddingDate locale={locale} />
-  </Section>
-
-  <Section tone="shell" spacing="md" width="narrow">
+    <hr class="section-divider" aria-hidden="true" />
     <WeddingLocation locale={locale} />
   </Section>
 
-  <Section tone="mist" spacing="md" width="narrow">
-    <div class="cta">
-      <h2>{t('wedding.faq.title')}</h2>
-      <p>{t('wedding.faq.intro')}</p>
-      <Button variant="primary" href={href(locale, 'weddingFaq')}>
-        {t('wedding.faq.title')}
-      </Button>
-    </div>
-  </Section>
 </PageLayout>
-
-<style>
-  .cta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-3);
-    text-align: center;
-  }
-  .cta p {
-    color: var(--text-muted);
-  }
-</style>

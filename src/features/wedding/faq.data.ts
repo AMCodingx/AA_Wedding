@@ -14,9 +14,9 @@ export const FAQ_ENTRIES: FaqEntry[] = [
       en: 'Where do you recommend we stay?',
     },
     answer: {
-      nl: 'In de buurt van Willemstad zijn veel goede hotels en boutique villas. Wij raden Pietermaai aan voor sfeer of de westkust voor strand-rust. Bekijk de pagina "Accommodatie" voor links.',
-      es: 'Cerca de Willemstad hay muchos hoteles y villas con encanto. Recomendamos Pietermaai para ambiente, o la costa oeste para playa y tranquilidad. Mira "Dónde alojarse" para enlaces.',
-      en: 'There are great hotels and boutique villas around Willemstad. We recommend Pietermaai for atmosphere or the west coast for beach calm. See "Where to stay" for links.',
+      nl: 'In de buurt van Willemstad zijn veel goede hotels en boutique villas. Wij raden Pietermaai aan voor sfeer of de westkust voor strand en rust. Bekijk de pagina "Onze tips" voor meer inspiratie.',
+      es: 'Cerca de Willemstad hay muchos hoteles y villas con encanto. Recomendamos Pietermaai para ambiente, o la costa oeste para playa y tranquilidad. Echa un vistazo a "Nuestros consejos" para más inspiración.',
+      en: 'There are great hotels and boutique villas around Willemstad. We recommend Pietermaai for atmosphere or the west coast for beach calm. Check out "Our tips" for more inspiration.',
     },
   },
   {

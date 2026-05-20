@@ -1,7 +1,7 @@
 ---
 import Icon, { type IconName } from '~/components/ui/Icon.astro';
 import { useTranslations, type Locale } from '~/i18n';
-import { formatTime, getDateParts } from '~/lib/date';
+import { getDateParts } from '~/lib/date';
 import { WEDDING } from '~/lib/wedding';
 
 interface Props {
@@ -12,22 +12,10 @@ const { locale } = Astro.props;
 const t = useTranslations(locale);
 const dp = getDateParts(WEDDING.ceremonyAt, locale);
 
-const steps: { icon: IconName; label: string; time: string }[] = [
-  {
-    icon: 'sun',
-    label: t('wedding.date.ceremony'),
-    time: formatTime(WEDDING.ceremonyAt, locale),
-  },
-  {
-    icon: 'fork',
-    label: t('wedding.date.cocktail'),
-    time: formatTime(WEDDING.cocktailAt, locale),
-  },
-  {
-    icon: 'heart',
-    label: t('wedding.date.reception'),
-    time: formatTime(WEDDING.receptionAt, locale),
-  },
+const beats: { icon: IconName; label: string }[] = [
+  { icon: 'sun',    label: t('wedding.date.beat1') },
+  { icon: 'fork',   label: t('wedding.date.beat2') },
+  { icon: 'heart',  label: t('wedding.date.beat3') },
 ];
 ---
 
@@ -50,18 +38,19 @@ const steps: { icon: IconName; label: string; time: string }[] = [
     </span>
   </p>
 
+  <p class="planning-intro">{t('wedding.date.planning1')}</p>
+
   <ol class="timeline">
     {
-      steps.map((step, i) => (
+      beats.map((beat, i) => (
         <li class="timeline__item" style={`--i:${i}`}>
           <span class="timeline__pill" aria-hidden="true">
             {String(i + 1).padStart(2, '0')}
           </span>
           <span class="timeline__icon" aria-hidden="true">
-            <Icon name={step.icon} size={20} />
+            <Icon name={beat.icon} size={20} />
           </span>
-          <span class="timeline__label">{step.label}</span>
-          <span class="timeline__time">{step.time}</span>
+          <span class="timeline__label">{beat.label}</span>
         </li>
       ))
     }
@@ -70,8 +59,9 @@ const steps: { icon: IconName; label: string; time: string }[] = [
 
 <style>
   .wedding-date__header {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-3);
     color: var(--accent);
   }
@@ -95,7 +85,6 @@ const steps: { icon: IconName; label: string; time: string }[] = [
     text-transform: uppercase;
     letter-spacing: 0.32em;
     font-size: var(--fs-xs);
-    /* Optical correction: tracked text drifts left of centre. */
     padding-inline-start: 0.32em;
   }
   .save-date__numerals {
@@ -170,6 +159,17 @@ const steps: { icon: IconName; label: string; time: string }[] = [
     }
   }
 
+  .planning-intro {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: var(--fs-sm);
+    color: var(--text-muted);
+    margin: 0;
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ——— Timeline ——— */
   .timeline {
     position: relative;
     list-style: none;
@@ -191,7 +191,7 @@ const steps: { icon: IconName; label: string; time: string }[] = [
   .timeline__item {
     position: relative;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto 1fr;
     align-items: center;
     column-gap: var(--space-4);
     padding: var(--space-3) var(--space-4);
@@ -233,12 +233,6 @@ const steps: { icon: IconName; label: string; time: string }[] = [
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.08em;
-  }
-
-  .timeline__time {
-    font-family: var(--font-display);
-    font-size: var(--fs-lg);
-    color: var(--text);
   }
 
   @keyframes timeline-in {

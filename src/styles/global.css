@@ -62,6 +62,47 @@ html.is-nav-open body {
   touch-action: none;
 }
 
+/*
+ * Beach pattern — ::before overlay so Astro's scoped Section background
+ * is untouched; the pattern sits on top via a positioned pseudo-element.
+ *   1. Soft sand radial wash from top-left corner
+ *   2. Softer echo from bottom-right
+ *   3. Diagonal hairlines at -55° — like light through palm fronds
+ */
+.beach-pattern {
+  position: relative;
+  overflow: hidden;
+}
+.beach-pattern::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 55% 40% at 2% 2%,  rgba(238, 215, 188, 0.55) 0%, transparent 100%),
+    radial-gradient(ellipse 45% 30% at 98% 98%, rgba(238, 215, 188, 0.40) 0%, transparent 100%),
+    repeating-linear-gradient(
+      -55deg,
+      transparent               0px,
+      transparent               24px,
+      rgba(238, 215, 188, 0.12) 24px,
+      rgba(238, 215, 188, 0.12) 25px
+    );
+}
+.beach-pattern > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Thin ornamental divider between related blocks within the same section. */
+.section-divider {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-strong), transparent);
+  margin-block: var(--space-12);
+}
+
 /* Subtle decorative wave used as a section divider — pure CSS, no asset. */
 .wave {
   --wave-color: var(--c-sea-soft);

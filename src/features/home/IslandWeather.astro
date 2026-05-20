@@ -22,6 +22,7 @@ const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitu
 
 <p class="weather" data-weather-endpoint={endpoint} data-state="loading">
   <span class="weather__value" data-weather-value>{t('home.weather.loading')}</span>
+  <span class="weather__sep" aria-hidden="true">·</span>
   <span class="weather__cue">{t('home.weather.label')}</span>
 </p>
 
@@ -51,9 +52,9 @@ const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitu
 <style>
   .weather {
     display: inline-flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: var(--space-1);
+    gap: var(--space-2);
     margin: 0;
     line-height: 1;
     transition: opacity var(--dur-base) var(--ease-out);
@@ -72,12 +73,21 @@ const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitu
   }
 
   .weather__value {
-    font-family: var(--font-display);
-    font-size: var(--fs-lg);
-    font-weight: 400;
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: 0.65rem;
     color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
     line-height: 1;
-    letter-spacing: -0.01em;
+  }
+
+  .weather__sep {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    line-height: 1;
   }
 
   .weather__cue {
