@@ -67,13 +67,11 @@ const categories: CategoryMeta[] = [
   .tips__filters {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-2);
     border: 0;
     margin: 0 0 var(--space-8);
-    padding: var(--space-1);
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-pill);
+    padding: 0;
   }
 
   .tips__radio {
@@ -87,20 +85,27 @@ const categories: CategoryMeta[] = [
   .tips__pill {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
+    white-space: nowrap;
     padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    background: var(--surface);
     cursor: pointer;
     font-size: var(--fs-sm);
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text);
     transition:
       background var(--dur-fast) var(--ease-out),
-      color var(--dur-fast) var(--ease-out);
+      color var(--dur-fast) var(--ease-out),
+      border-color var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
   }
 
   .tips__pill:hover {
-    color: var(--text);
+    border-color: var(--border-strong);
   }
 
   .tips__radio:focus-visible + .tips__pill {
@@ -111,6 +116,20 @@ const categories: CategoryMeta[] = [
   .tips__radio:checked + .tips__pill {
     background: var(--accent);
     color: var(--text-on-accent);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 599px) {
+    .tips__pill {
+      flex: 1 1 calc(50% - var(--space-2));
+      padding-inline: var(--space-3);
+    }
+
+    .tips__pill[for='tips-all'] {
+      flex-basis: 100%;
+    }
   }
 
   /* Show / hide sections based on selected filter */
