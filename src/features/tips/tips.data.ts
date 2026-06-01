@@ -22,8 +22,8 @@ import otrobandaMuralsImg from '~/assets/our_tips/tourist_sight/20240208_112152.
 import groteKleineKnipImg from '~/assets/our_tips/beach/IMG_4631.jpg';
 import playaPiskadoImg from '~/assets/our_tips/beach/IMG_5423.jpg';
 import pirateBayImg from '~/assets/our_tips/beach/IMG_5319.jpg.jpeg';
-import mamboBeachImg from '~/assets/our_tips/beach/IMG_4808.jpg';
-import janThielBeachImg from '~/assets/our_tips/beach/IMG_4691.jpg';
+import mamboBeachImg from '~/assets/our_tips/beach/IMG_4691.jpg';
+import janThielBeachImg from '~/assets/our_tips/beach/IMG_4808.jpg';
 import casAbaoBeachImg from '~/assets/our_tips/beach/IMG_4925.jpg';
 import playaDaaibooiImg from '~/assets/our_tips/beach/IMG_5335.jpg';
 
