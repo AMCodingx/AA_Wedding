@@ -15,7 +15,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     },
     answer: {
       nl: 'In de buurt van Willemstad zijn veel goede hotels en boutique villas. Wij raden Pietermaai aan voor sfeer of de westkust voor strand en rust. Bekijk de pagina "Onze tips" voor meer inspiratie.',
-      es: 'Cerca de Willemstad hay muchos hoteles y villas con encanto. Recomendamos Pietermaai para ambiente, o la costa oeste para playa y tranquilidad. Echa un vistazo a "Nuestros consejos" para más inspiración.',
+      es: 'Cerca de Willemstad hay muchos buenos hoteles y villas boutique. Recomendamos Pietermaai por su ambiente, o la costa oeste por la playa y la tranquilidad. Echa un vistazo a la página "Nuestros consejos" para más inspiración.',
       en: 'There are many good hotels and boutique villas near Willemstad. We recommend Pietermaai for atmosphere, or the west coast for beach and quiet. Check out the "Our tips" page for more inspiration.',
     },
   },
@@ -24,12 +24,12 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     category: 'kids',
     question: {
       nl: 'Zijn kinderen welkom?',
-      es: '¿Pueden venir los niños?',
+      es: '¿Son bienvenidos los niños?',
       en: 'Are kids welcome?',
     },
     answer: {
       nl: 'We zijn dol op jullie kinderen — ze zijn welkom bij de ceremonie en de borrel. Tijdens het diner is er oppas in een aparte ruimte zodat de avond ontspannen blijft voor iedereen.',
-      es: 'Adoramos a vuestros peques — son bienvenidos a la ceremonia y al cóctel. Durante la cena tendremos servicio de cuidadoras en una sala anexa para que la noche sea tranquila.',
+      es: 'Nos encantan vuestros niños, y son bienvenidos en la ceremonia y el cóctel. Durante la cena habrá cuidado infantil en una sala aparte para que la noche sea relajada para todos.',
       en: 'We love your children, and they\'re welcome at the ceremony and drinks. During dinner, we\'ll have childcare in a separate room so the evening stays relaxed for everyone.',
     },
   },
@@ -43,7 +43,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     },
     answer: {
       nl: 'Tropical chic. Linnen, luchtige jurken, warme kleuren. Lage hakken — we lopen over zand en hout. Een vestje voor na de zonsondergang is fijn.',
-      es: 'Tropical chic. Lino, vestidos vaporosos, colores cálidos. Tacones bajos — pisaremos arena y madera. Trae un chal por si refresca tras el atardecer.',
+      es: 'Tropical chic. Lino, vestidos ligeros, colores cálidos. Elige tacones bajos, caminaremos sobre arena y madera. Una chaqueta ligera viene bien después del atardecer.',
       en: 'Tropical chic. Linen, airy dresses, warm colours. Choose low heels, as we\'ll be walking on sand and wood. A light cardigan is nice after sunset.',
     },
   },
@@ -57,7 +57,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     },
     answer: {
       nl: 'We regelen een bus vanaf een centraal punt in Willemstad. Met een huurauto: er is gratis parkeren bij Playa Porto Mari. Tijden volgen dichter bij de datum.',
-      es: 'Habrá un autobús desde un punto central en Willemstad. En coche de alquiler: hay parking gratuito en Playa Porto Mari. Confirmaremos los horarios cerca de la fecha.',
+      es: 'Organizaremos un autobús desde un punto céntrico de Willemstad. Si vienes en coche de alquiler, hay aparcamiento gratuito en Playa Porto Mari. Compartiremos los horarios más cerca de la fecha.',
       en: 'We\'ll arrange a shuttle bus from a central point in Willemstad. If you\'re driving a rental car, there is free parking at Playa Porto Mari. Times will follow closer to the date.',
     },
   },
@@ -66,12 +66,12 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     category: 'other',
     question: {
       nl: 'Cadeautip?',
-      es: '¿Lista de regalos?',
+      es: '¿Alguna sugerencia de regalo?',
       en: 'Any gift suggestions?',
     },
     answer: {
       nl: 'Jullie aanwezigheid is het mooiste cadeau. Wie graag bijdraagt, kan onze huwelijksreis-pot vullen — de link verschijnt hier dichter bij de datum.',
-      es: 'Vuestra presencia es nuestro mejor regalo. Si queréis contribuir, abriremos una pequeña hucha para nuestra luna de miel — el enlace estará en este sitio cerca de la fecha.',
+      es: 'Vuestra presencia es el mejor regalo. Si queréis contribuir, podéis aportar a nuestro fondo para la luna de miel. El enlace aparecerá aquí más cerca de la fecha.',
       en: 'Your presence is the greatest gift. If you\'d like to contribute, you can add to our honeymoon fund. The link will appear here closer to the date.',
     },
   },
@@ -85,7 +85,7 @@ export const FAQ_ENTRIES: FaqEntry[] = [
     },
     answer: {
       nl: 'Graag vóór 15 januari 2027. Daarna sluiten we de catering — laat het ons dus op tijd weten.',
-      es: 'Por favor, antes del 15 de enero de 2027. Después de esa fecha cerramos el catering — y nos rompería el corazón que avisaras tarde.',
+      es: 'Por favor, antes del 15 de enero de 2027. Después cerraremos el número para el catering, así que avisadnos con tiempo.',
       en: 'Please reply by 15 January 2027. After that, we\'ll finalise the catering, so please let us know in good time.',
     },
   },

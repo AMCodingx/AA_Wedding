@@ -13,7 +13,7 @@ export interface FaqEntry {
 export const FAQ_CATEGORY_LABELS: Record<FaqCategory, Record<Locale, string>> = {
   stay: { nl: 'Accommodatie', es: 'Dónde alojarse', en: 'Where to stay' },
   kids: { nl: 'Kinderen', es: 'Niños', en: 'Children' },
-  attire: { nl: 'Dresscode', es: 'Qué llevar', en: 'What to wear' },
+  attire: { nl: 'Dresscode', es: 'Código de vestimenta', en: 'What to wear' },
   transport: { nl: 'Vervoer', es: 'Transporte', en: 'Transport' },
   other: { nl: 'Overige vragen', es: 'Otras preguntas', en: 'Other questions' },
 };
