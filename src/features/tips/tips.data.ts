@@ -1,7 +1,31 @@
 import { type ImageMetadata } from 'astro';
 import { type Locale } from '~/i18n/locales';
+
+import flakosGrillImg from '~/assets/our_tips/food/20240218_210219.jpg';
+import deVisserijImg from '~/assets/our_tips/food/20230101_190159.jpg';
+import tokTokImg from '~/assets/our_tips/food/IMG_5404.jpg';
+import fortNassauImg from '~/assets/our_tips/food/IMG_5451.jpg';
+
 import quadRijdenImg from '~/assets/our_tips/activities/IMG_9751.jpg';
 import sintChristoffelbergImg from '~/assets/our_tips/activities/IMG_3442.jpg';
+import kleinCuracaoImg from '~/assets/our_tips/beach/20221228_100749.jpg';
+
+import sintWillibrordusImg from '~/assets/our_tips/tourist_sight/IMG_9797.jpg';
+import hofiMangoImg from '~/assets/our_tips/tourist_sight/20240214_133233.jpg';
+import kuraHulandaImg from '~/assets/our_tips/tourist_sight/IMG_9418.jpg';
+import ostrichFarmImg from '~/assets/our_tips/tourist_sight/IMG_5369.jpg';
+import sheteBokaImg from '~/assets/our_tips/tourist_sight/IMG_4842.jpg';
+import amazoniaImg from '~/assets/our_tips/tourist_sight/IMG_5267.jpg';
+import willemstadImg from '~/assets/our_tips/tourist_sight/IMG_4245.jpg';
+import otrobandaMuralsImg from '~/assets/our_tips/tourist_sight/20240208_112152.jpg';
+
+import groteKleineKnipImg from '~/assets/our_tips/beach/IMG_4631.jpg';
+import playaPiskadoImg from '~/assets/our_tips/beach/IMG_5423.jpg';
+import pirateBayImg from '~/assets/our_tips/beach/IMG_5319.jpg.jpeg';
+import mamboBeachImg from '~/assets/our_tips/beach/IMG_4808.jpg';
+import janThielBeachImg from '~/assets/our_tips/beach/IMG_4691.jpg';
+import casAbaoBeachImg from '~/assets/our_tips/beach/IMG_4925.jpg';
+import playaDaaibooiImg from '~/assets/our_tips/beach/IMG_5335.jpg';
 
 export type TipCategory = 'food' | 'activities' | 'sights' | 'beach';
 
@@ -10,7 +34,7 @@ export interface Tip {
   category: TipCategory;
   name: string;
   blurb: Record<Locale, string>;
-  image?: ImageMetadata;
+  image: ImageMetadata;
 }
 
 export const TIPS: Tip[] = [
@@ -18,6 +42,7 @@ export const TIPS: Tip[] = [
     id: 'flakos-grill',
     category: 'food',
     name: "Flako's Grill",
+    image: flakosGrillImg,
     blurb: {
       nl: "Dit is een zogenaamde Truki Pan, dit is meestal een soort food truck langs de weg vanuit waar eten wordt verkocht. Dit is echt een plek waar 's avonds, denk na 20:00-21:00, veel locals komen om (betaalbare) gerechten te halen. Er staan allemaal picknickbanken waar je kan wachten op je eten en het eventueel op kan eten zodra het klaar is. Het is ook heel gebruikelijk om het eten mee te nemen en thuis op te eten. Bij dit soort plekken langsgaan is vaak vaste prik na het uitgaan, werk of een dagje strand. Er zit wel verschil in de kwaliteit van de verschillende plekken, dit is een favoriet.",
       es: 'Es un llamado Truki Pan, normalmente una especie de food truck junto a la carretera donde se vende comida. Es un sitio muy de noche, piensa a partir de las 20:00 o 21:00, al que van muchos locales a comprar comida asequible. Hay mesas de picnic donde puedes esperar tu pedido y comerlo allí cuando esté listo, aunque también es muy común llevárselo a casa. Pasar por este tipo de lugares suele ser un plan fijo después de salir, trabajar o pasar el día en la playa. La calidad cambia según el sitio, y este es uno de nuestros favoritos.',
@@ -28,6 +53,7 @@ export const TIPS: Tip[] = [
     id: 'sint-willibrordus',
     category: 'sights',
     name: 'Sint Willibrordus',
+    image: sintWillibrordusImg,
     blurb: {
       nl: 'Bij Sint Willibrordus kun je vaak prachtige flamingo\'s bewonderen in het zoutmeer naast de weg. Vooral rond zonsopkomst of zonsondergang is het uitzicht hier extra mooi. Als je hier in de buurt bent is het zeker de moeite waard om hier even te stoppen.',
       es: 'En Sint Willibrordus a menudo puedes ver flamencos preciosos en el lago salado junto a la carretera. La vista es especialmente bonita al amanecer o al atardecer. Si estás por la zona, merece mucho la pena parar un momento.',
@@ -49,6 +75,7 @@ export const TIPS: Tip[] = [
     id: 'hofi-mango',
     category: 'sights',
     name: 'Hofi Mango',
+    image: hofiMangoImg,
     blurb: {
       nl: 'Hofi Mango is een groene oase midden op het eiland. Hier wandel je tussen honderden mangobomen, tropische planten (enorme cactussen!) en rustige natuurpaden. Het park draait om duurzaamheid en natuurbehoud, maar voelt vooral als een fijne plek om even aan de drukte te ontsnappen. Extra leuk: in het mangoseizoen ruikt het hier overal heerlijk zoet.',
       es: 'Hofi Mango es un oasis verde en medio de la isla. Aquí paseas entre cientos de mangos, plantas tropicales, cactus enormes y senderos tranquilos. El parque gira en torno a la sostenibilidad y la conservación de la naturaleza, pero sobre todo se siente como un lugar agradable para escapar un rato del ajetreo. Además, en temporada de mango todo huele maravillosamente dulce.',
@@ -59,6 +86,7 @@ export const TIPS: Tip[] = [
     id: 'kura-hulanda',
     category: 'sights',
     name: 'Kura Hulanda',
+    image: kuraHulandaImg,
     blurb: {
       nl: 'Kurá Hulanda is een museum over de geschiedenis van de slavernij, Afrika en de Caribische cultuur. Het museum is indrukwekkend en soms confronterend, maar absoluut de moeite waard. Naast de exposities is ook het historische terrein zelf prachtig om doorheen te wandelen.',
       es: 'Kurá Hulanda es un museo sobre la historia de la esclavitud, África y la cultura caribeña. Es impresionante y a veces duro, pero merece muchísimo la pena. Además de las exposiciones, el propio recinto histórico es precioso para pasear.',
@@ -69,6 +97,7 @@ export const TIPS: Tip[] = [
     id: 'grote-kleine-knip',
     category: 'beach',
     name: 'Grote & Kleine Knip',
+    image: groteKleineKnipImg,
     blurb: {
       nl: 'Playa Kenepa Grandi, beter bekend als Grote Knip, is misschien wel het bekendste strand van Curaçao. Denk aan helderblauw water, witte stranden en uitzicht waar je meteen je camera voor pakt. Vlak daarnaast ligt Playa Kenepa Chiki (Kleine Knip): kleiner, rustiger en perfect om relaxed te snorkelen.',
       es: 'Playa Kenepa Grandi, más conocida como Grote Knip, quizá sea la playa más famosa de Curazao. Piensa en agua azul cristalina, arena blanca y vistas que te hacen sacar la cámara al instante. Justo al lado está Playa Kenepa Chiki, Kleine Knip, más pequeña, más tranquila y perfecta para hacer snorkel con calma.',
@@ -79,6 +108,7 @@ export const TIPS: Tip[] = [
     id: 'fort-nassau',
     category: 'food',
     name: 'Fort Nassau',
+    image: fortNassauImg,
     blurb: {
       nl: 'Bij Fort Nassau eet je niet alleen lekker, maar heb je ook een van de mooiste uitzichten van het eiland. Vanaf het oude fort kijk je uit over Willemstad, de haven en de zee. Vooral tijdens zonsondergang is dit een populaire plek voor een uitgebreid diner of een gezellige cocktailavond.',
       es: 'En Fort Nassau no solo se come bien, también tienes una de las vistas más bonitas de la isla. Desde el antiguo fuerte se ve Willemstad, el puerto y el mar. Es un lugar especialmente popular al atardecer para una cena larga o una noche agradable de cócteles.',
@@ -89,6 +119,7 @@ export const TIPS: Tip[] = [
     id: 'playa-piskado',
     category: 'beach',
     name: 'Playa Piskado',
+    image: playaPiskadoImg,
     blurb: {
       nl: 'Playa Piskado staat bekend als dé plek om zeeschildpadden van dichtbij te zien. Vaak zwemmen ze gewoon rustig tussen de mensen door terwijl jij snorkelt in het heldere water. Een bijzondere ervaring die Curaçao voor veel bezoekers extra speciaal maakt. De reden voor zo veel schildpadden is dat hier de vissers hun vis schoonmaken en de resten teruggooien in de zee. Het kan dus ook wel een beetje ruiken naar vis resten…',
       es: 'Playa Piskado es conocida como el lugar para ver tortugas marinas de cerca. A menudo nadan tranquilamente entre la gente mientras haces snorkel en el agua clara, una experiencia especial que hace que Curazao sea aún más memorable para muchos visitantes. Hay tantas tortugas porque los pescadores limpian aquí el pescado y tiran los restos al mar. Así que sí, puede oler un poco a restos de pescado.',
@@ -99,6 +130,7 @@ export const TIPS: Tip[] = [
     id: 'toktok',
     category: 'food',
     name: 'TokTok',
+    image: tokTokImg,
     blurb: {
       nl: 'Nog een andere populaire Truki Pan is Toktok. Hier hebben ze heerlijk mals vlees van de barbecue en andere locale specialiteiten. Maak hier een stop om laagdrempelig heerlijk eten af te halen.',
       es: 'Otro Truki Pan popular es TokTok. Tienen carne a la barbacoa muy tierna y otras especialidades locales. Haz una parada aquí para llevarte comida sencilla y muy rica.',
@@ -109,6 +141,7 @@ export const TIPS: Tip[] = [
     id: 'ostrich-farm',
     category: 'sights',
     name: 'Ostrich Farm',
+    image: ostrichFarmImg,
     blurb: {
       nl: 'Bij Curaçao Ostrich Farm maak je kennis met de grootste vogels ter wereld. Tijdens een safari-tour leer je van alles over struisvogels en kun je ze zelfs van dichtbij voeren. Het is een leuke activiteit voor jong en oud, voor een leuke afwisseling tussen alle stranddagen.',
       es: 'En Curaçao Ostrich Farm conoces a las aves más grandes del mundo. Durante un safari aprendes de todo sobre los avestruces e incluso puedes darles de comer de cerca. Es una actividad divertida para todas las edades y una buena variación entre tantos días de playa.',
@@ -119,6 +152,7 @@ export const TIPS: Tip[] = [
     id: 'pirate-bay',
     category: 'beach',
     name: 'Pirate Bay',
+    image: pirateBayImg,
     blurb: {
       nl: 'Pirate Bay is een relaxte strandplek waar locals en toeristen graag samenkomen. Je kunt hier chillen op het strand, snorkelen of genieten van een cocktail terwijl de zon langzaam ondergaat.',
       es: 'Pirate Bay es un lugar de playa relajado donde se reúnen tanto locales como turistas. Puedes descansar en la playa, hacer snorkel o disfrutar de un cóctel mientras el sol se pone poco a poco.',
@@ -129,6 +163,7 @@ export const TIPS: Tip[] = [
     id: 'shete-boka',
     category: 'sights',
     name: 'Shete Boka',
+    image: sheteBokaImg,
     blurb: {
       nl: 'Bij Shete Boka National Park zie je de ruige kant van Curaçao. Grote golven slaan hier hard tegen de rotsen terwijl je langs verschillende baaien en grotten wandelt.',
       es: 'En el Parque Nacional Shete Boka ves el lado más salvaje de Curazao. Grandes olas golpean con fuerza contra las rocas mientras caminas junto a distintas bahías y cuevas.',
@@ -139,6 +174,7 @@ export const TIPS: Tip[] = [
     id: 'amazonia',
     category: 'sights',
     name: 'Amazonia',
+    image: amazoniaImg,
     blurb: {
       nl: 'Ontdek de jungle! In dit park kijk je je ogen uit met alle verschillende soorten dieren die aanwezig zijn. Met in de hoofdrol Luna, de dansende kaketoe.',
       es: 'Descubre la jungla. En este parque no sabrás dónde mirar con todos los animales diferentes que hay. La protagonista es Luna, la cacatúa bailarina.',
@@ -149,6 +185,7 @@ export const TIPS: Tip[] = [
     id: 'de-visserij',
     category: 'food',
     name: 'De Visserij Piscadera',
+    image: deVisserijImg,
     blurb: {
       nl: 'Bij De Visserij draait alles om verse vis. Je kiest zelf je vis of zeevruchten uit, waarna het direct voor je wordt bereid. De sfeer is gezellig en ongedwongen, alsof je aanschuift bij een lokale barbecue aan zee.',
       es: 'En De Visserij todo gira en torno al pescado fresco. Tú eliges el pescado o marisco y te lo preparan al momento. El ambiente es acogedor y relajado, como si te sentaras en una barbacoa local junto al mar.',
@@ -159,6 +196,7 @@ export const TIPS: Tip[] = [
     id: 'klein-curacao',
     category: 'activities',
     name: 'Klein Curaçao',
+    image: kleinCuracaoImg,
     blurb: {
       nl: 'Klein Curaçao is een klein onbewoond eiland op ongeveer twee uur varen van Curaçao. Je vindt hier een hagelwit strand, een oude vuurtoren en helderblauw water waar je geweldig kunt snorkelen.',
       es: 'Klein Curaçao es una pequeña isla deshabitada a unas dos horas en barco desde Curazao. Allí encontrarás una playa blanquísima, un antiguo faro y agua azul cristalina donde se puede hacer snorkel de maravilla.',
@@ -169,6 +207,7 @@ export const TIPS: Tip[] = [
     id: 'mambo-beach',
     category: 'beach',
     name: 'Mambo Beach',
+    image: mamboBeachImg,
     blurb: {
       nl: "Mambo Beach is een van de gezelligste stranden van het eiland. Overdag kun je hier relaxen op een ligbed aan zee en 's avonds verandert het gebied in een levendige plek vol restaurants, bars en muziek. Ideaal als je strand en gezelligheid wilt combineren.",
       es: 'Mambo Beach es una de las playas más animadas de la isla. Durante el día puedes relajarte en una tumbona junto al mar y, por la noche, la zona se convierte en un lugar lleno de vida con restaurantes, bares y música. Ideal si quieres combinar playa y buen ambiente.',
@@ -190,6 +229,7 @@ export const TIPS: Tip[] = [
     id: 'willemstad',
     category: 'sights',
     name: 'Willemstad',
+    image: willemstadImg,
     blurb: {
       nl: 'Willemstad is het kleurrijke hart van Curaçao. De beroemde gekleurde huisjes langs de Handelskade, de Pontjesbrug en de gezellige straatjes maken de stad uniek. Je vindt hier een mix van cultuur, historie, winkels, restaurants en een ontspannen Caribische sfeer.',
       es: 'Willemstad es el corazón colorido de Curazao. Las famosas casas de colores junto a la Handelskade, el Puente Reina Emma y sus calles acogedoras hacen que la ciudad sea única. Aquí encuentras una mezcla de cultura, historia, tiendas, restaurantes y un ambiente caribeño relajado.',
@@ -200,6 +240,7 @@ export const TIPS: Tip[] = [
     id: 'otrobanda-murals',
     category: 'sights',
     name: 'Otrobanda Murals',
+    image: otrobandaMuralsImg,
     blurb: {
       nl: 'De kleurrijke muurschilderingen in Otrobanda vormen een van de meest bijzondere culturele trekpleisters van Curaçao. De wijk is uitgegroeid tot een groot openluchtmuseum waar lokale en internationale kunstenaars muren hebben omgetoverd tot indrukwekkende kunstwerken. De schilderingen vertellen verhalen over de geschiedenis, cultuur en identiteit van het eiland, met thema\'s zoals muziek, slavernij, natuur en het dagelijks leven op Curaçao.',
       es: 'Los murales de colores de Otrobanda son una de las atracciones culturales más especiales de Curazao. El barrio se ha convertido en un gran museo al aire libre donde artistas locales e internacionales han transformado muros en obras impresionantes. Las pinturas cuentan historias sobre la historia, la cultura y la identidad de la isla, con temas como la música, la esclavitud, la naturaleza y la vida cotidiana en Curazao.',
@@ -210,6 +251,7 @@ export const TIPS: Tip[] = [
     id: 'jan-thiel-beach',
     category: 'beach',
     name: 'Jan Thiel Beach',
+    image: janThielBeachImg,
     blurb: {
       nl: "Jan Thiel Beach is een populaire hotspot waar strand, luxe en gezelligheid samenkomen. Overdag kun je relaxen aan het water en 's avonds geniet je hier van beachclubs, cocktails en live muziek. Vooral tijdens zonsondergang hangt hier een gezellige sfeer.",
       es: 'Jan Thiel Beach es un hotspot popular donde se combinan playa, lujo y buen ambiente. Durante el día puedes relajarte junto al agua y, por la noche, disfrutar de beach clubs, cócteles y música en directo. El ambiente es especialmente agradable durante el atardecer.',
@@ -220,6 +262,7 @@ export const TIPS: Tip[] = [
     id: 'cas-abao-beach',
     category: 'beach',
     name: 'Cas Abao Beach',
+    image: casAbaoBeachImg,
     blurb: {
       nl: 'Cas Abao Beach is een van de mooiste en populairste stranden van Curaçao. Het water is hier helderblauw, het zand spierwit en de sfeer heerlijk relaxed. Door het rustige water is het ook een perfecte plek om te snorkelen tussen kleurrijke vissen.',
       es: 'Cas Abao Beach es una de las playas más bonitas y populares de Curazao. El agua es azul cristalina, la arena blanquísima y el ambiente muy relajado. Gracias al agua tranquila, también es un lugar perfecto para hacer snorkel entre peces de colores.',
@@ -230,6 +273,7 @@ export const TIPS: Tip[] = [
     id: 'playa-daaibooi',
     category: 'beach',
     name: 'Playa Daaibooi',
+    image: playaDaaibooiImg,
     blurb: {
       nl: 'Playa Daaibooi is een geliefd strand aan de westkust van Curaçao en staat bekend om zijn rustige en natuurlijke sfeer. Het strand ligt tussen hoge rotsen en helder turquoise water, waardoor het een prachtige plek is om te ontspannen en van de natuur te genieten. Zowel locals als toeristen komen hier graag om te zwemmen, snorkelen of gewoon te genieten van de zon.',
       es: 'Playa Daaibooi es una playa muy querida en la costa oeste de Curazao, conocida por su ambiente tranquilo y natural. La playa está entre rocas altas y agua turquesa clara, lo que la convierte en un lugar precioso para relajarse y disfrutar de la naturaleza. Tanto locales como turistas vienen aquí a nadar, hacer snorkel o simplemente disfrutar del sol.',

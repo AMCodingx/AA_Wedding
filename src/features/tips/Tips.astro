@@ -1,10 +1,8 @@
 ---
-import { Image } from 'astro:assets';
-import Card from '~/components/ui/Card.astro';
+import ImageCard from '~/components/ui/ImageCard.astro';
 import Badge from '~/components/ui/Badge.astro';
 import Icon, { type IconName } from '~/components/ui/Icon.astro';
 import { TIPS, type TipCategory } from './tips.data';
-import { galleryByCategory } from './gallery';
 import { useTranslations, type Locale } from '~/i18n';
 
 interface Props {
@@ -43,44 +41,20 @@ const categories: CategoryMeta[] = [
   </fieldset>
 
   {categories.map((cat) => {
-    const imgs = galleryByCategory[cat.id];
     const tips = TIPS.filter((tip) => tip.category === cat.id);
     const catLabel = t(`tips.filter.${cat.id}`);
     return (
       <div class="tips__section" data-section={cat.id}>
-        {imgs.length > 0 && (
-          <div class="tips__gallery" aria-label={t('tips.gallery.alt').replace('{category}', catLabel)}>
-            {imgs.map((img) => (
-              <div class="tips__gallery-item">
-                <Image
-                  src={img}
-                  alt={t('tips.gallery.alt').replace('{category}', catLabel)}
-                  widths={[400, 800]}
-                  sizes="(min-width: 768px) 25vw, 45vw"
-                  format="avif"
-                  quality={78}
-                  loading="lazy"
-                  decoding="async"
-                  class="tips__gallery-img"
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
         <ul class="tips__grid">
           {tips.map((tip) => (
             <li id={tip.id}>
-              <Card elevation="sm" as="article">
-                <div class="tips__card-header">
-                  <h3>{tip.name}</h3>
-                  <Badge tone={cat.tone}>
-                    <Icon name={cat.icon} size={12} />
-                    {catLabel}
-                  </Badge>
-                </div>
+              <ImageCard image={tip.image} alt={tip.name} title={tip.name}>
+                <Badge slot="badge" tone={cat.tone}>
+                  <Icon name={cat.icon} size={12} />
+                  {catLabel}
+                </Badge>
                 <p>{tip.blurb[locale]}</p>
-              </Card>
+              </ImageCard>
             </li>
           ))}
         </ul>
@@ -157,39 +131,6 @@ const categories: CategoryMeta[] = [
     margin-block-start: var(--space-12);
   }
 
-  /* Gallery strip */
-  .tips__gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(180px, 45vw), 1fr));
-    gap: var(--space-2);
-    margin-block-end: var(--space-8);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-
-  .tips__gallery-item {
-    aspect-ratio: 4 / 3;
-    overflow: hidden;
-  }
-
-  .tips__gallery-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform var(--dur-base) var(--ease-out);
-  }
-
-  .tips__gallery-item:hover .tips__gallery-img {
-    transform: scale(1.04);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .tips__gallery-img {
-      transition: none;
-    }
-  }
-
   /* Tip cards grid */
   .tips__grid {
     list-style: none;
@@ -210,26 +151,5 @@ const categories: CategoryMeta[] = [
     .tips__grid {
       grid-template-columns: repeat(3, 1fr);
     }
-  }
-
-  .tips__card-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-3);
-    margin-block-end: var(--space-2);
-  }
-
-  .tips__card-header h3 {
-    font-size: var(--fs-base);
-    margin: 0;
-    line-height: 1.2;
-  }
-
-  .tips__grid p {
-    color: var(--text-muted);
-    font-size: var(--fs-sm);
-    margin: 0;
-    line-height: 1.6;
   }
 </style>
