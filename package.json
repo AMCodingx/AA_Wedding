@@ -7,12 +7,12 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "bun run build && wrangler dev",
+    "preview": "bun run build && wrangler pages dev dist",
     "check": "astro check && tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint . --ext .ts,.astro",
-    "deploy": "bun run build && wrangler deploy",
+    "deploy": "bun run build && wrangler pages deploy dist --project-name aa-wedding-36p",
     "cf-typegen": "wrangler types"
   },
   "dependencies": {
