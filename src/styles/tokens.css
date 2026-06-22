@@ -11,6 +11,8 @@
   --c-mist: #d8ddcd;
   --c-sand: #eed7bc;
   --c-shell: #f6ebdf;
+  --c-coral: #e8917a;
+  --c-foliage: #6ba893;
 
   /* —— Functional aliases —— */
   --bg: var(--c-shell);
@@ -19,6 +21,8 @@
   --accent: var(--c-sea);
   --accent-soft: var(--c-sea-soft);
   --warm: var(--c-sand);
+  --coral: var(--c-coral);
+  --foliage: var(--c-foliage);
 
   --text: #1f3a38;
   --text-muted: #5a6e6b;

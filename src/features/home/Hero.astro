@@ -2,7 +2,10 @@
 import { Image } from 'astro:assets';
 import Button from '~/components/ui/Button.astro';
 import IslandWeather from './IslandWeather.astro';
-import couplePhoto from '~/assets/hero/couple.jpg';
+import coupleCutout from '~/assets/hero/couple-cutout.png';
+import beachImg from '~/assets/hero/beach.png';
+import palmImg from '~/assets/hero/palm.png';
+import accentImg from '~/assets/hero/accent.png';
 import { useTranslations, type Locale } from '~/i18n';
 import { href } from '~/lib/url';
 import { formatLongDate } from '~/lib/date';
@@ -17,33 +20,83 @@ const t = useTranslations(locale);
 const dateLabel = formatLongDate(WEDDING.ceremonyAt, locale);
 ---
 
-<section class="hero">
+<section class="hero" aria-label={`${WEDDING.couple.partnerOne} & ${WEDDING.couple.partnerTwo}`}>
   <div class="hero__bg" aria-hidden="true"></div>
 
-  <div class="container hero__inner">
-    <figure class="hero__media">
-      <Image
-        src={couplePhoto}
-        alt={`${WEDDING.couple.partnerOne} & ${WEDDING.couple.partnerTwo}`}
-        widths={[400, 600, 900, 1200]}
-        sizes="(min-width: 1024px) 28rem, (min-width: 720px) 22rem, 70vw"
-        loading="eager"
-        decoding="async"
-        format="avif"
-        quality={78}
-        class="hero__photo"
-      />
-    </figure>
+  <!-- Watercolor beach, bleeding from the left -->
+  <Image
+    src={beachImg}
+    alt=""
+    widths={[320, 512, 768]}
+    sizes="56vw"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+    format="webp"
+    quality={90}
+    class="hero__beach"
+    aria-hidden="true"
+  />
 
-    <div class="hero__text">
+  <!-- Watercolor palm fronds, top-right -->
+  <Image
+    src={palmImg}
+    alt=""
+    widths={[180, 360]}
+    sizes="24vw"
+    loading="eager"
+    decoding="async"
+    format="webp"
+    quality={92}
+    class="hero__palm"
+    aria-hidden="true"
+  />
+
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <p class="hero__eyebrow">
+        <span>{t('home.hero.eyebrow')}</span>
+        <svg
+          class="hero__eyebrow-heart"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.7A4 4 0 0 1 19 10c0 5.5-7 10-7 10Z"></path>
+        </svg>
+      </p>
+
       <h1 class="hero__title">
-        <span>{WEDDING.couple.partnerOne}</span>
-        <span class="hero__amp">&amp;</span>
-        <span>{WEDDING.couple.partnerTwo}</span>
+        <span class="hero__line">
+          <span class="hero__name">{WEDDING.couple.partnerOne}</span>
+          <span class="hero__amp">&amp;</span>
+        </span>
+        <span class="hero__name hero__name--two">{WEDDING.couple.partnerTwo}</span>
       </h1>
 
-      <p class="hero__date">{dateLabel}</p>
+      <svg
+        class="hero__flourish"
+        width="150"
+        height="24"
+        viewBox="0 0 150 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        aria-hidden="true"
+      >
+        <path d="M6 13 C32 4 54 4 66 12" />
+        <path d="M144 13 C118 4 96 4 84 12" />
+        <path d="M75 18s-6-3.5-6-7.6a3 3 0 0 1 6-2.1 3 3 0 0 1 6 2.1c0 4.1-6 7.6-6 7.6Z"></path>
+      </svg>
 
+      <p class="hero__date">{dateLabel}</p>
       <p class="hero__venue">{WEDDING.venue.region}</p>
 
       <div class="hero__weather">
@@ -59,185 +112,430 @@ const dateLabel = formatLongDate(WEDDING.ceremonyAt, locale);
         </Button>
       </div>
     </div>
+
+    <figure class="hero__media">
+      <Image
+        src={coupleCutout}
+        alt={`${WEDDING.couple.partnerOne} & ${WEDDING.couple.partnerTwo}`}
+        widths={[400, 600, 900, 1200, 1600]}
+        sizes="(min-width: 900px) 50vw, 60vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        format="webp"
+        quality={92}
+        class="hero__photo"
+      />
+    </figure>
   </div>
 
-  <svg class="hero__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0,64 C240,112 480,16 720,48 C960,80 1200,112 1440,64 L1440,120 L0,120 Z"></path>
-  </svg>
+  <!-- Sand dune sweeping across the bottom -->
+  <div class="hero__dune" aria-hidden="true">
+    <svg viewBox="0 0 1440 200" preserveAspectRatio="none">
+      <path
+        d="M0 92 C220 64 440 64 660 84 C880 104 1080 104 1260 74 C1340 60 1400 50 1440 44 L1440 200 L0 200 Z"
+      ></path>
+    </svg>
+  </div>
+
+  <!-- Watercolor monstera leaf + coral heart accent, bottom-right -->
+  <Image
+    src={accentImg}
+    alt=""
+    widths={[220, 440]}
+    sizes="26vw"
+    loading="lazy"
+    decoding="async"
+    format="webp"
+    quality={92}
+    class="hero__accent"
+    aria-hidden="true"
+  />
+
+  <a class="hero__scroll" href="#story">
+    <svg
+      class="hero__scroll-arrow"
+      width="22"
+      height="26"
+      viewBox="0 0 24 28"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 2v22 M5 18l7 6 7-6"></path>
+    </svg>
+    <span class="hero__scroll-text">{t('home.hero.scrollCue')}</span>
+  </a>
 </section>
 
 <style>
   .hero {
     position: relative;
-    overflow: hidden;
     isolation: isolate;
-    padding-block: var(--space-16) var(--space-16);
+    overflow: hidden;
     color: var(--text);
   }
 
+  /* —— Warm sky / shell base —— */
   .hero__bg {
     position: absolute;
     inset: 0;
-    z-index: -1;
+    z-index: 0;
     background:
-      radial-gradient(ellipse at 20% 0%, var(--c-sand) 0%, transparent 55%),
-      radial-gradient(ellipse at 100% 100%, var(--c-sea-soft) 0%, transparent 55%),
-      linear-gradient(180deg, var(--c-shell) 0%, var(--c-mist) 100%);
+      radial-gradient(60% 50% at 100% 0%, rgba(240, 214, 184, 0.5) 0%, transparent 58%),
+      radial-gradient(54% 46% at -4% 8%, rgba(244, 226, 206, 0.55) 0%, transparent 60%),
+      linear-gradient(165deg, var(--c-shell) 0%, #f7ead9 50%, #f2e3cd 100%);
   }
 
-  .hero__inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-10);
-    align-items: center;
-    justify-items: center;
-    text-align: center;
+  /* —— Watercolor beach, anchored bottom-left, fading into the cream —— */
+  .hero__beach {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: min(50vw, 44rem);
+    height: 100%;
+    object-fit: fill;
+    z-index: 0;
+    pointer-events: none;
+    -webkit-mask-image:
+      linear-gradient(to right, #000 0%, #000 40%, rgba(0, 0, 0, 0) 86%),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 14%);
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(to right, #000 0%, #000 40%, rgba(0, 0, 0, 0) 86%),
+      linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #000 14%);
+    mask-composite: intersect;
   }
 
-  /* —— Photo —— */
-  .hero__media {
-    margin: 0;
-    width: min(20rem, 70vw);
-    transform: rotate(-1.5deg);
-    transition: transform var(--dur-base) var(--ease-out);
-  }
-
-  .hero__media:hover {
-    transform: rotate(0deg);
-  }
-
-  .hero__photo {
-    width: 100%;
+  /* —— Palm fronds —— */
+  .hero__palm {
+    position: absolute;
+    top: clamp(-2rem, -2vw, 0rem);
+    right: clamp(-2.5rem, -2vw, 0.5rem);
+    width: clamp(12rem, 26vw, 22rem);
     height: auto;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    border-radius: var(--radius-md);
-    background: var(--bg-elevated);
-    /* Polaroid-ish white margin + soft shadow + hairline */
-    padding: var(--space-2);
-    box-shadow:
-      0 1px 0 rgba(31, 58, 56, 0.04) inset,
-      0 18px 40px -12px rgba(31, 58, 56, 0.28),
-      0 4px 10px -2px rgba(31, 58, 56, 0.12);
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: radial-gradient(120% 120% at 92% 8%, #000 55%, rgba(0, 0, 0, 0) 100%);
+    mask-image: radial-gradient(120% 120% at 92% 8%, #000 55%, rgba(0, 0, 0, 0) 100%);
   }
 
-  /* —— Text column —— */
-  .hero__text {
+  /* —— Layout: text + photo side by side, CTA flows under on small screens —— */
+  .hero__inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+    align-items: center;
+    column-gap: var(--space-4);
+    padding-block: clamp(1rem, 3vw, 2.5rem) clamp(6rem, 16vw, 9rem);
+    min-height: clamp(34rem, calc(100svh - var(--header-h)), 52rem);
+  }
+
+  .hero__content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: var(--space-3);
-    max-width: 28rem;
+    align-items: flex-start;
+    gap: clamp(0.5rem, 1.4vw, 1rem);
+    position: relative;
+    z-index: 3;
   }
 
+  /* —— Eyebrow —— */
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: clamp(0.7rem, 0.55rem + 0.5vw, 0.95rem);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.26em;
+    line-height: 1.2;
+  }
+
+  .hero__eyebrow-heart {
+    width: clamp(0.95rem, 2vw, 1.25rem);
+    height: auto;
+    color: var(--coral);
+  }
+
+  /* —— Title —— */
   .hero__title {
     font-family: var(--font-display);
-    font-size: var(--fs-2xl);
     font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-block-start: var(--space-3);
+    line-height: 0.92;
+    letter-spacing: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    color: var(--text);
+    font-size: clamp(3.25rem, 5vw + 2.5rem, 8.5rem);
   }
 
-  .hero__title > span {
-    display: inline-block;
+  .hero__line {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.18em;
   }
 
   .hero__amp {
-    font-style: italic;
     color: var(--accent);
-    margin-inline: 0.15em;
+    font-size: 0.82em;
   }
 
+  .hero__name--two {
+    margin-block-start: -0.05em;
+  }
+
+  /* —— Flourish —— */
+  .hero__flourish {
+    width: clamp(7rem, 16vw, 9.5rem);
+    height: auto;
+    color: var(--accent);
+    margin-block: clamp(0.1rem, 0.5vw, 0.4rem);
+  }
+
+  /* —— Date / venue —— */
   .hero__date {
     font-family: var(--font-display);
-    font-size: var(--fs-lg);
+    font-size: clamp(1.4rem, 0.9rem + 1.5vw, 2.2rem);
     font-weight: 400;
+    line-height: 1.1;
     color: var(--text);
-    margin-block-start: var(--space-1);
-  }
-
-  .hero__weather {
-    margin-block-start: var(--space-2);
-    /* Reserve a tiny minimum so the layout doesn't jitter when the
-       loading dash is replaced by the live value. */
-    min-height: 2.4rem;
+    margin: 0;
   }
 
   .hero__venue {
     font-family: var(--font-subtitle);
     font-weight: var(--weight-subtitle);
-    font-size: var(--fs-sm);
+    font-size: clamp(0.8rem, 0.65rem + 0.4vw, 1rem);
     color: var(--text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.22em;
-    margin-block-start: var(--space-1);
+    letter-spacing: 0.28em;
+    margin: 0;
   }
 
+  .hero__weather {
+    margin-block-start: var(--space-1);
+    min-height: 1.2rem;
+  }
+
+  /* —— CTA —— */
   .hero__cta {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-block-start: var(--space-6);
-    justify-content: center;
+    margin-block-start: clamp(0.75rem, 2vw, 1.5rem);
   }
 
-  .hero__wave {
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
+  /* —— Photo —— */
+  .hero__media {
+    margin: 0;
+    align-self: end;
+    justify-self: end;
     width: 100%;
-    height: 80px;
+    z-index: 2;
+  }
+
+  .hero__photo {
     display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 26px rgba(31, 58, 56, 0.15));
+  }
+
+  /* —— Dune —— */
+  .hero__dune {
+    position: absolute;
+    inset: auto 0 -1px 0;
+    height: clamp(4.5rem, 12vw, 8rem);
+    z-index: 4;
+    pointer-events: none;
+  }
+
+  .hero__dune svg {
+    display: block;
+    width: 100%;
+    height: 100%;
     fill: var(--bg);
   }
 
-  /* —— Two columns on tablet+ —— */
-  @media (min-width: 768px) {
-    .hero {
-      padding-block: var(--space-24) var(--space-24);
-    }
+  /* —— Bottom accent: watercolor monstera + coral heart —— */
+  .hero__accent {
+    position: absolute;
+    right: clamp(0.25rem, 1vw, 1rem);
+    bottom: clamp(0.25rem, 1.5vw, 1rem);
+    width: clamp(9rem, 24vw, 18rem);
+    height: auto;
+    z-index: 5;
+    pointer-events: none;
+  }
 
+  /* —— Scroll cue —— */
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: clamp(0.75rem, 2.5vw, 1.5rem);
+    transform: translateX(-50%);
+    z-index: 6;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--text-muted);
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .hero__scroll-arrow {
+    width: clamp(0.9rem, 2vw, 1.2rem);
+    height: auto;
+    transition: transform var(--dur-base) var(--ease-out);
+  }
+
+  .hero__scroll:hover .hero__scroll-arrow {
+    transform: translateY(3px);
+  }
+
+  .hero__scroll-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.5rem);
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* —— Small screens: photo overlaps right, CTA in cream zone below the dune —— */
+  @media (max-width: 768px) {
     .hero__inner {
-      grid-template-columns: minmax(0, 22rem) minmax(0, 32rem);
-      gap: var(--space-16);
-      align-items: center;
-      text-align: left;
-      justify-items: stretch;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      min-height: calc(100svh - var(--header-h));
+      padding-block: clamp(0.5rem, 3vw, 1.5rem) 0;
+      z-index: 6;
     }
 
-    .hero__media {
-      width: 100%;
-      max-width: 22rem;
-      justify-self: end;
+    .hero__content {
+      flex: 1;
+      gap: clamp(0.35rem, 1.4vw, 0.8rem);
     }
 
-    .hero__text {
-      align-items: flex-start;
-      max-width: none;
+    .hero__eyebrow {
+      letter-spacing: 0.16em;
+      font-size: clamp(0.62rem, 2.6vw, 0.8rem);
     }
 
     .hero__title {
-      font-size: clamp(3rem, 1.8rem + 4.5vw, 5rem);
+      font-size: clamp(2.7rem, 13vw, 4.4rem);
+    }
+
+    .hero__title {
+      max-width: 84%;
+    }
+
+    .hero__flourish,
+    .hero__venue,
+    .hero__weather {
+      max-width: 54%;
+    }
+
+    .hero__date {
+      font-size: clamp(0.95rem, 4vw, 1.4rem);
+      white-space: nowrap;
+      max-width: none;
     }
 
     .hero__weather {
-      margin-block-start: var(--space-3);
+      margin-block-end: var(--space-2);
+    }
+
+    .hero__media {
+      position: absolute;
+      top: clamp(8rem, 30vw, 12rem);
+      right: clamp(-13rem, -35vw, -6rem);
+      width: clamp(21rem, 112vw, 32rem);
+      margin: 0;
+      z-index: 1;
+    }
+
+    .hero__photo {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      -webkit-mask-image: linear-gradient(to bottom, #000 90%, rgba(0, 0, 0, 0) 100%);
+      mask-image: linear-gradient(to bottom, #000 90%, rgba(0, 0, 0, 0) 100%);
     }
 
     .hero__cta {
-      justify-content: flex-start;
+      flex-direction: column;
+      align-items: stretch;
+      width: clamp(17rem, 86%, 22rem);
+      margin-inline-end: auto;
+      position: relative;
+      z-index: 5;
+      margin-block-start: auto;
+      margin-block-end: clamp(4.5rem, 17vw, 7rem);
+    }
+
+    .hero__cta :global(.btn) {
+      width: 100%;
+      padding-inline: var(--space-5);
+      font-size: var(--fs-base);
+    }
+
+    .hero__dune {
+      height: clamp(12rem, 35svh, 16rem);
+    }
+
+    .hero__accent {
+      width: clamp(6.5rem, 26vw, 9.5rem);
+      right: clamp(0.25rem, 2vw, 1rem);
+      bottom: clamp(0.75rem, 4vw, 1.75rem);
+    }
+
+    .hero__scroll {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(0.75rem, 3vw, 1.5rem);
+      transform: translateX(-50%);
     }
   }
 
-  @media (min-width: 1024px) {
+  /* —— Desktop: photo anchored bottom-right, bleeding to the viewport edge —— */
+  @media (min-width: 769px) {
     .hero__inner {
-      grid-template-columns: minmax(0, 26rem) minmax(0, 36rem);
-      gap: var(--space-24);
+      display: block;
+      padding-block: clamp(2rem, 6vh, 5rem) clamp(7rem, 14vw, 11rem);
     }
+
+    .hero__content {
+      max-width: min(34rem, 40vw);
+    }
+
+    .hero__date {
+      white-space: nowrap;
+    }
+
     .hero__media {
-      max-width: 26rem;
+      position: absolute;
+      right: clamp(-16rem, -15vw, -11rem);
+      bottom: 0;
+      width: min(80vw, 74rem);
+      max-width: none;
+      z-index: 2;
+    }
+
+    .hero__dune {
+      height: clamp(8rem, 16vw, 14rem);
     }
   }
 </style>

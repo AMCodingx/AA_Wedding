@@ -6,6 +6,7 @@
  * client-side via Open-Meteo (free, no key). On error the widget hides
  * itself instead of falling back to a misleading number.
  */
+import Icon from '~/components/ui/Icon.astro';
 import { useTranslations, type Locale } from '~/i18n';
 import { WEDDING } from '~/lib/wedding';
 
@@ -21,6 +22,7 @@ const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitu
 ---
 
 <p class="weather" data-weather-endpoint={endpoint} data-state="loading">
+  <Icon name="sun" size={16} class="weather__icon" />
   <span class="weather__value" data-weather-value>{t('home.weather.loading')}</span>
   <span class="weather__sep" aria-hidden="true">·</span>
   <span class="weather__cue">{t('home.weather.label')}</span>
@@ -70,6 +72,10 @@ const endpoint = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitu
     /* Reserve no space — collapses cleanly when the API can't be reached. */
     height: 0;
     overflow: hidden;
+  }
+
+  .weather__icon {
+    color: var(--text-muted);
   }
 
   .weather__value {

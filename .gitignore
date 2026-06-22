@@ -26,6 +26,7 @@ yarn-error.log*
 # misc
 .cache/
 coverage/
+temp/
 
 # wrangler files
 .wrangler

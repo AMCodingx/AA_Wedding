@@ -10,6 +10,8 @@ export const colors = {
   mist: '#D8DDCD',
   sand: '#EED7BC',
   shell: '#F6EBDF',
+  coral: '#E8917A',
+  foliage: '#6BA893',
   text: '#1F3A38',
   textMuted: '#5A6E6B',
 } as const;
