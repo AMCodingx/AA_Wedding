@@ -2,7 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-import cloudflare from "@astrojs/cloudflare";
+import cloudflare from '@astrojs/cloudflare';
 
 const SITE = 'https://wedding.example.com';
 
@@ -43,6 +43,9 @@ export default defineConfig({
     defaultStrategy: 'viewport',
   },
 
-  output: "hybrid",
-  adapter: cloudflare()
+  output: 'static',
+  adapter: cloudflare({
+    imageService: 'compile',
+    prerenderEnvironment: 'node',
+  }),
 });
