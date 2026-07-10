@@ -20,6 +20,11 @@ const categories: CategoryMeta[] = [
   { id: 'sights',     icon: 'camera', tone: 'mist' },
   { id: 'beach',      icon: 'wave',   tone: 'outline' },
 ];
+
+const metaFor = (id: TipCategory) => categories.find((c) => c.id === id)!;
+
+// "All" view: mix categories together, ordered by name so it feels less rigid.
+const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
 ---
 
 <div class="tips">
@@ -39,6 +44,25 @@ const categories: CategoryMeta[] = [
       </>
     ))}
   </fieldset>
+
+  <div class="tips__section" data-section="all">
+    <ul class="tips__grid">
+      {allTips.map((tip) => {
+        const cat = metaFor(tip.category);
+        return (
+          <li>
+            <ImageCard image={tip.image} alt={tip.name} title={tip.name}>
+              <Badge slot="badge" tone={cat.tone}>
+                <Icon name={cat.icon} size={12} />
+                {t(`tips.filter.${cat.id}`)}
+              </Badge>
+              <p>{tip.blurb[locale]}</p>
+            </ImageCard>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
 
   {categories.map((cat) => {
     const tips = TIPS.filter((tip) => tip.category === cat.id);
@@ -137,17 +161,12 @@ const categories: CategoryMeta[] = [
     display: none;
   }
 
-  .tips:has(#tips-all:checked) .tips__section,
+  .tips:has(#tips-all:checked) .tips__section[data-section='all'],
   .tips:has(#tips-food:checked) .tips__section[data-section='food'],
   .tips:has(#tips-activities:checked) .tips__section[data-section='activities'],
   .tips:has(#tips-sights:checked) .tips__section[data-section='sights'],
   .tips:has(#tips-beach:checked) .tips__section[data-section='beach'] {
     display: block;
-  }
-
-  /* When showing all, add spacing between category sections */
-  .tips:has(#tips-all:checked) .tips__section + .tips__section {
-    margin-block-start: var(--space-12);
   }
 
   /* Tip cards grid */
