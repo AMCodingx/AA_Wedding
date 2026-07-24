@@ -22,8 +22,6 @@
      the tide; --c-tide stays the brand value for rules, waves and icons. */
   --c-tide-deep: #477f85;
   --c-foam: #cbdfe2;
-  /* The card's header-button discs. */
-  --c-shallow: #b4d7d8;
 
   /* —— Functional aliases —— */
   --bg: var(--c-shell);
@@ -40,6 +38,11 @@
   --text: #1f3a38;
   --text-muted: #5a6e6b;
   --text-on-accent: #ffffff;
+
+  /* Edge hairline for images and flags. Must stay PURE black — every other
+     border here is lagoon-tinted, and a tinted edge on artwork picks up the
+     surface behind it and reads as dirt rather than as depth. */
+  --outline-image: rgba(0, 0, 0, 0.1);
 
   --border: rgba(31, 58, 56, 0.12);
   --border-strong: rgba(31, 58, 56, 0.24);

@@ -42,8 +42,7 @@ Sampled from the Canva card. Cooler than the original palette on purpose.
 | `--c-lagoon` | `#285260` | Names, CURAÇAO, monogram, nav links. The dark voice. |
 | `--c-tide` | `#548C92` | Rules, waves, dividers, icons. |
 | `--c-tide-deep` | `#477F85` | **Only** where white text sits on tide — see §6. |
-| `--c-foam` | `#CBDFE2` | Bottom of the hero ramp, selected states. |
-| `--c-shallow` | `#B4D7D8` | The card's header-button discs. |
+| `--c-foam` | `#CBDFE2` | Bottom of the hero ramp, selected states, header-control hover wash. |
 
 ### Legacy sea family (pre-card)
 

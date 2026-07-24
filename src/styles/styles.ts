@@ -13,7 +13,6 @@ export const colors = {
   lagoon: '#285260',
   tide: '#548C92',
   foam: '#CBDFE2',
-  shallow: '#B4D7D8',
   text: '#1F3A38',
   textMuted: '#5A6E6B',
 } as const;

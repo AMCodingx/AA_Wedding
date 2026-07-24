@@ -42,11 +42,21 @@ const items: Item[] = [
   </ul>
 
   <details class="nav__drawer" data-nav-drawer>
+    {/*
+      Morphing hamburger adapted from Uiverse.io by JulanDeAlb (MIT). The
+      original drives it with a checkbox; here the state comes from <details>
+      so the drawer keeps working without JS. One continuous path is drawn in
+      by stroke-dasharray, so the bars don't rotate into an X — they're
+      re-drawn as one.
+    */}
     <summary class="nav__toggle" aria-label={t('nav.menu')}>
-      <span class="nav__bars" aria-hidden="true">
-        <span></span>
-        <span></span>
-      </span>
+      <svg class="nav__icon" viewBox="0 0 32 32" aria-hidden="true">
+        <path
+          class="nav__line nav__line--morph"
+          d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
+        ></path>
+        <path class="nav__line" d="M7 16 27 16"></path>
+      </svg>
     </summary>
 
     <div class="nav__backdrop" data-nav-backdrop aria-hidden="true"></div>
@@ -221,87 +231,80 @@ const items: Item[] = [
     width: 44px;
     height: 44px;
     border-radius: var(--radius-pill);
-    /* Card mockup: a soft-teal disc, matching the language pill beside it
-       so the two controls read as one pair. */
-    border: 1px solid transparent;
-    background: var(--c-shallow);
+    /* No disc at rest — the mark alone sits on the hero gradient. The 44×44
+       box is still here, it just isn't painted until you touch it. */
+    border: 0;
+    background: transparent;
     cursor: pointer;
     list-style: none;
     color: var(--c-lagoon);
     transition:
       transform var(--dur-fast) var(--ease-out),
-      border-color var(--dur-fast) var(--ease-out),
-      background var(--dur-base) var(--ease-out),
-      box-shadow var(--dur-base) var(--ease-out),
-      color var(--dur-base) var(--ease-out);
+      background var(--dur-fast) var(--ease-out);
   }
 
   /* Tactile click feedback — quick squish on press, springs back. */
   .nav__toggle:active {
-    transform: scale(0.92);
+    transform: scale(0.96);
     transition-duration: 80ms;
   }
   .nav__toggle::-webkit-details-marker {
     display: none;
   }
+  /* Hover dims the mark rather than painting a disc behind it. A hover fill
+     reads as "the background came back" — and it sticks after a click, since
+     the pointer is still over the control while the menu is open. */
   .nav__toggle:hover {
-    border-color: var(--border-strong);
+    opacity: 0.65;
   }
   .nav__toggle:focus-visible {
     outline: 2px solid var(--c-tide);
     outline-offset: 2px;
   }
 
-  .nav__bars {
-    position: relative;
-    width: 20px;
-    height: 14px;
-  }
-  .nav__bars span {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 1.5px;
-    background: currentColor;
-    border-radius: var(--radius-pill);
-    transition:
-      transform var(--dur-base) var(--ease-out),
-      top var(--dur-base) var(--ease-out),
-      width var(--dur-base) var(--ease-out);
-  }
-  .nav__bars span:nth-child(1) {
-    top: 4px;
-  }
-  .nav__bars span:nth-child(2) {
-    top: 10px;
-    width: 70%;
+  .nav__icon {
+    display: block;
+    width: 26px;
+    height: 26px;
+    transition: transform var(--dur-slow) var(--ease-in-out);
   }
 
-  /* Open state borrows the hero CTA's pill — tide fill, white mark — so the
-     control that produced the menu is the same object as the card's button. */
-  .nav__drawer[open] .nav__toggle {
-    border-color: transparent;
-    background: var(--c-tide);
-    color: var(--text-on-accent);
+  /* stroke-width 2 on a 32 viewBox lands at ~1.6px rendered — the weight of
+     the hero's divider rules, rather than the snippet's chunkier 3. */
+  .nav__line {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    transition:
+      stroke-dasharray var(--dur-slow) var(--ease-in-out),
+      stroke-dashoffset var(--dur-slow) var(--ease-in-out);
   }
-  .nav__drawer[open] .nav__bars span:nth-child(1) {
-    top: 7px;
-    transform: rotate(45deg);
+
+  /* Only 12 units of the long path are painted at rest — the top bar. */
+  .nav__line--morph {
+    stroke-dasharray: 12 63;
   }
-  .nav__drawer[open] .nav__bars span:nth-child(2) {
-    top: 7px;
-    width: 100%;
+
+  /* No fill when open either — the mark redrawing itself is the state change.
+     Painting a disc behind it would say the same thing twice. */
+  .nav__drawer[open] .nav__icon {
     transform: rotate(-45deg);
   }
-  /* Reverse the X back into bars while closing animation plays. */
-  .nav__drawer[data-closing] .nav__bars span:nth-child(1) {
-    top: 4px;
+  .nav__drawer[open] .nav__line--morph {
+    stroke-dasharray: 20 300;
+    stroke-dashoffset: -32.42;
+  }
+
+  /* Redraw back into bars while the panel is closing. Ordered after [open] so
+     it wins on equal specificity. */
+  .nav__drawer[data-closing] .nav__icon {
     transform: rotate(0);
   }
-  .nav__drawer[data-closing] .nav__bars span:nth-child(2) {
-    top: 10px;
-    width: 70%;
-    transform: rotate(0);
+  .nav__drawer[data-closing] .nav__line--morph {
+    stroke-dasharray: 12 63;
+    stroke-dashoffset: 0;
   }
 
   /* —————————————————— Backdrop —————————————————— */
@@ -448,7 +451,8 @@ const items: Item[] = [
     .nav__backdrop,
     .nav__sheet,
     .nav__sheet-item,
-    .nav__bars span {
+    .nav__icon,
+    .nav__line {
       animation: none !important;
       transition: none !important;
     }

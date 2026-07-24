@@ -1,4 +1,5 @@
 ---
+import Flag from './Flag.astro';
 import { LOCALES, LOCALE_LABELS, type Locale } from '~/i18n/locales';
 import { useTranslations } from '~/i18n';
 import { ROUTES, type RouteKey, localePath } from '~/lib/url';
@@ -21,13 +22,17 @@ function localeHref(locale: Locale): string {
 
 <details class="lang">
   {/*
-    The accessible name has to *contain* the visible "EN" (WCAG 2.5.3, Label
-    in Name) — with a bare "Language" label, a voice-control user saying
-    "click EN" doesn't reach this control. Lighthouse flags it as
-    label-content-name-mismatch.
+    The flag is decorative (aria-hidden in Flag.astro), so the trigger carries
+    the whole accessible name itself. It names the language in full rather than
+    the code — with no visible text left, there's no visible string for it to
+    match under WCAG 2.5.3, and "Language: English" is what a screen-reader
+    user needs to hear.
   */}
-  <summary class="lang__trigger" aria-label={`${t('lang.label')}: ${current.toUpperCase()}`}>
-    <span class="lang__code">{current.toUpperCase()}</span>
+  <summary
+    class="lang__trigger"
+    aria-label={`${t('lang.label')}: ${LOCALE_LABELS[current]}`}
+  >
+    <Flag locale={current} />
     <svg class="lang__caret" width="10" height="10" viewBox="0 0 20 20" aria-hidden="true">
       <path
         d="M5 8l5 5 5-5"
@@ -49,6 +54,7 @@ function localeHref(locale: Locale): string {
             aria-current={locale === current ? 'true' : undefined}
             class="lang__item"
           >
+            <Flag locale={locale} size={19} />
             {LOCALE_LABELS[locale]}
           </a>
         </li>
@@ -62,39 +68,32 @@ function localeHref(locale: Locale): string {
     position: relative;
   }
 
+  /* No pill at rest, matching the nav toggle beside it — the two controls are
+     marks on the hero, and the fill only shows up on contact. */
   .lang__trigger {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
     min-height: 44px;
     border-radius: var(--radius-pill);
-    border: 1px solid var(--border);
-    background: var(--bg-elevated);
+    border: 0;
+    background: transparent;
     cursor: pointer;
     list-style: none;
-    font-size: var(--fs-sm);
-    font-weight: 600;
-    color: var(--text);
+    color: var(--c-lagoon);
     transition:
-      border-color var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out),
       background var(--dur-fast) var(--ease-out);
   }
 
-  /* On mobile the trigger is the "EN" pill from the card mockup —
-     language code in a soft-teal circle, no caret. */
   @media (max-width: 720px) {
     .lang__trigger {
       gap: 0;
       padding: 0;
       width: 44px;
       height: 44px;
-      justify-content: center;
-      background: var(--c-shallow);
-      border-color: transparent;
-      color: var(--c-lagoon);
-      font-size: var(--fs-xs);
-      letter-spacing: 0.04em;
     }
     .lang__caret {
       display: none;
@@ -105,12 +104,26 @@ function localeHref(locale: Locale): string {
     display: none;
   }
 
+  /* Dim, don't fill — see the note on .nav__toggle:hover. */
   .lang__trigger:hover {
-    border-color: var(--border-strong);
+    opacity: 0.65;
   }
 
+  .lang__trigger:focus-visible {
+    outline: 2px solid var(--c-tide);
+    outline-offset: 2px;
+  }
+
+  /* Same squish as the nav toggle. */
+  .lang__trigger:active {
+    transform: scale(0.96);
+  }
+
+  /* Inherits lagoon and steps back, rather than dropping to a grey that
+     belongs to no part of the card. */
   .lang__caret {
-    color: var(--text-muted);
+    color: currentColor;
+    opacity: 0.55;
     transition: transform var(--dur-fast) var(--ease-out);
   }
 
@@ -171,6 +184,7 @@ function localeHref(locale: Locale): string {
   .lang__item {
     display: flex;
     align-items: center;
+    gap: var(--space-3);
     min-height: 44px;
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);

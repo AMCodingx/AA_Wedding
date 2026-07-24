@@ -1,0 +1,82 @@
+---
+/**
+ * Locale flag chip. One component rather than one file per flag: the three
+ * differ only in their rects, and a shared frame keeps the size, radius and
+ * edge outline identical across them.
+ *
+ * Drawn at 24×16 (3:2, the Dutch and Dominican ratio) so all three share one
+ * box. Detail that can't survive 20px is left out on purpose — the Dominican
+ * coat of arms and the American stars both turn to mush at this size, and a
+ * smudge in the middle of a flag reads as a rendering fault, not as a crest.
+ */
+interface Props {
+  locale: 'nl' | 'es' | 'en';
+  size?: number;
+  class?: string;
+}
+
+const { locale, size = 21, class: className } = Astro.props;
+const height = Math.round((size / 3) * 2);
+---
+
+<svg
+  class:list={['flag', className]}
+  width={size}
+  height={height}
+  viewBox="0 0 24 16"
+  role="presentation"
+  aria-hidden="true"
+>
+  {
+    locale === 'nl' && (
+      <>
+        <rect width="24" height="16" fill="#FFFFFF" />
+        <rect width="24" height="5.33" fill="#AE1C28" />
+        <rect y="10.67" width="24" height="5.33" fill="#21468B" />
+      </>
+    )
+  }
+
+  {/* Hoist-top blue, fly-top red, hoist-bottom red, fly-bottom blue,
+      separated by the white cross. */}
+  {
+    locale === 'es' && (
+      <>
+        <rect width="24" height="16" fill="#FFFFFF" />
+        <rect width="10.5" height="6.5" fill="#002D62" />
+        <rect x="13.5" width="10.5" height="6.5" fill="#CE1126" />
+        <rect y="9.5" width="10.5" height="6.5" fill="#CE1126" />
+        <rect x="13.5" y="9.5" width="10.5" height="6.5" fill="#002D62" />
+      </>
+    )
+  }
+
+  {/* Seven red stripes on white, with the union over the top four. */}
+  {
+    locale === 'en' && (
+      <>
+        <rect width="24" height="16" fill="#FFFFFF" />
+        <rect width="24" height="1.23" fill="#B22234" />
+        <rect y="2.46" width="24" height="1.23" fill="#B22234" />
+        <rect y="4.92" width="24" height="1.23" fill="#B22234" />
+        <rect y="7.38" width="24" height="1.23" fill="#B22234" />
+        <rect y="9.85" width="24" height="1.23" fill="#B22234" />
+        <rect y="12.31" width="24" height="1.23" fill="#B22234" />
+        <rect y="14.77" width="24" height="1.23" fill="#B22234" />
+        <rect width="9.6" height="8.62" fill="#3C3B6E" />
+      </>
+    )
+  }
+</svg>
+
+<style>
+  .flag {
+    display: block;
+    flex: none;
+    border-radius: 2px;
+    /* Pure black at 10%, never a tinted neutral: a tinted edge picks up the
+       surface underneath and reads as dirt on the flag. */
+    outline: 1px solid var(--outline-image);
+    outline-offset: -1px;
+  }
+</style>
