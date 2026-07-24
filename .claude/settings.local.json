@@ -1,5 +1,130 @@
 {
   "enabledPlugins": {
-    "frontend-design@claude-plugins-official": true
+    "frontend-design@claude-plugins-official": true,
+    "canva@claude-plugins-official": true
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=UserPromptSubmit\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { $resp = Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop; if ($resp) { $resp | ConvertTo-Json -Depth 10 -Compress } } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=Stop\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop | Out-Null } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=SessionStart\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { $resp = Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop; if ($resp) { $resp | ConvertTo-Json -Depth 10 -Compress } } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ],
+    "PermissionRequest": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=PermissionRequest\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop | Out-Null } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=Notification\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop | Out-Null } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=PreToolUse\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop | Out-Null } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "AskUserQuestion",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=PostToolUse\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop | Out-Null } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      },
+      {
+        "matcher": "Bash|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=PostToolUse\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop | Out-Null } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=SubagentStart\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop | Out-Null } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if (-not $env:MC_TASK_ID -or -not $env:MC_API_URL) { exit 0 }; $payload = [Console]::In.ReadToEnd(); $taskId = [System.Uri]::EscapeDataString($env:MC_TASK_ID); $url = \"$($env:MC_API_URL)/api/hooks/claude?taskId=$taskId&hookEvent=SubagentStop\"; $headers = @{ Authorization = \"Bearer $($env:MC_API_TOKEN)\"; \"X-Mission-Control-Runtime\" = \"electron-local\" }; try { Invoke-RestMethod -Method Post -Uri $url -Headers $headers -Body $payload -ContentType \"application/json\" -TimeoutSec 3 -ErrorAction Stop | Out-Null } catch {}",
+            "shell": "powershell"
+          }
+        ],
+        "_mcManaged": true
+      }
+    ]
   }
 }

@@ -239,11 +239,13 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
     width: 44px;
     height: 44px;
     border-radius: var(--radius-pill);
-    border: 1px solid var(--border);
-    background: var(--bg-elevated);
+    /* Card mockup: a soft-teal disc, matching the language pill beside it
+       so the two controls read as one pair. */
+    border: 1px solid transparent;
+    background: var(--c-shallow);
     cursor: pointer;
     list-style: none;
-    color: var(--text);
+    color: var(--c-lagoon);
     transition:
       transform var(--dur-fast) var(--ease-out),
       border-color var(--dur-fast) var(--ease-out),
@@ -295,7 +297,7 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
 
   .nav__drawer[open] .nav__toggle {
     border-color: var(--accent);
-    background: var(--accent-soft);
+    background: var(--bg-elevated);
     box-shadow: 0 6px 16px -6px rgba(31, 58, 56, 0.25);
   }
   .nav__drawer[open] .nav__bars span:nth-child(1) {

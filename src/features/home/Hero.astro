@@ -1,11 +1,17 @@
 ---
 import { Image } from 'astro:assets';
-import Button from '~/components/ui/Button.astro';
-import IslandWeather from './IslandWeather.astro';
-import couplePhoto from '~/assets/hero/couple.jpg';
+import couplePhoto from '~/assets/hero/couple-watercolor.png';
+import palmShadow from '~/assets/hero/palm-shadow.png';
+// Outlined straight from the couple's Canva card (design/1.svg export), so the
+// names and the wave are the real artwork rather than a webfont approximation.
+// "Feeling Passionate" is Canva-licensed and can't be self-hosted; the names
+// are a fixed string, so shipping them as vector costs less than a script face.
+import Names from '~/assets/brand/names.svg';
+import Wave from '~/assets/brand/wave.svg';
+import Heart from '~/assets/brand/heart.svg';
 import { useTranslations, type Locale } from '~/i18n';
 import { href } from '~/lib/url';
-import { formatLongDate } from '~/lib/date';
+import { formatDotDate } from '~/lib/date';
 import { WEDDING } from '~/lib/wedding';
 
 interface Props {
@@ -14,230 +20,412 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const dateLabel = formatLongDate(WEDDING.ceremonyAt, locale);
+const dateLabel = formatDotDate(WEDDING.ceremonyAt);
 ---
 
 <section class="hero">
   <div class="hero__bg" aria-hidden="true"></div>
 
+  <div class="hero__palm" aria-hidden="true">
+    <Image
+      src={palmShadow}
+      alt=""
+      widths={[480, 720, 1080]}
+      sizes="(min-width: 768px) 34rem, 62vw"
+      loading="eager"
+      decoding="async"
+      format="webp"
+      quality={70}
+    />
+  </div>
+
   <div class="container hero__inner">
+    <h1 class="hero__title">
+      <span class="visually-hidden">
+        {WEDDING.couple.partnerOne} &amp; {WEDDING.couple.partnerTwo}
+      </span>
+      <Names class="hero__names" aria-hidden="true" />
+    </h1>
+
+    {/* `sizes` must track .hero__media's CSS width, or the browser picks a
+        candidate too small for the slot and upscales it. */}
     <figure class="hero__media">
       <Image
         src={couplePhoto}
         alt={`${WEDDING.couple.partnerOne} & ${WEDDING.couple.partnerTwo}`}
-        widths={[400, 600, 900, 1200]}
-        sizes="(min-width: 1024px) 28rem, (min-width: 720px) 22rem, 70vw"
+        widths={[400, 600, 900, 1344]}
+        sizes="(min-width: 768px) min(30rem, 42vw), 69vw"
         loading="eager"
         decoding="async"
+        fetchpriority="high"
         format="avif"
         quality={78}
         class="hero__photo"
       />
     </figure>
 
-    <div class="hero__text">
-      <h1 class="hero__title">
-        <span>{WEDDING.couple.partnerOne}</span>
-        <span class="hero__amp">&amp;</span>
-        <span>{WEDDING.couple.partnerTwo}</span>
-      </h1>
-
-      <p class="hero__date">{dateLabel}</p>
+    <div class="hero__details">
+      <div class="hero__divider" aria-hidden="true">
+        <Heart class="hero__heart" />
+      </div>
 
       <p class="hero__venue">{WEDDING.venue.region}</p>
+      <p class="hero__date">{dateLabel}</p>
 
-      <div class="hero__weather">
-        <IslandWeather locale={locale} />
-      </div>
+      <Wave class="hero__squiggle" aria-hidden="true" />
 
-      <div class="hero__cta">
-        <Button variant="primary" size="lg" href={href(locale, 'rsvp')}>
-          {t('home.hero.cta.rsvp')}
-        </Button>
-        <Button variant="outline" size="lg" href={href(locale, 'wedding')}>
-          {t('home.hero.cta.details')}
-        </Button>
-      </div>
+      <a class="hero__cta" href={href(locale, 'wedding')}>{t('home.hero.cta.details')}</a>
     </div>
   </div>
-
-  <svg class="hero__wave" viewBox="0 0 1440 120" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0,64 C240,112 480,16 720,48 C960,80 1200,112 1440,64 L1440,120 L0,120 Z"></path>
-  </svg>
 </section>
 
 <style>
+  /* Geometry below is ported from design/hero-mock.html — the approved
+     phone mockup. Numbers there are px at a 390px screen; they land on
+     the 4px spacing scale almost exactly, so they're expressed as tokens. */
   .hero {
+    /* One card, scaled to the largest size that fits the viewport, centred.
+       Every measurement inside is a fraction of --card-w / --card-h, which
+       are themselves derived from the viewport, so the page fits any screen
+       without a breakpoint and never scrolls.
+
+       0.4621 is the card's own aspect (310.5 / 672). Floored at 37rem tall so
+       type can't shrink into illegibility on a squat window; below that floor
+       the card outgrows the viewport and scrolling comes back, which is the
+       right trade against unreadable text.
+       Height is derived first: when the viewport is the limit this makes
+       --card-h exactly 100dvh, where going via the width and back would lose
+       a fraction of a pixel to the aspect round-trip and leave the page one
+       pixel scrollable. */
+    --card-h: max(37rem, min(100dvh, 100vw / 0.4621));
+    --card-w: calc(var(--card-h) * 0.4621);
+
     position: relative;
     overflow: hidden;
     isolation: isolate;
-    padding-block: var(--space-16) var(--space-16);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* Pull the page gradient up behind the (translucent) sticky header. */
+    margin-block-start: calc(-1 * var(--header-h));
+    /* The sticky header still occupies its 72px of flow, so the negative
+       margin nets out and 100dvh lands the section's bottom edge on the fold.
+       dvh is safe precisely because nothing scrolls: the mobile URL bar never
+       retracts, so dvh can't change under us. */
+    min-height: 100dvh;
     color: var(--text);
   }
 
   .hero__bg {
     position: absolute;
     inset: 0;
+    z-index: -2;
+    /* Four stops: sand holds the top third, then it turns through the
+       mist before settling into foam — a two-stop ramp reads as grey. */
+    background: linear-gradient(
+      180deg,
+      var(--c-shell) 0%,
+      color-mix(in srgb, var(--c-shell) 62%, var(--c-mist)) 28%,
+      color-mix(in srgb, var(--c-foam) 60%, var(--c-shell)) 58%,
+      var(--c-foam) 100%
+    );
+  }
+
+  /* Anchored to the card, not the viewport, so it stays put when the card is
+     letterboxed. Offsets are the card's own fractions. */
+  .hero__palm {
+    position: absolute;
+    top: calc((100% - var(--card-h)) / 2 + var(--card-h) * 0.0379);
+    left: calc(50% - var(--card-w) * 0.6025);
     z-index: -1;
-    background:
-      radial-gradient(ellipse at 20% 0%, var(--c-sand) 0%, transparent 55%),
-      radial-gradient(ellipse at 100% 100%, var(--c-sea-soft) 0%, transparent 55%),
-      linear-gradient(180deg, var(--c-shell) 0%, var(--c-mist) 100%);
+    width: calc(var(--card-w) * 0.78);
+    /* The PNG is a hard silhouette; at full strength it reads as a stain
+       rather than a shadow cast on the wall. */
+    opacity: 0.5;
+    pointer-events: none;
+    user-select: none;
   }
 
-  .hero__inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-10);
-    align-items: center;
-    justify-items: center;
-    text-align: center;
-  }
-
-  /* —— Photo —— */
-  .hero__media {
-    margin: 0;
-    width: min(20rem, 70vw);
-    transform: rotate(-1.5deg);
-    transition: transform var(--dur-base) var(--ease-out);
-  }
-
-  .hero__media:hover {
-    transform: rotate(0deg);
-  }
-
-  .hero__photo {
+  /* :global — Astro scoped styles don't reach <Image>'s rendered img. */
+  .hero__palm :global(img),
+  .hero__media :global(img) {
+    display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    border-radius: var(--radius-md);
-    background: var(--bg-elevated);
-    /* Polaroid-ish white margin + soft shadow + hairline */
-    padding: var(--space-2);
-    box-shadow:
-      0 1px 0 rgba(31, 58, 56, 0.04) inset,
-      0 18px 40px -12px rgba(31, 58, 56, 0.28),
-      0 4px 10px -2px rgba(31, 58, 56, 0.12);
   }
 
-  /* —— Text column —— */
-  .hero__text {
+  /* Flex + per-element margins, not a uniform grid gap: the mockup's
+     rhythm is deliberately uneven (tight under the names, open above
+     the wave), and one gap value cannot express that. */
+  .hero__inner {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-3);
-    max-width: 28rem;
+    text-align: center;
+    /* The card box itself. Overrides .container's max-width and inline
+       padding — here the card's width IS the content width. */
+    width: var(--card-w);
+    height: var(--card-h);
+    max-width: none;
+    padding: calc(var(--card-h) * 0.2433) 0 calc(var(--card-h) * 0.0838);
   }
 
+  /* The h1 is a wrapper: the visible names are vector artwork, the readable
+     text sits in .visually-hidden for screen readers, SEO and translation. */
   .hero__title {
-    font-family: var(--font-display);
-    font-size: var(--fs-2xl);
-    font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    margin-block-start: var(--space-3);
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color: var(--c-lagoon);
   }
 
-  .hero__title > span {
-    display: inline-block;
+  .hero__names {
+    display: block;
+    width: 61.3%;
+    height: auto;
   }
 
-  .hero__amp {
-    font-style: italic;
-    color: var(--accent);
-    margin-inline: 0.15em;
+  .hero__media {
+    margin: calc(var(--card-h) * 0.0284) 0 0;
+    width: 68.5%;
   }
 
-  .hero__date {
-    font-family: var(--font-display);
-    font-size: var(--fs-lg);
-    font-weight: 400;
-    color: var(--text);
-    margin-block-start: var(--space-1);
+  .hero__details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
   }
 
-  .hero__weather {
-    margin-block-start: var(--space-2);
-    /* Reserve a tiny minimum so the layout doesn't jitter when the
-       loading dash is replaced by the live value. */
-    min-height: 2.4rem;
+  /* Rules either side of the heart rather than one drawn SVG, so each can
+     fade out toward its outer end instead of stopping on a hard edge. */
+  .hero__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--card-w) * 0.039);
+    width: 70%;
+    margin-block-start: calc(var(--card-h) * 0.0379);
+    color: var(--c-tide);
+  }
+
+  .hero__divider::before,
+  .hero__divider::after {
+    content: '';
+    flex: 1;
+    /* Scales with the card like everything else, but never thins below a
+       device pixel. */
+    height: max(1px, calc(var(--card-w) * 0.0035));
+    opacity: 0.85;
+    /* Solid for the half nearest the heart, fading out over the outer half.
+       Holding full colour until 88% left the rule all but invisible. */
+    background: linear-gradient(90deg, transparent, currentColor 55%);
+  }
+
+  .hero__divider::after {
+    background: linear-gradient(270deg, transparent, currentColor 55%);
+  }
+
+  .hero__heart {
+    flex: none;
+    width: calc(var(--card-w) * 0.053);
+    height: auto;
   }
 
   .hero__venue {
+    margin-block-start: calc(var(--card-h) * 0.0284);
     font-family: var(--font-subtitle);
     font-weight: var(--weight-subtitle);
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
+    font-size: calc(var(--card-w) * 0.044);
+    letter-spacing: 0.28em;
+    text-indent: 0.28em; /* optical centering against the tracking */
     text-transform: uppercase;
-    letter-spacing: 0.22em;
-    margin-block-start: var(--space-1);
+    color: var(--c-lagoon);
+  }
+
+  .hero__date {
+    margin-block-start: calc(var(--card-h) * 0.0142);
+    font-weight: 400;
+    font-size: calc(var(--card-w) * 0.039);
+    letter-spacing: 0.12em;
+    text-indent: 0.12em;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Full bleed: in the card the wave runs off both edges (its geometry is
+     134% of the card width, cropped to it). Escaping the container's inset
+     is what makes the ends read as cut off rather than tapered. */
+  .hero__squiggle {
+    display: block;
+    /* Viewport-wide, not card-wide: when the card is letterboxed a wave that
+       stopped at the card edge would leave a visible seam. */
+    width: 100vw;
+    /* reset.css caps every svg at max-width:100%, which would undo the bleed */
+    max-width: none;
+    height: auto;
+    color: var(--c-tide);
+    margin-block-start: calc(var(--card-h) * 0.0568);
   }
 
   .hero__cta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-    margin-block-start: var(--space-6);
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
+    /* 44px stays an absolute floor — a touch target can't scale away. */
+    min-height: 44px;
+    margin-block-start: calc(var(--card-h) * 0.032);
+    padding: calc(var(--card-h) * 0.0142) calc(var(--card-w) * 0.1025);
+    border-radius: var(--radius-pill);
+    background: var(--c-tide);
+    color: var(--text-on-accent);
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: calc(var(--card-w) * 0.0328);
+    letter-spacing: 0.18em;
+    text-indent: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: var(--shadow-cta);
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out),
+      box-shadow var(--dur-fast) var(--ease-out);
   }
 
-  .hero__wave {
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 80px;
-    display: block;
-    fill: var(--bg);
+  .hero__cta:hover {
+    background: var(--c-lagoon);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
   }
 
-  /* —— Two columns on tablet+ —— */
+  .hero__cta:active {
+    transform: scale(0.96);
+  }
+
+  .hero__cta:focus-visible {
+    outline: 2px solid var(--c-lagoon);
+    outline-offset: 3px;
+  }
+
+  /* Staged reveal — the card assembles itself the way an invitation is
+     read: names, portrait, then the details. One pass on load, no loops. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__title,
+    .hero__media,
+    .hero__divider,
+    .hero__venue,
+    .hero__date,
+    .hero__squiggle,
+    .hero__cta {
+      opacity: 0;
+      animation: hero-rise var(--dur-slow) var(--ease-out) forwards;
+    }
+
+    .hero__title { animation-delay: 50ms; }
+    .hero__media { animation-delay: 150ms; }
+    .hero__divider { animation-delay: 250ms; }
+    .hero__venue { animation-delay: 320ms; }
+    .hero__date { animation-delay: 390ms; }
+    .hero__squiggle { animation-delay: 460ms; }
+    .hero__cta { animation-delay: 550ms; }
+
+    @keyframes hero-rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+
+  /* —— Tablet / desktop: portrait left, card stack right —— */
   @media (min-width: 768px) {
     .hero {
-      padding-block: var(--space-24) var(--space-24);
-    }
-
-    .hero__inner {
-      grid-template-columns: minmax(0, 22rem) minmax(0, 32rem);
-      gap: var(--space-16);
+      padding-block: calc(var(--header-h) + var(--space-12)) var(--space-16);
+      display: grid;
       align-items: center;
-      text-align: left;
-      justify-items: stretch;
+      min-height: 100dvh;
     }
 
-    .hero__media {
+    /* Two columns, so the single-card scaling model is off: back to the
+       normal container box. */
+    .hero__inner {
       width: 100%;
-      max-width: 22rem;
-      justify-self: end;
-    }
-
-    .hero__text {
-      align-items: flex-start;
-      max-width: none;
+      height: auto;
+      max-width: var(--content-width);
+      padding: 0 var(--space-6);
+      display: grid;
+      grid-template-areas:
+        'media title'
+        'media details';
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      align-items: center;
+      align-content: center;
+      column-gap: var(--space-12);
     }
 
     .hero__title {
-      font-size: clamp(3rem, 1.8rem + 4.5vw, 5rem);
+      grid-area: title;
+      align-self: end;
     }
 
-    .hero__weather {
+    /* Two-column layout: size against the column, not the viewport. */
+    .hero__names {
+      width: min(26rem, 100%);
+    }
+
+    .hero__media {
+      margin-block-start: 0;
+    }
+
+    .hero__venue {
+      font-size: var(--fs-base);
+      margin-block-start: var(--space-6);
+    }
+
+    .hero__date {
+      font-size: var(--fs-sm);
       margin-block-start: var(--space-3);
     }
 
-    .hero__cta {
-      justify-content: flex-start;
+    .hero__heart {
+      width: 1.15rem;
     }
-  }
 
-  @media (min-width: 1024px) {
-    .hero__inner {
-      grid-template-columns: minmax(0, 26rem) minmax(0, 36rem);
-      gap: var(--space-24);
+    .hero__cta {
+      margin-block-start: var(--space-8);
+      padding: var(--space-3) var(--space-10);
+      font-size: var(--fs-xs);
     }
+
     .hero__media {
-      max-width: 26rem;
+      grid-area: media;
+      width: min(30rem, 42vw);
+      justify-self: end;
+    }
+
+    .hero__details {
+      grid-area: details;
+      align-self: start;
+    }
+
+    /* No full bleed here — the wave belongs to the right-hand column. */
+    .hero__divider,
+    .hero__squiggle {
+      width: min(22rem, 100%);
+      margin-block-start: var(--space-8);
+    }
+
+    .hero__palm {
+      top: -4rem;
+      left: -5rem;
+      width: min(34vw, 32rem);
     }
   }
 </style>

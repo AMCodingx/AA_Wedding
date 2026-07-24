@@ -12,9 +12,20 @@ interface Props {
   routeKey?: RouteKey;
   preloadImage?: string;
   ogImage?: string;
+  /** Home is a single-screen card that must not scroll, so it opts out —
+      there is nowhere to scroll a footer into view. Content pages keep it. */
+  showFooter?: boolean;
 }
 
-const { locale, title, description, routeKey, preloadImage, ogImage } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  routeKey,
+  preloadImage,
+  ogImage,
+  showFooter = true,
+} = Astro.props;
 const t = useTranslations(locale);
 ---
 
@@ -31,5 +42,5 @@ const t = useTranslations(locale);
   <main id="main">
     <slot />
   </main>
-  <Footer locale={locale} />
+  {showFooter && <Footer locale={locale} />}
 </BaseLayout>

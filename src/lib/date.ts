@@ -71,6 +71,16 @@ export function getDateParts(date: Date, locale: Locale): DateParts {
   };
 }
 
+/** "20.03.2027" — locale-independent, matches the invitation card. */
+export function formatDotDate(date: Date): string {
+  return new Intl.DateTimeFormat('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: VENUE_TZ,
+  }).format(date);
+}
+
 export function isoDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }

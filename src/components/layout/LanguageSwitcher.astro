@@ -90,8 +90,8 @@ const CurrentFlag = flagFor[current];
       background var(--dur-fast) var(--ease-out);
   }
 
-  /* On mobile, the flag alone is enough — keeps the header airy
-     and matches the tap-target size of the hamburger next to it. */
+  /* On mobile the trigger is the "EN" pill from the card mockup —
+     language code in a soft-teal circle, no flag, no caret. */
   @media (max-width: 720px) {
     .lang__trigger {
       gap: 0;
@@ -99,9 +99,14 @@ const CurrentFlag = flagFor[current];
       width: 44px;
       height: 44px;
       justify-content: center;
+      background: var(--c-shallow);
+      border-color: transparent;
+      color: var(--c-lagoon);
+      font-size: var(--fs-xs);
+      letter-spacing: 0.04em;
     }
-    .lang__code,
-    .lang__caret {
+    .lang__caret,
+    .lang__trigger :global(svg) {
       display: none;
     }
   }

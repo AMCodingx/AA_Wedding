@@ -62,22 +62,21 @@ const fullTitle = title === SITE_NAME ? title : `${title} · ${SITE_NAME}`;
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
     {/*
-      Preload the two fonts that actually power the design — display
-      script for headings and the variable Poppins for body. These match
-      the @font-face rules in styles/typography.css. (The previous
-      preloads pointed to fraunces-variable.woff2 and inter-variable.woff2
-      which weren't installed, costing two 404s on the critical path.)
+      Preload the two fonts that actually power the design — Dancing
+      Script (display, headings) and Poppins 400 (body). Latin subset
+      only; latin-ext loads on demand. These match the @font-face rules
+      in styles/typography.css.
     */}
     <link
       rel="preload"
-      href="/fonts/reklame-script-regular.woff2"
+      href="/fonts/dancing-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/poppins-variable.woff2"
+      href="/fonts/poppins-400-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin

@@ -11,6 +11,14 @@
   --c-mist: #d8ddcd;
   --c-sand: #eed7bc;
   --c-shell: #f6ebdf;
+  /* Card-mockup teals — cooler than the sea family on purpose.
+     Lagoon is Canva's "Dark azure", the couple's picked colour for the
+     names, CURAÇAO and the monogram. */
+  --c-lagoon: #285260;
+  --c-tide: #548c92;
+  --c-foam: #cbdfe2;
+  /* The card's header-button discs. */
+  --c-shallow: #b4d7d8;
 
   /* —— Functional aliases —— */
   --bg: var(--c-shell);
@@ -30,6 +38,10 @@
   --shadow-sm: 0 1px 2px rgba(31, 58, 56, 0.06);
   --shadow-md: 0 8px 24px rgba(31, 58, 56, 0.1);
   --shadow-lg: 0 24px 48px rgba(31, 58, 56, 0.14);
+  /* Lifted pill on the hero gradient — tinted lagoon, not neutral black,
+     so it reads as depth in the water rather than a drop shadow. */
+  --shadow-cta:
+    0 10px 24px rgba(47, 109, 122, 0.28), 0 2px 6px rgba(47, 109, 122, 0.18);
 
   /* —— Spacing (4px base) —— */
   --space-1: 0.25rem;
@@ -38,6 +50,7 @@
   --space-4: 1rem;
   --space-6: 1.5rem;
   --space-8: 2rem;
+  --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
   --space-24: 6rem;
