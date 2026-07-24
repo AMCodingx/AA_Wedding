@@ -87,7 +87,8 @@ never hard-coded sizes.
 
 ### LanguageSwitcher (`LanguageSwitcher.astro`)
 
-- `<details>` dropdown with inline flag SVGs (`FlagES`, `FlagNL`).
+- `<details>` dropdown, text-only. Shares its card surface, radius, shadow and
+  drop animation with the nav panel so the two header menus read as a pair.
 - Switches to the equivalent route in the target locale (via `routeKey`).
 
 ---

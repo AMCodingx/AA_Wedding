@@ -16,6 +16,11 @@
      names, CURAÇAO and the monogram. */
   --c-lagoon: #285260;
   --c-tide: #548c92;
+  /* Tide, darkened just enough to carry white text at AA. Plain --c-tide
+     measures 3.79:1 against #fff, and the CTA label is small type, so it
+     needs 4.5:1 — this lands at 4.52:1. Use it *only* where white sits on
+     the tide; --c-tide stays the brand value for rules, waves and icons. */
+  --c-tide-deep: #477f85;
   --c-foam: #cbdfe2;
   /* The card's header-button discs. */
   --c-shallow: #b4d7d8;
@@ -26,6 +31,10 @@
   --surface: var(--c-mist);
   --accent: var(--c-sea);
   --accent-soft: var(--c-sea-soft);
+  /* --accent is a *wash*: it works as a fill and fails as text at every size
+     (1.75:1 on --bg, 2.05:1 on white, 1.26:1 on --accent-soft). Anything that
+     paints letters uses this instead — 7.25:1 on --bg. See design.md §7. */
+  --accent-text: var(--c-lagoon);
   --warm: var(--c-sand);
 
   --text: #1f3a38;

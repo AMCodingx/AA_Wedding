@@ -137,10 +137,13 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     outline-offset: 2px;
   }
 
+  /* The one --accent *fill* that carries text, so it's the one that has to
+     move: white on the sea green measured 2.05:1. Same token as the accent
+     text colour, which puts the selected pill at 8.5:1. */
   .tips__radio:checked + .tips__pill {
-    background: var(--accent);
+    background: var(--accent-text);
     color: var(--text-on-accent);
-    border-color: var(--accent);
+    border-color: var(--accent-text);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
   }

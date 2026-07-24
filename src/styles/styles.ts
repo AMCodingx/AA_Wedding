@@ -10,16 +10,18 @@ export const colors = {
   mist: '#D8DDCD',
   sand: '#EED7BC',
   shell: '#F6EBDF',
-  lagoon: '#2F6D7A',
-  tide: '#4F929B',
+  lagoon: '#285260',
+  tide: '#548C92',
   foam: '#CBDFE2',
+  shallow: '#B4D7D8',
   text: '#1F3A38',
   textMuted: '#5A6E6B',
 } as const;
 
 export type ColorToken = keyof typeof colors;
 
-export const space = (n: 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 24): string => `var(--space-${n})`;
+export const space = (n: 1 | 2 | 3 | 4 | 6 | 8 | 10 | 12 | 16 | 24): string =>
+  `var(--space-${n})`;
 
 export const radius = (s: 'sm' | 'md' | 'lg' | 'pill'): string => `var(--radius-${s})`;
 

@@ -22,8 +22,6 @@ const items: Item[] = [
   { key: 'rsvp', label: t('nav.rsvp') },
   { key: 'faq', label: t('nav.faq') },
 ];
-
-const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
 ---
 
 <nav class="nav" aria-label={t('nav.menu')}>
@@ -63,24 +61,7 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
                 href={href(locale, item.key)}
                 aria-current={item.key === current ? 'page' : undefined}
               >
-                <span class="nav__sheet-num" aria-hidden="true">{numerals[i]}</span>
-                <span class="nav__sheet-label">{item.label}</span>
-                <svg
-                  class="nav__sheet-arrow"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M5 12h14 M13 6l6 6-6 6"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                {item.label}
               </a>
             </li>
           ))
@@ -194,7 +175,8 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
     display: inline-block;
     padding: var(--space-2) var(--space-3);
     text-decoration: none;
-    color: var(--text);
+    /* Same lagoon as the monogram beside it and the names in the hero. */
+    color: var(--c-lagoon);
     font-weight: 500;
     font-size: var(--fs-sm);
     white-space: nowrap;
@@ -203,14 +185,14 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
 
   .nav__link[aria-current='page'] {
     text-decoration: underline;
-    text-decoration-color: var(--accent);
+    text-decoration-color: var(--c-tide);
     text-decoration-thickness: 2px;
     text-underline-offset: 6px;
   }
 
   /* Keep keyboard users oriented — focus ring is preserved. */
   .nav__link:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--c-tide);
     outline-offset: 4px;
     border-radius: var(--radius-sm);
   }
@@ -266,7 +248,7 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
     border-color: var(--border-strong);
   }
   .nav__toggle:focus-visible {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--c-tide);
     outline-offset: 2px;
   }
 
@@ -295,10 +277,12 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
     width: 70%;
   }
 
+  /* Open state borrows the hero CTA's pill — tide fill, white mark — so the
+     control that produced the menu is the same object as the card's button. */
   .nav__drawer[open] .nav__toggle {
-    border-color: var(--accent);
-    background: var(--bg-elevated);
-    box-shadow: 0 6px 16px -6px rgba(31, 58, 56, 0.25);
+    border-color: transparent;
+    background: var(--c-tide);
+    color: var(--text-on-accent);
   }
   .nav__drawer[open] .nav__bars span:nth-child(1) {
     top: 7px;
@@ -321,115 +305,90 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
   }
 
   /* —————————————————— Backdrop —————————————————— */
+  /* An invisible click-catcher, not a scrim. The panel is small enough that
+     dimming the whole page to introduce it would be the heavier gesture. */
   .nav__backdrop {
     position: fixed;
     inset: 0;
     z-index: 1;
-    background: rgba(31, 58, 56, 0.32);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
-    animation: nav-backdrop-in var(--dur-base) var(--ease-out) both;
-  }
-  .nav__drawer[data-closing] .nav__backdrop {
-    animation: nav-backdrop-out 240ms var(--ease-out) both;
-  }
-  @keyframes nav-backdrop-in {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-  @keyframes nav-backdrop-out {
-    from { opacity: 1; }
-    to   { opacity: 0; }
   }
 
-  /* —————————————————— Sheet —————————————————— */
+  /* —————————————————— Panel —————————————————— */
+  /* A card hanging off the toggle, not a surface covering the page. Right edge
+     lines up with the container's inline padding so it sits flush with the
+     header content above it. */
   .nav__sheet {
     position: fixed;
-    /* Extend to the very top so the gradient flows under the (now
-       transparent) header — the menu reads as one continuous surface
-       that the toggle button sits on, not a panel below it. */
-    inset: 0 0 auto 0;
+    top: calc(var(--header-h) - var(--space-2));
+    right: var(--space-6);
     z-index: 2;
-    /* Pad the header zone so menu items begin below the toggle. */
-    padding-block: calc(var(--header-h) + var(--space-4)) var(--space-8);
-    background:
-      radial-gradient(ellipse at 100% 0%, var(--c-sea-soft) 0%, transparent 60%),
-      radial-gradient(ellipse at 0% 100%, var(--c-sand) 0%, transparent 55%),
-      linear-gradient(180deg, var(--c-shell) 0%, var(--c-mist) 100%);
-    border-bottom: 1px solid var(--border);
-    box-shadow: var(--shadow-lg);
-    /* Origin sits at the toggle button's center so the bloom radiates
-       from the hamburger — the menu feels generated by the button. */
-    --origin-x: calc(100% - var(--space-6) - 22px);
-    --origin-y: calc(var(--header-h) / 2);
-    will-change: clip-path, opacity;
-    animation: nav-sheet-in 380ms var(--ease-out) both;
-  }
-
-  .nav__sheet::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    right: 0;
-    height: 18px;
-    background:
-      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'><path d='M0,40 C240,72 480,8 720,32 C960,56 1200,72 1440,40 L1440,80 L0,80 Z' fill='%23F6EBDF'/></svg>")
-        bottom / 100% 100% no-repeat;
-    pointer-events: none;
+    width: min(15rem, calc(100vw - var(--space-12)));
+    padding: var(--space-2);
+    /* Short gradient, low contrast — enough to give the card a light source,
+       not enough to become a second background. */
+    background: linear-gradient(
+      165deg,
+      var(--c-shell) 0%,
+      color-mix(in srgb, var(--c-shell) 55%, var(--c-foam)) 100%
+    );
+    /* 20px outer − 8px padding = 12px inner, so the hover fill on a row is
+       concentric with the card that holds it. */
+    border-radius: var(--radius-lg);
+    box-shadow:
+      0 1px 2px color-mix(in srgb, var(--c-lagoon) 8%, transparent),
+      0 12px 28px -8px color-mix(in srgb, var(--c-lagoon) 22%, transparent);
+    /* Origin sits on the toggle's centre, not the card's corner: measured back
+       from the container edge past the language pill (44px), the gap between
+       the two controls, and half the toggle. The card visibly comes out of the
+       hamburger rather than out of the pill next to it. */
+    transform-origin: calc(100% - 44px - var(--space-2) - 22px) top;
+    animation: nav-sheet-in var(--dur-base) var(--ease-out) both;
   }
 
   .nav__drawer[data-closing] .nav__sheet {
-    animation: nav-sheet-out 280ms var(--ease-in-out) both;
+    animation: nav-sheet-out var(--dur-fast) var(--ease-in-out) both;
   }
 
-  /* Circular clip grows from the button → menu blooms from the toggle.
-     150% radius guarantees full coverage even on tall viewports. */
+  /* Grows out of the toggle's corner and settles downward. Scale + fade only,
+     both compositable, so the drop stays smooth on a mid-range phone. */
   @keyframes nav-sheet-in {
     from {
-      opacity: 0.6;
-      clip-path: circle(0% at var(--origin-x) var(--origin-y));
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
     }
     to {
       opacity: 1;
-      clip-path: circle(150% at var(--origin-x) var(--origin-y));
+      transform: none;
     }
   }
   @keyframes nav-sheet-out {
     from {
       opacity: 1;
-      clip-path: circle(150% at var(--origin-x) var(--origin-y));
+      transform: none;
     }
     to {
       opacity: 0;
-      clip-path: circle(0% at var(--origin-x) var(--origin-y));
+      transform: translateY(-4px) scale(0.98);
     }
   }
 
   .nav__sheet-list {
     list-style: none;
     margin: 0;
-    padding: 0 var(--space-6);
-    max-width: 32rem;
-    margin-inline: auto;
+    padding: 0;
   }
 
   .nav__sheet-item {
-    border-bottom: 1px dashed var(--border);
     opacity: 0;
-    transform: translateY(10px);
-    animation: nav-item-in 360ms var(--ease-out) forwards;
-    /* Stagger 1→4 on open. */
-    animation-delay: calc(80ms + var(--i, 0) * 55ms);
+    transform: translateY(4px);
+    animation: nav-item-in var(--dur-base) var(--ease-out) forwards;
+    /* Runs under the card's own reveal so the rows arrive with it rather
+       than after it — one gesture, not two. */
+    animation-delay: calc(30ms + var(--i, 0) * 25ms);
   }
-  .nav__sheet-item:last-child {
-    border-bottom: 0;
-  }
-
-  /* Reverse stagger on close — top item leaves first. */
+  /* Close is one quiet fade — exits should be softer than enters. */
   .nav__drawer[data-closing] .nav__sheet-item {
-    animation: nav-item-out 200ms var(--ease-in-out) forwards;
-    animation-delay: calc(var(--i, 0) * 25ms);
+    animation: nav-item-out var(--dur-fast) var(--ease-in-out) forwards;
   }
 
   @keyframes nav-item-in {
@@ -449,61 +408,39 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
     }
   }
 
+  /* Rows in the card's own hand — the names, CURAÇAO and the monogram are all
+     lagoon, so the menu is too. No numerals, no row arrows, no dividers: nav
+     items aren't a sequence, and none of those marks exist on the card. */
   .nav__sheet-link {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: baseline;
-    gap: var(--space-4);
-    padding: var(--space-4) var(--space-2);
-    text-decoration: none;
-    color: var(--text);
-    transition: color var(--dur-fast) var(--ease-out);
-  }
-  .nav__sheet-link:hover,
-  .nav__sheet-link:focus-visible {
-    color: var(--accent);
-  }
-  .nav__sheet-link:focus-visible {
-    outline: none;
-    background: color-mix(in srgb, var(--accent-soft) 35%, transparent);
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
-  }
-
-  .nav__sheet-num {
+    text-decoration: none;
+    color: var(--c-lagoon);
     font-family: var(--font-display);
-    font-style: italic;
-    font-size: var(--fs-sm);
-    color: var(--text-muted);
-    width: 1.5rem;
-    line-height: 1;
-    align-self: center;
-    text-align: right;
-  }
-
-  .nav__sheet-label {
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 1.4rem + 3.2vw, 2.75rem);
+    font-size: var(--fs-lg);
     font-weight: 400;
-    line-height: 1;
-    letter-spacing: -0.01em;
-  }
-
-  .nav__sheet-arrow {
-    color: var(--text-muted);
-    align-self: center;
+    line-height: 1.2;
     transition:
       color var(--dur-fast) var(--ease-out),
-      transform var(--dur-base) var(--ease-out);
+      background var(--dur-fast) var(--ease-out);
   }
-  .nav__sheet-link:hover .nav__sheet-arrow,
-  .nav__sheet-link:focus-visible .nav__sheet-arrow {
-    color: var(--accent);
-    transform: translateX(4px);
+  /* States are carried by the fill, never by lightening the text: tide on this
+     card measures 2.95:1, under the 4.5:1 floor. Lagoon stays put at 7.2:1 and
+     the background does the signalling. */
+  .nav__sheet-link:hover,
+  .nav__sheet-link:focus-visible {
+    background: color-mix(in srgb, var(--c-foam) 45%, transparent);
   }
-
-  .nav__sheet-link[aria-current='page'] .nav__sheet-num,
-  .nav__sheet-link[aria-current='page'] .nav__sheet-label {
-    color: var(--accent);
+  /* Current page holds the full foam fill — 6.2:1 with lagoon. */
+  .nav__sheet-link[aria-current='page'] {
+    background: var(--c-foam);
+  }
+  .nav__sheet-link:focus-visible {
+    outline: 2px solid var(--c-tide);
+    outline-offset: -2px;
   }
 
   /* —————————————————— Reduced motion —————————————————— */
@@ -511,8 +448,7 @@ const numerals = ['i', 'ii', 'iii', 'iv', 'v'] as const;
     .nav__backdrop,
     .nav__sheet,
     .nav__sheet-item,
-    .nav__bars span,
-    .nav__sheet-arrow {
+    .nav__bars span {
       animation: none !important;
       transition: none !important;
     }

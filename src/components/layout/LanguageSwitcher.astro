@@ -1,7 +1,4 @@
 ---
-import FlagES from './flags/FlagES.astro';
-import FlagNL from './flags/FlagNL.astro';
-import FlagGB from './flags/FlagGB.astro';
 import { LOCALES, LOCALE_LABELS, type Locale } from '~/i18n/locales';
 import { useTranslations } from '~/i18n';
 import { ROUTES, type RouteKey, localePath } from '~/lib/url';
@@ -20,18 +17,16 @@ function localeHref(locale: Locale): string {
   return localePath(locale);
 }
 
-const flagFor = {
-  nl: FlagNL,
-  es: FlagES,
-  en: FlagGB,
-} as const;
-
-const CurrentFlag = flagFor[current];
 ---
 
 <details class="lang">
-  <summary class="lang__trigger" aria-label={t('lang.label')}>
-    <CurrentFlag size={16} />
+  {/*
+    The accessible name has to *contain* the visible "EN" (WCAG 2.5.3, Label
+    in Name) — with a bare "Language" label, a voice-control user saying
+    "click EN" doesn't reach this control. Lighthouse flags it as
+    label-content-name-mismatch.
+  */}
+  <summary class="lang__trigger" aria-label={`${t('lang.label')}: ${current.toUpperCase()}`}>
     <span class="lang__code">{current.toUpperCase()}</span>
     <svg class="lang__caret" width="10" height="10" viewBox="0 0 20 20" aria-hidden="true">
       <path
@@ -45,23 +40,19 @@ const CurrentFlag = flagFor[current];
   </summary>
   <ul class="lang__menu" role="menu">
     {
-      LOCALES.map((locale) => {
-        const F = flagFor[locale];
-        return (
-          <li role="none">
-            <a
-              role="menuitem"
-              hreflang={locale}
-              href={localeHref(locale)}
-              aria-current={locale === current ? 'true' : undefined}
-              class="lang__item"
-            >
-              <F size={16} />
-              <span>{LOCALE_LABELS[locale]}</span>
-            </a>
-          </li>
-        );
-      })
+      LOCALES.map((locale, i) => (
+        <li role="none" class="lang__row" style={`--i:${i}`}>
+          <a
+            role="menuitem"
+            hreflang={locale}
+            href={localeHref(locale)}
+            aria-current={locale === current ? 'true' : undefined}
+            class="lang__item"
+          >
+            {LOCALE_LABELS[locale]}
+          </a>
+        </li>
+      ))
     }
   </ul>
 </details>
@@ -91,7 +82,7 @@ const CurrentFlag = flagFor[current];
   }
 
   /* On mobile the trigger is the "EN" pill from the card mockup —
-     language code in a soft-teal circle, no flag, no caret. */
+     language code in a soft-teal circle, no caret. */
   @media (max-width: 720px) {
     .lang__trigger {
       gap: 0;
@@ -105,8 +96,7 @@ const CurrentFlag = flagFor[current];
       font-size: var(--fs-xs);
       letter-spacing: 0.04em;
     }
-    .lang__caret,
-    .lang__trigger :global(svg) {
+    .lang__caret {
       display: none;
     }
   }
@@ -128,37 +118,88 @@ const CurrentFlag = flagFor[current];
     transform: rotate(180deg);
   }
 
+  /* Same card as the nav panel next door — surface, gradient, radius, shadow
+     and drop are deliberately identical so the two header dropdowns read as
+     one pair rather than two components that happen to be adjacent. */
   .lang__menu {
     position: absolute;
     top: calc(100% + var(--space-2));
     right: 0;
-    min-width: 12rem;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
+    min-width: 11rem;
+    list-style: none;
+    margin: 0;
     padding: var(--space-2);
+    background: linear-gradient(
+      165deg,
+      var(--c-shell) 0%,
+      color-mix(in srgb, var(--c-shell) 55%, var(--c-foam)) 100%
+    );
+    /* 20px outer − 8px padding = 12px inner, concentric with the row fill. */
+    border-radius: var(--radius-lg);
+    box-shadow:
+      0 1px 2px color-mix(in srgb, var(--c-lagoon) 8%, transparent),
+      0 12px 28px -8px color-mix(in srgb, var(--c-lagoon) 22%, transparent);
     z-index: var(--z-overlay);
+    transform-origin: calc(100% - 22px) top;
+    animation: lang-menu-in var(--dur-base) var(--ease-out) both;
+  }
+
+  .lang__row {
+    opacity: 0;
+    transform: translateY(4px);
+    animation: lang-row-in var(--dur-base) var(--ease-out) forwards;
+    animation-delay: calc(30ms + var(--i, 0) * 25ms);
+  }
+
+  @keyframes lang-menu-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes lang-row-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .lang__item {
     display: flex;
     align-items: center;
-    gap: var(--space-3);
+    min-height: 44px;
     padding: var(--space-2) var(--space-3);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     text-decoration: none;
-    color: var(--text);
-    font-weight: 500;
-    transition: background var(--dur-fast) var(--ease-out);
+    color: var(--c-lagoon);
+    font-family: var(--font-display);
+    font-size: var(--fs-lg);
+    font-weight: 400;
+    line-height: 1.2;
+    transition:
+      color var(--dur-fast) var(--ease-out),
+      background var(--dur-fast) var(--ease-out);
   }
 
-  .lang__item:hover {
-    background: var(--surface);
+  /* States are carried by the fill, never by lightening the text: tide on this
+     card measures 2.95:1, under the 4.5:1 floor. Lagoon stays put at 7.2:1 and
+     the background does the signalling. */
+  .lang__item:hover,
+  .lang__item:focus-visible {
+    background: color-mix(in srgb, var(--c-foam) 45%, transparent);
   }
 
+  .lang__item:focus-visible {
+    outline: 2px solid var(--c-tide);
+    outline-offset: -2px;
+  }
+
+  /* Selected locale holds the full foam fill — 6.2:1 with lagoon. */
   .lang__item[aria-current='true'] {
-    color: var(--accent);
-    background: var(--accent-soft);
+    background: var(--c-foam);
   }
 </style>

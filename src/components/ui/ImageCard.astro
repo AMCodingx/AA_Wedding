@@ -31,7 +31,11 @@ const hasBadge = Astro.slots.has('badge');
   </div>
 
   <div class="image-card__header">
-    <h3 class="image-card__title">{title}</h3>
+    {/* h2, not h3: the only consumer (Tips) puts these directly under the
+        page h1 — the filter pills group the cards, but they aren't headings,
+        so an h3 here skips a level. Take a `level` prop if a second consumer
+        ever nests these deeper. */}
+    <h2 class="image-card__title">{title}</h2>
     {hasBadge && <slot name="badge" />}
   </div>
 

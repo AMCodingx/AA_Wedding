@@ -26,6 +26,12 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
 <section class="hero">
   <div class="hero__bg" aria-hidden="true"></div>
 
+  {/*
+    Eager so the shadow never pops in, but explicitly *below* the portrait in
+    priority: Lighthouse was electing this decorative image as the LCP element
+    and then flagging that the LCP image had no fetchpriority. The portrait is
+    the picture that matters — let it win the race.
+  */}
   <div class="hero__palm" aria-hidden="true">
     <Image
       src={palmShadow}
@@ -34,6 +40,7 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
       sizes="(min-width: 768px) 34rem, 62vw"
       loading="eager"
       decoding="async"
+      fetchpriority="low"
       format="webp"
       quality={70}
     />
@@ -54,7 +61,7 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
         src={couplePhoto}
         alt={`${WEDDING.couple.partnerOne} & ${WEDDING.couple.partnerTwo}`}
         widths={[400, 600, 900, 1344]}
-        sizes="(min-width: 768px) min(30rem, 42vw), 69vw"
+        sizes="(min-width: 768px) min(34rem, 43vw), 69vw"
         loading="eager"
         decoding="async"
         fetchpriority="high"
@@ -153,6 +160,22 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  /* The watercolor PNG carries uneven transparent bleed — measured opaque
+     box is 1125×984 inside 1344×1008, inset 10.94%/5.36% left/right and
+     2.38%/0% top/bottom. So its painted centre sits at 52.75%/51.14% of
+     the box, and centring the *box* leaves the *picture* visibly right of
+     and below centre. These two numbers are that error, negated.
+     ponytail: CSS compensation, not a re-export — trimming the asset would
+     shift mobile, which is signed off as-is. Retrim + drop this if the
+     artwork is ever regenerated. */
+  .hero__media {
+    --paint-dx: -2.75%;
+    --paint-dy: -1.14%;
+    /* Fraction of the box the paint actually covers (1125/1344). Width is
+       set from the size the *picture* should be, not the box. */
+    --paint-scale: 0.837;
   }
 
   /* Flex + per-element margins, not a uniform grid gap: the mockup's
@@ -278,7 +301,7 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
     margin-block-start: calc(var(--card-h) * 0.032);
     padding: calc(var(--card-h) * 0.0142) calc(var(--card-w) * 0.1025);
     border-radius: var(--radius-pill);
-    background: var(--c-tide);
+    background: var(--c-tide-deep);
     color: var(--text-on-accent);
     font-family: var(--font-subtitle);
     font-weight: var(--weight-subtitle);
@@ -367,7 +390,9 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
       grid-template-rows: auto auto;
       align-items: center;
       align-content: center;
-      column-gap: var(--space-12);
+      /* Tighter than it looks: ~44px of the picture's own box is transparent
+         bleed, so the *optical* gutter is this plus that. */
+      column-gap: var(--space-8);
     }
 
     .hero__title {
@@ -378,10 +403,6 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
     /* Two-column layout: size against the column, not the viewport. */
     .hero__names {
       width: min(26rem, 100%);
-    }
-
-    .hero__media {
-      margin-block-start: 0;
     }
 
     .hero__venue {
@@ -406,8 +427,18 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
 
     .hero__media {
       grid-area: media;
-      width: min(30rem, 42vw);
+      margin-block-start: 0;
+      /* Size the *picture*, then inflate to the box that carries its bleed,
+         so the number here is the size you actually see on screen. */
+      width: calc(min(28.5rem, 36vw) / var(--paint-scale));
       justify-self: end;
+    }
+
+    /* Transform lives on the img, not the figure: .hero__media runs the
+       hero-rise entrance, which lands on `transform: none` and would wipe
+       any compensation set here. */
+    .hero__media :global(img) {
+      transform: translate(var(--paint-dx), var(--paint-dy));
     }
 
     .hero__details {
@@ -422,9 +453,14 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
       margin-block-start: var(--space-8);
     }
 
+    /* Was cropped hard on two sides: at -4rem/-5rem the frond's tips and
+       its whole top-left arc fell outside the section's overflow:hidden,
+       so on wide screens it read as a cut-off rectangle rather than a
+       shadow. Sit it just off the corner instead — enough bleed to feel
+       cast from outside the frame, little enough to keep the fan intact. */
     .hero__palm {
-      top: -4rem;
-      left: -5rem;
+      top: -1rem;
+      left: -1.5rem;
       width: min(34vw, 32rem);
     }
   }
