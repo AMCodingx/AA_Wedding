@@ -1,8 +1,6 @@
 ---
 import PageLayout from '~/layouts/PageLayout.astro';
-import Section from '~/components/ui/Section.astro';
-import WeddingDate from '~/features/wedding/WeddingDate.astro';
-import WeddingLocation from '~/features/wedding/WeddingLocation.astro';
+import TheDay from '~/features/wedding/TheDay.astro';
 import { useTranslations } from '~/i18n';
 
 const locale = 'es' as const;
@@ -12,13 +10,9 @@ const t = useTranslations(locale);
 <PageLayout
   locale={locale}
   routeKey="wedding"
+  showFooter={false}
   title={t('wedding.title')}
-  description={t('wedding.intro')}
+  description={t('wedding.day.intro')}
 >
-  <Section tone="elevated" spacing="lg" width="narrow" class="beach-pattern">
-    <WeddingDate locale={locale} />
-    <hr class="section-divider" aria-hidden="true" />
-    <WeddingLocation locale={locale} />
-  </Section>
-
+  <TheDay locale={locale} />
 </PageLayout>

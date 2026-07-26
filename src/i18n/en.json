@@ -25,6 +25,18 @@
 
   "wedding.title": "The wedding",
   "wedding.intro": "We'd love for you to be there.",
+
+  "wedding.day.title": "The day",
+  "wedding.day.intro": "We are still working on the perfect planning and the details, but this timeline can give you an idea of what our day will look like.",
+  "wedding.day.start": "Start during afternoon",
+  "wedding.day.startNote": "Exact time to be decided",
+  "wedding.day.beat.welcome": "Welcome",
+  "wedding.day.beat.ceremony": "Ceremony",
+  "wedding.day.beat.cocktail": "Cocktail hour",
+  "wedding.day.beat.dinner": "Dinner",
+  "wedding.day.beat.party": "Party",
+  "wedding.day.location": "This will all be in the same location.",
+
   "wedding.date.title": "Date & time",
   "wedding.date.ceremony": "Ceremony",
   "wedding.date.cocktail": "Cocktail hour",

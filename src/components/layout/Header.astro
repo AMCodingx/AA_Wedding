@@ -31,15 +31,30 @@ const t = useTranslations(locale);
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background: color-mix(in srgb, var(--bg) 90%, transparent);
-    backdrop-filter: saturate(140%) blur(8px);
-    -webkit-backdrop-filter: saturate(140%) blur(8px);
     /* A shadow, not a border: a 1px border occupies flow, and on the home
        page that pixel is the difference between "fits exactly" and "scrolls". */
     box-shadow: 0 1px 0 var(--border);
-    transition:
-      background var(--dur-base) var(--ease-out),
-      box-shadow var(--dur-base) var(--ease-out);
+    transition: box-shadow var(--dur-base) var(--ease-out);
+  }
+
+  /* The tint and blur live on a pseudo-element rather than on .header itself.
+     An element with a backdrop-filter becomes the containing block for its
+     `position: fixed` descendants — and for a *sticky* header that block is the
+     un-stuck box at the top of the document, not the painted one. So the nav
+     sheet and its backdrop anchored themselves however far the page had been
+     scrolled, i.e. off the top of the screen. At scroll 0 the two coincided,
+     which is why the menu only broke below the fold. The pseudo-element paints
+     identically and has no descendants to trap. */
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Behind the header's own content, still above the page scrolling under it. */
+    z-index: -1;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    transition: background var(--dur-base) var(--ease-out);
   }
 
   .header__inner {

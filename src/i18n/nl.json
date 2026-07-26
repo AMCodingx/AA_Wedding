@@ -25,6 +25,18 @@
 
   "wedding.title": "De Bruiloft",
   "wedding.intro": "We zouden het geweldig vinden als je erbij bent.",
+
+  "wedding.day.title": "De dag",
+  "wedding.day.intro": "We werken nog aan de perfecte planning en de details, maar deze tijdlijn geeft je alvast een idee van hoe onze dag eruit gaat zien.",
+  "wedding.day.start": "Start in de middag",
+  "wedding.day.startNote": "Exacte tijd wordt nog bepaald",
+  "wedding.day.beat.welcome": "Welkom",
+  "wedding.day.beat.ceremony": "Ceremonie",
+  "wedding.day.beat.cocktail": "Cocktailuur",
+  "wedding.day.beat.dinner": "Diner",
+  "wedding.day.beat.party": "Feest",
+  "wedding.day.location": "Dit is allemaal op dezelfde locatie.",
+
   "wedding.date.title": "Datum & tijd",
   "wedding.date.ceremony": "Ceremonie",
   "wedding.date.cocktail": "Cocktailuur",
