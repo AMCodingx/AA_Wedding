@@ -18,28 +18,30 @@ const { tone = 'sea', class: className = '' } = Astro.props;
     gap: var(--space-2);
     padding: var(--space-1) var(--space-3);
     border-radius: var(--radius-pill);
+    font-family: var(--font-subtitle);
     font-size: var(--fs-xs);
-    font-weight: 600;
-    letter-spacing: 0.04em;
+    font-weight: var(--weight-subtitle);
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     line-height: 1.2;
     border: 1px solid transparent;
+    /* One ink for every tone — the wash tells you which category, the
+       lettering stays the card system's lagoon. Clears AA on all four
+       grounds (5.25:1 on sea, 6.12:1 on sand, 6.14:1 on mist, 8.5:1 on the
+       card's white behind the outline tone). */
+    color: var(--c-lagoon);
   }
   .badge--sea {
     background: var(--accent-soft);
-    color: var(--text);
   }
   .badge--sand {
     background: var(--warm);
-    color: var(--text);
   }
   .badge--mist {
     background: var(--surface);
-    color: var(--text);
   }
   .badge--outline {
     background: transparent;
-    color: var(--text);
-    border-color: var(--border-strong);
+    border-color: var(--c-tide);
   }
 </style>

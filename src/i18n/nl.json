@@ -25,7 +25,6 @@
 
   "wedding.title": "De Bruiloft",
   "wedding.intro": "We zouden het geweldig vinden als je erbij bent.",
-
   "wedding.day.title": "De dag",
   "wedding.day.intro": "We werken nog aan de perfecte planning en de details, maar deze tijdlijn geeft je alvast een idee van hoe onze dag eruit gaat zien.",
   "wedding.day.start": "Start in de middag",
@@ -36,7 +35,6 @@
   "wedding.day.beat.dinner": "Diner",
   "wedding.day.beat.party": "Feest",
   "wedding.day.location": "Dit is allemaal op dezelfde locatie.",
-
   "wedding.date.title": "Datum & tijd",
   "wedding.date.ceremony": "Ceremonie",
   "wedding.date.cocktail": "Cocktailuur",
@@ -71,16 +69,11 @@
 
   "rsvp.title": "Bevestig je komst",
   "rsvp.intro": "Geen formulier, gewoon een berichtje.",
-
-  "rsvp.note.checklist.intro": "Vermeld in je bericht:",
-  "rsvp.note.item1": "Of je komt.",
-  "rsvp.note.item2": "Eventuele dieetwensen (vegetarisch, allergieën, enz.).",
-  "rsvp.note.item3": "Wil je met onze pendelbus mee? Vertel waar je verblijft en we plannen een ophaalmoment.",
-
-  "rsvp.directive.title": "Voor je RSVP",
-  "rsvp.directive.before": "Stuur ",
-  "rsvp.directive.between": " of ",
-  "rsvp.directive.after": " een bericht.",
+  "rsvp.statement": "Je kunt ons een bericht sturen.",
+  "rsvp.note.checklist.intro": "Vermeld het volgende:",
+  "rsvp.note.item1": "Of je komt",
+  "rsvp.note.item2": "Eventuele dieetwensen (vegetarisch, allergieën, enz.)",
+  "rsvp.note.item3": "Als je met de pendelbus mee wilt, geef door waar je verblijft.",
 
   "footer.madeWith": "Met liefde gemaakt",
   "footer.contact": "Contact",

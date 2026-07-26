@@ -25,7 +25,6 @@
 
   "wedding.title": "La boda",
   "wedding.intro": "Nos encantaría que estuvieras allí.",
-
   "wedding.day.title": "El día",
   "wedding.day.intro": "Todavía estamos afinando la planificación y los detalles, pero esta cronología te da una idea de cómo será nuestro día.",
   "wedding.day.start": "Inicio por la tarde",
@@ -36,7 +35,6 @@
   "wedding.day.beat.dinner": "Cena",
   "wedding.day.beat.party": "Fiesta",
   "wedding.day.location": "Todo esto será en el mismo lugar.",
-
   "wedding.date.title": "Fecha y hora",
   "wedding.date.ceremony": "Ceremonia",
   "wedding.date.cocktail": "Cóctel",
@@ -71,16 +69,11 @@
 
   "rsvp.title": "Confirma tu asistencia",
   "rsvp.intro": "Sin formulario, simplemente envíanos un mensaje.",
-
-  "rsvp.note.checklist.intro": "Incluye en tu mensaje:",
-  "rsvp.note.item1": "Si vas a venir.",
-  "rsvp.note.item2": "Restricciones alimentarias (vegetariano, alergias, etc.).",
-  "rsvp.note.item3": "¿Quieres venir en nuestro autobús? Dinos dónde te alojas y planificaremos una hora de recogida.",
-
-  "rsvp.directive.title": "Para confirmar",
-  "rsvp.directive.before": "Escríbele a ",
-  "rsvp.directive.between": " o a ",
-  "rsvp.directive.after": " un mensaje.",
+  "rsvp.statement": "Puedes enviarnos un mensaje.",
+  "rsvp.note.checklist.intro": "Incluye lo siguiente:",
+  "rsvp.note.item1": "Si vas a venir",
+  "rsvp.note.item2": "Restricciones alimentarias (vegetariano, alergias, etc.)",
+  "rsvp.note.item3": "Si quieres usar el autobús lanzadera, dinos dónde te alojas.",
 
   "footer.madeWith": "Hecho con cariño",
   "footer.contact": "Contacto",

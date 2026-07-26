@@ -1,8 +1,9 @@
 ---
 interface Props {
   id?: string;
-  /** Background tone — picks from the design tokens. */
-  tone?: 'shell' | 'mist' | 'sand' | 'sea' | 'elevated';
+  /** Background tone — picks from the design tokens. `none` paints nothing,
+      for pages that carry their own ground (a gradient) across several bands. */
+  tone?: 'none' | 'shell' | 'mist' | 'sand' | 'sea' | 'elevated';
   /** Vertical rhythm. */
   spacing?: 'sm' | 'md' | 'lg';
   /** Constrains inner width. */
@@ -33,6 +34,9 @@ const containerClass = width === 'narrow' ? 'container container--narrow' : 'con
 <style>
   .section {
     width: 100%;
+  }
+  .section--none {
+    background: transparent;
   }
   .section--shell {
     background: var(--bg);

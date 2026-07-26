@@ -25,7 +25,6 @@
 
   "wedding.title": "The wedding",
   "wedding.intro": "We'd love for you to be there.",
-
   "wedding.day.title": "The day",
   "wedding.day.intro": "We are still working on the perfect planning and the details, but this timeline can give you an idea of what our day will look like.",
   "wedding.day.start": "Start during afternoon",
@@ -36,7 +35,6 @@
   "wedding.day.beat.dinner": "Dinner",
   "wedding.day.beat.party": "Party",
   "wedding.day.location": "This will all be in the same location.",
-
   "wedding.date.title": "Date & time",
   "wedding.date.ceremony": "Ceremony",
   "wedding.date.cocktail": "Cocktail hour",
@@ -71,16 +69,11 @@
 
   "rsvp.title": "Confirm your attendance",
   "rsvp.intro": "No form, just send us a message.",
-
-  "rsvp.note.checklist.intro": "Please include in your message:",
-  "rsvp.note.item1": "Whether you're coming.",
-  "rsvp.note.item2": "Any dietary requirements (vegetarian, allergies, etc.).",
-  "rsvp.note.item3": "Would you like to join our shuttle bus? Tell us where you're staying and we'll plan a pickup time.",
-
-  "rsvp.directive.title": "To RSVP",
-  "rsvp.directive.before": "Send ",
-  "rsvp.directive.between": " or ",
-  "rsvp.directive.after": " a message.",
+  "rsvp.statement": "You can send us a message.",
+  "rsvp.note.checklist.intro": "Please include the following:",
+  "rsvp.note.item1": "Whether you are coming",
+  "rsvp.note.item2": "Any dietary requirements (vegetarian, allergies, etc)",
+  "rsvp.note.item3": "If you like to use the shuttle bus, include where you are staying.",
 
   "footer.madeWith": "Made with love",
   "footer.contact": "Contact",

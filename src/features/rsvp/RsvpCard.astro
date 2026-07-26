@@ -1,0 +1,256 @@
+---
+// Third card in the set, same contract as Hero and TheDay: one screen, no
+// scroll, hero gradient, geometry measured off the couple's Canva export
+// (design/rsvp-card.svg) in its own 310.5 × 672 units and expressed as
+// fractions of the card.
+//
+// "TO RSVP" is outlined "Feeling Passionate" for the same reason the hero's
+// names are — the face is Canva-licensed. The three bullet rings are three
+// *different* hand-drawn circles in the export; keeping all three is the
+// point, a repeated one would read as a shape rather than a pen stroke.
+import Title from '~/assets/rsvp/to-rsvp.svg';
+import Ring1 from '~/assets/rsvp/circle-1.svg';
+import Ring2 from '~/assets/rsvp/circle-2.svg';
+import Ring3 from '~/assets/rsvp/circle-3.svg';
+import Heart from '~/assets/brand/heart.svg';
+import { useTranslations, type Locale } from '~/i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const items = [
+  { Ring: Ring1, text: t('rsvp.note.item1') },
+  { Ring: Ring2, text: t('rsvp.note.item2') },
+  { Ring: Ring3, text: t('rsvp.note.item3') },
+];
+---
+
+<section class="rsvp">
+  <div class="rsvp__bg" aria-hidden="true"></div>
+
+  <div class="container rsvp__inner">
+    {/* Hero pattern: artwork for the eye, translated text for everything
+        else. The lettering stays English in every locale — the export has
+        no glyphs for the Dutch or Spanish title. */}
+    <h1 class="rsvp__title">
+      <span class="visually-hidden">{t('rsvp.title')}</span>
+      <Title class="rsvp__title-art" aria-hidden="true" />
+    </h1>
+
+    <p class="rsvp__statement">{t('rsvp.statement')}</p>
+
+    {/* Rules either side of the heart rather than one drawn line, so each
+        can fade out toward its outer end — same device as the hero. */}
+    <div class="rsvp__divider" aria-hidden="true">
+      <Heart class="rsvp__heart" />
+    </div>
+
+    <p class="rsvp__cue">{t('rsvp.note.checklist.intro')}</p>
+
+    <ul class="checklist">
+      {
+        items.map(({ Ring, text }, i) => (
+          <li class="checklist__item" style={`--i:${i}`}>
+            <Ring class="checklist__ring" aria-hidden="true" />
+            <span class="checklist__text">{text}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .rsvp {
+    /* Identical derivation to Hero and TheDay — see Hero.astro for why the
+       height leads and why the 37rem floor exists. */
+    --card-h: max(37rem, min(100dvh, 100vw / 0.4621));
+    --card-w: calc(var(--card-h) * 0.4621);
+
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-block-start: calc(-1 * var(--header-h));
+    min-height: 100dvh;
+    color: var(--c-lagoon);
+  }
+
+  .rsvp__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      180deg,
+      var(--c-shell) 0%,
+      color-mix(in srgb, var(--c-shell) 62%, var(--c-mist)) 28%,
+      color-mix(in srgb, var(--c-foam) 60%, var(--c-shell)) 58%,
+      var(--c-foam) 100%
+    );
+  }
+
+  /* No flexible filler anywhere in here: the export leaves the bottom
+     ~15% of the card deliberately empty, and because every measurement is
+     a fraction of --card-h that margin reproduces itself at any size. */
+  .rsvp__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: var(--card-w);
+    height: var(--card-h);
+    max-width: none;
+    /* Wants 9.78% of the card; the header is a fixed 4.5rem and on a short
+       phone that is the larger of the two — take whichever clears it. */
+    padding-block-start: max(calc(var(--card-h) * 0.0978), calc(var(--header-h) + var(--space-2)));
+    padding-inline: 0;
+  }
+
+  .rsvp__title {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    width: 100%;
+    color: var(--c-lagoon);
+  }
+
+  /* 141.875 of the export's 310.5 — the artwork carries its own aspect. */
+  .rsvp__title-art {
+    display: block;
+    width: 45.7%;
+    height: auto;
+  }
+
+  /* Every line of copy on this card is one size. 0.0478 is not guessed from
+     the export's cap heights — it is calibrated so "Whether you are coming"
+     sets to the same advance width Canva gives it (183.9 of 310.5), which is
+     what decides whether the two- and three-line items wrap where the export
+     wraps them. Line height follows from the export's 20.9-unit baseline
+     pitch at that size. */
+  .rsvp__statement,
+  .rsvp__cue,
+  .checklist__text {
+    font-size: calc(var(--card-w) * 0.0478);
+    font-weight: 400;
+    line-height: 1.406;
+    color: var(--c-lagoon);
+  }
+
+  /* Gaps are measured ink-to-ink on the export, so each is that figure
+     minus the leading the adjacent line box already contributes. */
+  .rsvp__statement {
+    margin: calc(var(--card-h) * 0.064) 0 0;
+    width: 92%;
+    text-wrap: balance;
+  }
+
+  .rsvp__divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: calc(var(--card-w) * 0.007);
+    width: 82.2%;
+    margin-block-start: calc(var(--card-h) * 0.079);
+    color: var(--c-tide);
+  }
+
+  .rsvp__divider::before,
+  .rsvp__divider::after {
+    content: '';
+    flex: 1;
+    /* Scales with the card, but never thins below a device pixel. */
+    height: max(1px, calc(var(--card-w) * 0.0035));
+    opacity: 0.85;
+    background: linear-gradient(90deg, transparent, currentColor 55%);
+  }
+
+  .rsvp__divider::after {
+    background: linear-gradient(270deg, transparent, currentColor 55%);
+  }
+
+  .rsvp__heart {
+    flex: none;
+    width: calc(var(--card-w) * 0.103);
+    height: auto;
+  }
+
+  .rsvp__cue {
+    margin: calc(var(--card-h) * 0.077) 0 0;
+    width: 92%;
+    text-wrap: balance;
+  }
+
+  /* ——— Checklist ——————————————————————————————————— */
+
+  .checklist {
+    list-style: none;
+    margin: calc(var(--card-h) * 0.047) 0 0;
+    padding: 0;
+    /* Sized so the text column lands on the export's 199.4 of 310.5 once the
+       ring column and its gap are taken out — that width is what makes the
+       long items break where Canva breaks them. */
+    width: 77.3%;
+    text-align: start;
+  }
+
+  .checklist__item {
+    display: grid;
+    grid-template-columns: calc(var(--card-w) * 0.0531) 1fr;
+    column-gap: calc(var(--card-w) * 0.0776);
+    align-items: start;
+  }
+
+  .checklist__item + .checklist__item {
+    margin-block-start: calc(var(--card-h) * 0.073);
+  }
+
+  /* The ring sits on the cap-height centre of the item's FIRST line, not
+     on the block — a two- or three-line item must not push it down. */
+  .checklist__ring {
+    width: 100%;
+    height: auto;
+    margin-block-start: calc(var(--card-w) * 0.004);
+    color: var(--c-tide);
+  }
+
+  .checklist__text {
+    text-wrap: pretty;
+  }
+
+  /* Staged reveal, same grammar as the other two cards: the card is read
+     top to bottom. One pass on load, no loops. */
+  @media (prefers-reduced-motion: no-preference) {
+    .rsvp__title,
+    .rsvp__statement,
+    .rsvp__divider,
+    .rsvp__cue,
+    .checklist__item {
+      opacity: 0;
+      animation: rsvp-rise var(--dur-slow) var(--ease-out) forwards;
+    }
+
+    .rsvp__title { animation-delay: 50ms; }
+    .rsvp__statement { animation-delay: 150ms; }
+    .rsvp__divider { animation-delay: 250ms; }
+    .rsvp__cue { animation-delay: 350ms; }
+    .checklist__item { animation-delay: calc(450ms + var(--i) * 110ms); }
+
+    @keyframes rsvp-rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+</style>

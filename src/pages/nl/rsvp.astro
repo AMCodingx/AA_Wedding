@@ -1,7 +1,6 @@
 ---
 import PageLayout from '~/layouts/PageLayout.astro';
-import Section from '~/components/ui/Section.astro';
-import RsvpInstructions from '~/features/rsvp/RsvpInstructions.astro';
+import RsvpCard from '~/features/rsvp/RsvpCard.astro';
 import { useTranslations } from '~/i18n';
 
 const locale = 'nl' as const;
@@ -11,10 +10,9 @@ const t = useTranslations(locale);
 <PageLayout
   locale={locale}
   routeKey="rsvp"
+  showFooter={false}
   title={t('rsvp.title')}
   description={t('rsvp.intro')}
 >
-  <Section tone="elevated" spacing="md" width="narrow">
-    <RsvpInstructions locale={locale} />
-  </Section>
+  <RsvpCard locale={locale} />
 </PageLayout>

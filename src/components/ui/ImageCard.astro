@@ -56,6 +56,11 @@ const hasBadge = Astro.slots.has('badge');
     border-radius: var(--radius-lg) var(--radius-lg) var(--radius-md) var(--radius-md);
     overflow: hidden;
     aspect-ratio: 16 / 10;
+    /* Hairline so a photo with a pale edge still has a shape. Outline, not
+       border: it paints over the image and doesn't take part in layout, so
+       the media keeps sitting flush on the card's own corners. */
+    outline: 1px solid var(--outline-image);
+    outline-offset: -1px;
   }
 
   .image-card__img {
@@ -78,20 +83,34 @@ const hasBadge = Astro.slots.has('badge');
     margin-block-end: var(--space-2);
   }
 
+  /* The subtitle treatment (Poppins 600 — what h4 wears), not the display
+     face. The hero and The day keep the script for the one title on the
+     page and set everything under it in Poppins; at --fs-base the script's
+     x-height also left these reading lighter than the blurb below them. */
   .image-card__title {
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
     font-size: var(--fs-base);
+    letter-spacing: 0.01em;
     margin: 0;
     line-height: 1.2;
+    color: var(--c-lagoon);
+    text-wrap: balance;
   }
 
+  /* Lagoon, not the muted grey: the card system paints every piece of copy
+     in the one colour and lets size and face carry the hierarchy. 400 rather
+     than the ExtraLight page default, matching The day. */
   .image-card__body {
-    color: var(--text-muted);
+    color: var(--c-lagoon);
     font-size: var(--fs-sm);
+    font-weight: 400;
     line-height: 1.6;
   }
 
   .image-card__body :global(p) {
     margin: 0;
+    text-wrap: pretty;
   }
 
   @media (prefers-reduced-motion: reduce) {

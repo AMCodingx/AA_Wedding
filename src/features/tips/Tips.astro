@@ -32,7 +32,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     <legend class="visually-hidden">{t('tips.filter.label')}</legend>
 
     <input class="tips__radio" type="radio" id="tips-all" name="tips-filter" value="all" checked />
-    <label class="tips__pill" for="tips-all">{t('tips.filter.all')}</label>
+    <label class="tips__pill" for="tips-all"><span>{t('tips.filter.all')}</span></label>
 
     {categories.map((cat) => (
       <>
@@ -106,20 +106,27 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     clip: rect(0, 0, 0, 0);
   }
 
+  /* Same tracked-uppercase treatment as the hero CTA — these are the page's
+     only buttons, so they wear the card system's button voice. */
   .tips__pill {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
     white-space: nowrap;
+    /* Tap target floor: the label alone is ~17px tall. */
+    min-height: 40px;
     padding: var(--space-2) var(--space-4);
     border-radius: var(--radius-pill);
-    border: 1px solid transparent;
-    background: var(--surface);
+    border: 1px solid var(--c-tide);
+    background: var(--bg-elevated);
     cursor: pointer;
-    font-size: var(--fs-sm);
-    font-weight: 600;
-    color: var(--text);
+    font-family: var(--font-subtitle);
+    font-size: var(--fs-xs);
+    font-weight: var(--weight-subtitle);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--c-lagoon);
     transition:
       background var(--dur-fast) var(--ease-out),
       color var(--dur-fast) var(--ease-out),
@@ -128,24 +135,37 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
       transform var(--dur-fast) var(--ease-out);
   }
 
+  /* The tracking adds a space after the *last* glyph too, which throws a
+     centred label left by half of it. The hero pays this back with
+     text-indent; a flex container ignores that, so pull it off the label. */
+  .tips__pill > span {
+    margin-inline-end: -0.18em;
+  }
+
   .tips__pill:hover {
-    border-color: var(--border-strong);
+    background: var(--c-foam);
+    border-color: var(--c-tide-deep);
   }
 
   .tips__radio:focus-visible + .tips__pill {
-    outline: 2px solid var(--accent);
+    outline: 2px solid var(--c-lagoon);
     outline-offset: 2px;
   }
 
-  /* The one --accent *fill* that carries text, so it's the one that has to
-     move: white on the sea green measured 2.05:1. Same token as the accent
-     text colour, which puts the selected pill at 8.5:1. */
+  /* Same fill as the hero CTA: --c-tide is the brand teal but only reaches
+     3.79:1 against white, and this is small type — --c-tide-deep is that
+     colour darkened to 4.52:1, which clears AA. */
   .tips__radio:checked + .tips__pill {
-    background: var(--accent-text);
+    background: var(--c-tide-deep);
     color: var(--text-on-accent);
-    border-color: var(--accent-text);
+    border-color: var(--c-tide-deep);
     box-shadow: var(--shadow-md);
     transform: translateY(-1px);
+  }
+
+  /* After the :checked rule — equal specificity, so the press wins. */
+  .tips__pill:active {
+    transform: scale(0.96);
   }
 
   @media (max-width: 599px) {
