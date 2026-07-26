@@ -1,6 +1,14 @@
 ---
 import { useTranslations, type Locale } from '~/i18n';
 import { href, type RouteKey } from '~/lib/url';
+// Each label is the destination page's own title, in the card's hand — the
+// same outlined "Feeling Passionate" vector the page shows in its <h1>, not a
+// webfont approximation of it. RSVP is the tail of the RSVP card's TO RSVP,
+// sliced out by the flatten/trim recipe the day/ line art came from.
+import TheDayArt from '~/assets/day/the-day.svg';
+import OurTipsArt from '~/assets/tips/our-tips.svg';
+import RsvpArt from '~/assets/rsvp/rsvp.svg';
+import FaqArt from '~/assets/faq/faq.svg';
 
 interface Props {
   locale: Locale;
@@ -10,17 +18,23 @@ interface Props {
 const { locale, current } = Astro.props;
 const t = useTranslations(locale);
 
+/** `w`/`h` are the export's own viewBox, in the card's units. All four were
+    set at the same size on the same card, so scaling them by one shared unit
+    (`--nav-u`) keeps them in the proportions Canva drew them in — sizing each
+    to a uniform height instead would make FAQ tower over OUR TIPS. */
 interface Item {
   key: RouteKey;
   label: string;
+  Art: typeof TheDayArt;
+  w: number;
+  h: number;
 }
 
 const items: Item[] = [
-  { key: 'home', label: t('nav.home') },
-  { key: 'wedding', label: t('nav.wedding') },
-  { key: 'tips', label: t('nav.tips') },
-  { key: 'rsvp', label: t('nav.rsvp') },
-  { key: 'faq', label: t('nav.faq') },
+  { key: 'wedding', label: t('nav.wedding'), Art: TheDayArt, w: 124.25, h: 32.5 },
+  { key: 'tips', label: t('nav.tips'), Art: OurTipsArt, w: 151.66, h: 30 },
+  { key: 'rsvp', label: t('nav.rsvp'), Art: RsvpArt, w: 90.15, h: 29.77 },
+  { key: 'faq', label: t('nav.faq'), Art: FaqArt, w: 52.1, h: 30.3 },
 ];
 ---
 
@@ -34,7 +48,12 @@ const items: Item[] = [
             href={href(locale, item.key)}
             aria-current={item.key === current ? 'page' : undefined}
           >
-            {item.label}
+            <span class="visually-hidden">{item.label}</span>
+            <item.Art
+              class="nav__art"
+              aria-hidden="true"
+              style={`--w:${item.w};--h:${item.h}`}
+            />
           </a>
         </li>
       ))
@@ -71,7 +90,12 @@ const items: Item[] = [
                 href={href(locale, item.key)}
                 aria-current={item.key === current ? 'page' : undefined}
               >
-                {item.label}
+                <span class="visually-hidden">{item.label}</span>
+                <item.Art
+                  class="nav__art"
+                  aria-hidden="true"
+                  style={`--w:${item.w};--h:${item.h}`}
+                />
               </a>
             </li>
           ))
@@ -187,17 +211,25 @@ const items: Item[] = [
     text-decoration: none;
     /* Same lagoon as the monogram beside it and the names in the hero. */
     color: var(--c-lagoon);
-    font-weight: 500;
-    font-size: var(--fs-sm);
-    white-space: nowrap;
-    /* No hover or click affordance — the underline carries the state. */
+    /* One shared card unit for every label — see the `items` comment. */
+    --nav-u: 0.5px;
+    /* No hover or click affordance — the rule below carries the state. */
   }
 
+  /* `text-decoration` can't mark the current page any more: the label is an
+     atomic inline SVG, and browsers disagree about whether an underline is
+     drawn under one. A border on the link is the same 2px of tide, drawn by
+     the box instead of by the text. */
   .nav__link[aria-current='page'] {
-    text-decoration: underline;
-    text-decoration-color: var(--c-tide);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 6px;
+    box-shadow: inset 0 -2px 0 var(--c-tide);
+  }
+
+  /* Scaled from the export's own viewBox so the four titles keep the sizes
+     Canva drew them at relative to each other. */
+  .nav__art {
+    display: block;
+    inline-size: calc(var(--nav-u) * var(--w));
+    block-size: calc(var(--nav-u) * var(--h));
   }
 
   /* Keep keyboard users oriented — focus ring is preserved. */
@@ -422,10 +454,11 @@ const items: Item[] = [
     border-radius: var(--radius-md);
     text-decoration: none;
     color: var(--c-lagoon);
-    font-family: var(--font-display);
-    font-size: var(--fs-lg);
-    font-weight: 400;
-    line-height: 1.2;
+    /* Roomier than the header's row, but well short of the card's 200px of
+       content width — at 1.1px the widest label (OUR TIPS, 151.66 units)
+       ran nearly edge to edge and the rows read as headings, not menu
+       items. 0.78px leaves the margin the card's own layout keeps. */
+    --nav-u: 0.78px;
     transition:
       color var(--dur-fast) var(--ease-out),
       background var(--dur-fast) var(--ease-out);

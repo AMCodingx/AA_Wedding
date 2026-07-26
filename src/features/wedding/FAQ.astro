@@ -1,7 +1,25 @@
 ---
+// Fourth card in the set. Same gradient, same 310.5 × 672 export geometry and
+// the same "measure it off the Canva file" contract as Hero, TheDay and
+// RsvpCard (design/faq-card.svg) — but this one is allowed to scroll: seven
+// answers do not fit a phone screen and pretending otherwise would either
+// shrink the type or hide the content.
+//
+// That is the one deliberate difference from its siblings, and it decides how
+// --card-w is derived. The others take it from the viewport *height* so the
+// card can never overflow the fold. Here the page scrolls, so a dvh-derived
+// width would resize the whole layout the moment a mobile URL bar retracts.
+// Width comes from the viewport instead, capped at the size the siblings
+// settle on anyway (~416px), and --card-h is reconstructed from the card's
+// own aspect purely so the export's vertical fractions stay readable.
+//
+// "FAQ" is outlined "Feeling Passionate" for the same reason the hero's names
+// are — the face is Canva-licensed. The rule under each question is the
+// export's hand-drawn stroke, not a border; it tapers, and a border cannot.
 import Accordion from '~/components/ui/Accordion.astro';
+import Title from '~/assets/faq/faq.svg';
+import Heart from '~/assets/brand/heart.svg';
 import { FAQ_ENTRIES } from './faq.data';
-import { FAQ_CATEGORY_LABELS, type FaqCategory } from './faq.types';
 import { useTranslations, type Locale } from '~/i18n';
 
 interface Props {
@@ -10,53 +28,38 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-
-const grouped = FAQ_ENTRIES.reduce<Record<FaqCategory, typeof FAQ_ENTRIES>>(
-  (acc, entry) => {
-    (acc[entry.category] ||= []).push(entry);
-    return acc;
-  },
-  {} as Record<FaqCategory, typeof FAQ_ENTRIES>,
-);
-
-const categoryOrder: FaqCategory[] = ['stay', 'kids', 'attire', 'transport', 'other'];
-const visibleCategories = categoryOrder.filter((c) => grouped[c]?.length);
 ---
 
-<div class="faq">
-  <h1 class="visually-hidden">{t('wedding.faq.title')}</h1>
+<section class="faq">
+  <div class="faq__bg" aria-hidden="true"></div>
 
-  {
-    visibleCategories.map((cat, idx) => {
-      const entries = grouped[cat]!;
-      const num = String(idx + 1).padStart(2, '0');
-      return (
-        <section class="faq__category" aria-labelledby={`faq-cat-${cat}`}>
-          <header class="faq__cat-head">
-            <span class="faq__cat-num" aria-hidden="true">
-              {num}
-            </span>
-            <span class="faq__cat-rule" aria-hidden="true" />
-            <h2 id={`faq-cat-${cat}`} class="faq__cat-title">
-              {FAQ_CATEGORY_LABELS[cat][locale]}
-            </h2>
-          </header>
+  <div class="faq__inner">
+    {/* Hero pattern: artwork for the eye, translated text for everything
+        else. The lettering stays English in every locale — the export has
+        no glyphs for VEELGESTELDE VRAGEN or PREGUNTAS FRECUENTES. */}
+    <h1 class="faq__title">
+      <span class="visually-hidden">{t('wedding.faq.title')}</span>
+      <Title class="faq__title-art" aria-hidden="true" />
+    </h1>
 
-          <div class="faq__list">
-            {entries.map((entry) => (
-              <Accordion group={`faq-${cat}`}>
-                <Fragment slot="title">
-                  <span id={entry.id}>{entry.question[locale]}</span>
-                </Fragment>
-                <p>{entry.answer[locale]}</p>
-              </Accordion>
+    <Heart class="faq__heart" aria-hidden="true" />
+
+    <div class="faq__list">
+      {
+        FAQ_ENTRIES.map((entry, i) => (
+          <Accordion group="faq" class="faq__item" style={`--i:${i}`}>
+            <Fragment slot="title">
+              <span id={entry.id}>{entry.question[locale]}</span>
+            </Fragment>
+            {entry.answer[locale].map((paragraph) => (
+              <p>{paragraph}</p>
             ))}
-          </div>
-        </section>
-      );
-    })
-  }
-</div>
+          </Accordion>
+        ))
+      }
+    </div>
+  </div>
+</section>
 
 <style>
   .visually-hidden {
@@ -72,62 +75,118 @@ const visibleCategories = categoryOrder.filter((c) => grouped[c]?.length);
   }
 
   .faq {
-    display: grid;
-    gap: var(--space-12);
+    /* Identical derivation to Hero, TheDay and RsvpCard — see Hero.astro for
+       why the height leads and why the 37rem floor exists. Deriving from the
+       width instead (the card's own aspect, capped at 26rem) made this card
+       ~416px on a phone where its siblings are ~387px, which is a different
+       type size and a different measure on the same screen.
+
+       svh, not the siblings' dvh, is the one deliberate difference: they
+       never scroll, so for them the two are equal, but this card does once
+       answers open — and dvh would resize the whole layout the moment a
+       mobile URL bar retracted. svh is the stable end of that range. */
+    --card-h: max(37rem, min(100svh, 100vw / 0.4621));
+    --card-w: calc(var(--card-h) * 0.4621);
+
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    justify-content: center;
+    /* Pull the page gradient up behind the (translucent) sticky header. */
+    margin-block-start: calc(-1 * var(--header-h));
+    min-height: 100svh;
+    color: var(--c-lagoon);
   }
 
-  .faq__category {
-    display: grid;
-    gap: var(--space-4);
+  /* fixed, not absolute: the gradient is the card's four stops over the
+     card's own height, and on a page this long an absolutely-positioned
+     copy would stretch those stops over three screens and read as flat. */
+  .faq__bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+      180deg,
+      var(--c-shell) 0%,
+      color-mix(in srgb, var(--c-shell) 62%, var(--c-mist)) 28%,
+      color-mix(in srgb, var(--c-foam) 60%, var(--c-shell)) 58%,
+      var(--c-foam) 100%
+    );
   }
 
-  .faq__cat-head {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: baseline;
-    column-gap: var(--space-4);
-    row-gap: var(--space-2);
+  .faq__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    inline-size: var(--card-w);
+    /* Wants 9.9% of the card; the header is a fixed 4.5rem and on a short
+       phone that is the larger of the two — take whichever clears it. */
+    padding-block: max(calc(var(--card-h) * 0.099), calc(var(--header-h) + var(--space-2)))
+      calc(var(--card-h) * 0.12);
   }
 
-  .faq__cat-num {
-    font-family: var(--font-subtitle);
-    font-weight: var(--weight-subtitle);
-    font-size: var(--fs-xs);
-    letter-spacing: 0.24em;
-    color: var(--accent-text);
-    /* Optical lift so the numeral sits on the same baseline as the title kicker. */
-    line-height: 1;
-  }
-
-  .faq__cat-rule {
-    block-size: 1px;
-    background: var(--c-sand);
-    align-self: center;
-    transform: translateY(-2px);
-  }
-
-  .faq__cat-title {
-    grid-column: 1 / -1;
-    font-family: var(--font-subtitle);
-    font-weight: var(--weight-subtitle);
-    font-size: var(--fs-sm);
-    text-transform: uppercase;
-    letter-spacing: 0.24em;
-    color: var(--text);
+  .faq__title {
+    display: flex;
+    justify-content: center;
+    inline-size: 100%;
     margin: 0;
-    padding-inline-start: calc(var(--space-8) + var(--space-1));
-    /* Vertically nudge so it reads as the chapter title under the rule */
-    margin-block-start: var(--space-1);
+    /* Not inherited from .faq: typography.css sets `h1,h2,h3 { color: --text }`
+       and a type selector beats inheritance, so the wordmark painted #1f3a38
+       instead of the couple's teal. Hero and RsvpCard restate it on their own
+       titles for exactly this reason. */
+    color: var(--c-lagoon);
   }
 
+  /* 51.94 of the export's 310.5 — the artwork carries its own aspect. */
+  .faq__title-art {
+    display: block;
+    inline-size: 16.73%;
+    block-size: auto;
+  }
+
+  /* Alone here, with no rules either side: on this card the heart is the
+     full stop after the title, not a divider between two things. */
+  .faq__heart {
+    display: block;
+    inline-size: calc(var(--card-w) * 0.0895);
+    block-size: auto;
+    margin-block-start: calc(var(--card-h) * 0.0436);
+    color: var(--c-tide);
+  }
+
+  /* 199.9 of 310.5 — the width that makes the questions wrap where Canva
+     wraps them. Centred on the card; the +/− markers hang outside it. */
   .faq__list {
-    display: grid;
-    gap: var(--space-3);
+    inline-size: 64.38%;
+    margin-block-start: calc(var(--card-h) * 0.0506);
+    /* One size for every line on the card, questions and answers alike.
+       15 of the export's 310.5 units. */
+    font-size: calc(var(--card-w) * 0.0483);
   }
 
-  @media (min-width: 540px) {
-    .faq__cat-title {
-      font-size: var(--fs-base);
+  /* Staged reveal, same grammar as the other three cards: the card is read
+     top to bottom. One pass on load, no loops. */
+  @media (prefers-reduced-motion: no-preference) {
+    .faq__title,
+    .faq__heart,
+    .faq__list :global(.faq__item) {
+      opacity: 0;
+      animation: faq-rise var(--dur-slow) var(--ease-out) forwards;
+    }
+
+    .faq__title { animation-delay: 50ms; }
+    .faq__heart { animation-delay: 150ms; }
+    .faq__list :global(.faq__item) { animation-delay: calc(250ms + var(--i) * 70ms); }
+
+    @keyframes faq-rise {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
     }
   }
 </style>

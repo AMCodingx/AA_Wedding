@@ -60,3 +60,12 @@ form on success`, `chore(deps): bump astro`.
 - Do not add Google Fonts `<link>` tags. Self-host in `public/fonts/`.
 - Do not add analytics without checking with the couple — they value
   privacy and a clean network panel.
+- Do not ship a card SVG in `src/assets/` without `width`/`height`
+  attributes matching its `viewBox`. Canva exports omit them, and every
+  card sizes its artwork in CSS (`inline-size: 16.73%`, `calc(--card-w …)`)
+  — so in any window where that CSS has not applied yet, a `viewBox`-only
+  SVG expands to fill its container and the title or heart paints
+  full-bleed. Astro's dev server injects scoped styles via JS, so this
+  flash is guaranteed in `bun run dev` on every load. CSS beats
+  presentation attributes, so adding them changes nothing once styled.
+  Re-add them after any re-export.

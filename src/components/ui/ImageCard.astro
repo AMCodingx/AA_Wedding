@@ -15,7 +15,7 @@ const { image, alt, title, loading = 'lazy', class: className = '' } = Astro.pro
 const hasBadge = Astro.slots.has('badge');
 ---
 
-<Card elevation="sm" as="article" class={`image-card ${className}`.trim()}>
+<Card elevation="lift" as="article" class={`image-card ${className}`.trim()}>
   <div class="image-card__media">
     <Image
       src={image}
@@ -75,8 +75,14 @@ const hasBadge = Astro.slots.has('badge');
     transform: scale(1.04);
   }
 
+  /* Wraps because the badge label is a single unbreakable word in some
+     locales — Dutch "Bezienswaardigheden" is 218px on its own, and held on
+     one line with the title it pushes the card past its grid track and puts
+     a horizontal scrollbar on the page. Dropping it under the title is the
+     only place that width can go. */
   .image-card__header {
     display: flex;
+    flex-wrap: wrap;
     align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-3);

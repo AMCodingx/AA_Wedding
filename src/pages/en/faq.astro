@@ -1,6 +1,5 @@
 ---
 import PageLayout from '~/layouts/PageLayout.astro';
-import Section from '~/components/ui/Section.astro';
 import FAQ from '~/features/wedding/FAQ.astro';
 import { useTranslations } from '~/i18n';
 
@@ -8,13 +7,13 @@ const locale = 'en' as const;
 const t = useTranslations(locale);
 ---
 
+{/* No Section wrapper: FAQ is a full-bleed card that carries its own
+    gradient and its own measure, exactly like the other three. */}
 <PageLayout
   locale={locale}
   routeKey="faq"
   title={t('wedding.faq.title')}
   description={t('wedding.faq.intro')}
 >
-  <Section tone="shell" spacing="lg" width="narrow">
-    <FAQ locale={locale} />
-  </Section>
+  <FAQ locale={locale} />
 </PageLayout>

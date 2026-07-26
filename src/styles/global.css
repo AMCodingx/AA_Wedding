@@ -55,10 +55,15 @@
 
 /* Lock body scroll while the mobile nav sheet is open. The Nav island
    toggles `is-nav-open` on <html>; we keep the rule global so it works
-   regardless of where Nav mounts. */
+   regardless of where Nav mounts.
+
+   `touch-action` only — NOT `overflow: hidden`. Hiding overflow on <html>
+   takes away the scrollport `position: sticky` measures against, so on a
+   page that had been scrolled the header dropped back to its document
+   position (i.e. off the top of the screen) the moment the menu opened.
+   The drawer is mobile-only, so blocking touch panning is the whole lock. */
 html.is-nav-open,
 html.is-nav-open body {
-  overflow: hidden;
   touch-action: none;
 }
 

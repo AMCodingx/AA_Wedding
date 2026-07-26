@@ -2,8 +2,7 @@
   "site.title": "Our Wedding",
   "site.tagline": "A celebration by the Caribbean Sea",
 
-  "nav.home": "Home",
-  "nav.wedding": "The wedding",
+  "nav.wedding": "The day",
   "nav.tips": "Our tips",
   "nav.rsvp": "RSVP",
   "nav.faq": "FAQ",
@@ -73,9 +72,5 @@
   "rsvp.note.checklist.intro": "Please include the following:",
   "rsvp.note.item1": "Whether you are coming",
   "rsvp.note.item2": "Any dietary requirements (vegetarian, allergies, etc)",
-  "rsvp.note.item3": "If you like to use the shuttle bus, include where you are staying.",
-
-  "footer.madeWith": "Made with love",
-  "footer.contact": "Contact",
-  "footer.copyright": "© 2027"
+  "rsvp.note.item3": "If you like to use the shuttle bus, include where you are staying."
 }

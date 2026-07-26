@@ -2,79 +2,74 @@
 /**
  * Native <details>/<summary> accordion. Keyboard + screen-reader support
  * comes for free from the platform — no JS required.
+ *
+ * Styled to the couple's card set: no box, no border. A hanging +/− marker
+ * in the left margin, the question on the baseline grid, and a hand-drawn
+ * rule closing the item. Geometry is expressed in `em` so the whole thing
+ * scales with whatever font-size the caller sets, and in `--card-w`
+ * fractions where the export measures against the card rather than the type.
  */
+import Rule from '~/assets/brand/rule.svg';
+
 interface Props {
   /** Group name — pass the same string to siblings to make only one open at a time. */
   group?: string;
   open?: boolean;
   class?: string;
+  /** Inline custom properties, e.g. a stagger index for the caller's reveal. */
+  style?: string;
 }
 
-const { group, open = false, class: className = '' } = Astro.props;
+const { group, open = false, class: className = '', style } = Astro.props;
 ---
 
-<details
-  class:list={['accordion', className]}
-  open={open}
-  name={group}
->
-  <summary class="accordion__summary">
-    <span class="accordion__title"><slot name="title" /></span>
-    <span class="accordion__toggle" aria-hidden="true">
-      <span class="accordion__bar accordion__bar--h"></span>
-      <span class="accordion__bar accordion__bar--v"></span>
-    </span>
-  </summary>
-  <div class="accordion__body">
-    <slot />
-  </div>
-</details>
+<div class:list={['accordion', className]} style={style}>
+  <details class="accordion__details" open={open} name={group}>
+    <summary class="accordion__summary">
+      <span class="accordion__marker" aria-hidden="true">
+        <span class="accordion__bar accordion__bar--h"></span>
+        <span class="accordion__bar accordion__bar--v"></span>
+      </span>
+      <span class="accordion__title"><slot name="title" /></span>
+    </summary>
+
+    <div class="accordion__body">
+      <slot />
+    </div>
+  </details>
+
+  {/* Outside the <details>, not inside it: a closed <details> renders only
+      its <summary>, so a rule in there would vanish on every shut item.
+      And a sibling element rather than a border, because the export's rule
+      is a tapered pen stroke and a border cannot taper. */}
+  <Rule class="accordion__rule" aria-hidden="true" />
+</div>
 
 <style>
+  /* The element IS the text column; the marker hangs outside it, which is
+     how the export sets it — question left edges align, +/− sits in the
+     margin at 32.6 of the card's 310.5 units to their left. */
   .accordion {
+    --hang: calc(var(--card-w, 26rem) * 0.1049);
     position: relative;
-    background: var(--bg-elevated);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    overflow: hidden;
-    transition:
-      border-color var(--dur-base) var(--ease-out),
-      box-shadow var(--dur-base) var(--ease-out);
-  }
-  .accordion::before {
-    content: '';
-    position: absolute;
-    inset-block: 0;
-    inset-inline-start: 0;
-    inline-size: 3px;
-    background: var(--accent);
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform var(--dur-base) var(--ease-out);
-  }
-  .accordion[open] {
-    border-color: var(--accent-soft);
-    box-shadow: var(--shadow-sm);
-  }
-  .accordion[open]::before {
-    transform: scaleY(1);
+    /* Set here, not on the inner spans: the line boxes that decide the
+       item's height belong to <summary> and to each <p>, so a line-height
+       further in never reaches the strut that actually measures them. */
+    line-height: 1.376;
+    color: var(--c-lagoon);
   }
 
+  /* Ink-to-ink in the export: 42.76 card units baseline to baseline, which
+     is this once the line box and the rule's own band are taken out. */
   .accordion + .accordion {
-    margin-top: var(--space-3);
+    margin-block-start: 0.65em;
   }
 
   .accordion__summary {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
-    padding: var(--space-4) var(--space-6);
+    position: relative;
+    display: block;
     cursor: pointer;
     list-style: none;
-    font-weight: 500;
-    color: var(--text);
-    transition: background var(--dur-fast) var(--ease-out);
   }
 
   .accordion__summary::-webkit-details-marker {
@@ -84,56 +79,109 @@ const { group, open = false, class: className = '' } = Astro.props;
     content: '';
   }
 
-  .accordion__summary:hover {
-    background: color-mix(in oklab, var(--surface) 35%, var(--bg-elevated));
+  /* The visible row is one line of type (~26px). Grow the *target* to ~42px
+     without moving anything: the gap to the next question is ~18px, so the
+     expanded targets of two siblings still cannot meet. */
+  .accordion__summary::before {
+    content: '';
+    position: absolute;
+    inset-inline: calc(-1 * var(--hang)) 0;
+    inset-block: -0.5rem;
   }
+
+  /* The ring goes on the target, not on the text box — otherwise it draws a
+     rectangle that excludes the +/− the user just aimed at. */
   .accordion__summary:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
+    outline: none;
+  }
+
+  .accordion__summary:focus-visible::before {
+    outline: 2px solid var(--c-tide);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
   }
 
   .accordion__title {
-    font-family: var(--font-subtitle);
-    font-weight: var(--weight-subtitle);
-    font-size: var(--fs-base);
-    line-height: 1.4;
+    font-weight: 400;
+    text-wrap: pretty;
   }
 
-  .accordion__toggle {
-    position: relative;
-    flex: 0 0 auto;
-    inline-size: 18px;
-    block-size: 18px;
-    color: var(--text-muted);
-    transition: color var(--dur-base) var(--ease-out);
+  /* ——— +/− marker ———————————————————————————————— */
+
+  .accordion__marker {
+    position: absolute;
+    inset-inline-start: calc(-1 * var(--hang));
+    /* Centred on the first line's optical middle, so a two-line question
+       does not drag the marker down with it. */
+    inset-block-start: calc(0.688em - 0.28em);
+    inline-size: 0.56em;
+    block-size: 0.56em;
+    color: var(--c-lagoon);
   }
+
   .accordion__bar {
     position: absolute;
     inset: 50% 0 auto 0;
-    block-size: 1.5px;
+    block-size: max(1px, 0.08em);
     background: currentColor;
     border-radius: 2px;
     transform: translateY(-50%);
     transition: transform var(--dur-base) var(--ease-out);
   }
+
   .accordion__bar--v {
     transform: translateY(-50%) rotate(90deg);
   }
-  .accordion[open] .accordion__toggle {
-    color: var(--accent);
-  }
-  .accordion[open] .accordion__bar--v {
+
+  .accordion__details[open] .accordion__bar--v {
     transform: translateY(-50%) rotate(0deg);
   }
 
+  /* ——— Answer ————————————————————————————————————— */
+
+  /* No gap above: the export puts the answer's baseline exactly one line
+     pitch below the question's, i.e. the two set as continuous text. */
   .accordion__body {
-    padding: 0 var(--space-6) var(--space-6);
-    color: var(--text-muted);
-    font-size: var(--fs-base);
-    line-height: 1.7;
+    font-weight: 300;
+    text-wrap: pretty;
+  }
+
+  .accordion__body :global(p) {
+    margin: 0;
+    font-size: inherit;
+    color: inherit;
   }
 
   .accordion__body :global(p + p) {
-    margin-top: var(--space-3);
+    margin-block-start: 0.688em;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .accordion__details[open] .accordion__body {
+      animation: accordion-reveal var(--dur-base) var(--ease-out) both;
+    }
+
+    @keyframes accordion-reveal {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+
+  /* ——— Rule ——————————————————————————————————————— */
+
+  /* 10.4 card units below the last baseline in the export — expressed from
+     the line box's bottom edge, which is where CSS can actually measure. */
+  .accordion__rule {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    margin-block-start: 0.69em;
+    color: var(--c-tide);
   }
 </style>

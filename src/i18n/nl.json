@@ -2,8 +2,7 @@
   "site.title": "Onze Bruiloft",
   "site.tagline": "Een feest aan de Caribische zee",
 
-  "nav.home": "Home",
-  "nav.wedding": "De Bruiloft",
+  "nav.wedding": "De dag",
   "nav.tips": "Onze tips",
   "nav.rsvp": "RSVP",
   "nav.faq": "FAQ",
@@ -31,13 +30,13 @@
   "wedding.day.startNote": "Exacte tijd wordt nog bepaald",
   "wedding.day.beat.welcome": "Welkom",
   "wedding.day.beat.ceremony": "Ceremonie",
-  "wedding.day.beat.cocktail": "Cocktailuur",
+  "wedding.day.beat.cocktail": "Borrel",
   "wedding.day.beat.dinner": "Diner",
   "wedding.day.beat.party": "Feest",
   "wedding.day.location": "Dit is allemaal op dezelfde locatie.",
   "wedding.date.title": "Datum & tijd",
   "wedding.date.ceremony": "Ceremonie",
-  "wedding.date.cocktail": "Cocktailuur",
+  "wedding.date.cocktail": "Borrel",
   "wedding.date.reception": "Receptie",
   "wedding.date.planning1": "We zijn nog bezig met de definitieve dagplanning.",
   "wedding.date.planning2": "Wat we al weten is dat we 's middags beginnen tot middernacht en dat het zoiets zal zijn als: ceremonie – eten – feest! Alles vindt op hetzelfde strand plaats, dus je hoeft je geen zorgen te maken over vervoer naar verschillende plekken.",
@@ -73,9 +72,5 @@
   "rsvp.note.checklist.intro": "Vermeld het volgende:",
   "rsvp.note.item1": "Of je komt",
   "rsvp.note.item2": "Eventuele dieetwensen (vegetarisch, allergieën, enz.)",
-  "rsvp.note.item3": "Als je met de pendelbus mee wilt, geef door waar je verblijft.",
-
-  "footer.madeWith": "Met liefde gemaakt",
-  "footer.contact": "Contact",
-  "footer.copyright": "© 2027"
+  "rsvp.note.item3": "Als je met de pendelbus mee wilt, geef door waar je verblijft."
 }

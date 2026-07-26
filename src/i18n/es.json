@@ -2,8 +2,7 @@
   "site.title": "Nuestra boda",
   "site.tagline": "Una celebración junto al mar Caribe",
 
-  "nav.home": "Inicio",
-  "nav.wedding": "La boda",
+  "nav.wedding": "El día",
   "nav.tips": "Nuestros consejos",
   "nav.rsvp": "Confirmar",
   "nav.faq": "FAQ",
@@ -73,9 +72,5 @@
   "rsvp.note.checklist.intro": "Incluye lo siguiente:",
   "rsvp.note.item1": "Si vas a venir",
   "rsvp.note.item2": "Restricciones alimentarias (vegetariano, alergias, etc.)",
-  "rsvp.note.item3": "Si quieres usar el autobús lanzadera, dinos dónde te alojas.",
-
-  "footer.madeWith": "Hecho con cariño",
-  "footer.contact": "Contacto",
-  "footer.copyright": "© 2027"
+  "rsvp.note.item3": "Si quieres usar el autobús lanzadera, dinos dónde te alojas."
 }

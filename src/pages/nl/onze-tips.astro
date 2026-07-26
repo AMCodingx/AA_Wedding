@@ -15,13 +15,6 @@ const t = useTranslations(locale);
   description={t('tips.intro')}
 >
   <div class="tips-page">
-    <Section tone="none" spacing="md" width="narrow">
-      <header class="tips-header">
-        <h1>{t('tips.title')}</h1>
-        <p>{t('tips.intro')}</p>
-      </header>
-    </Section>
-
     <Section tone="none" spacing="md">
       <Tips locale={locale} />
     </Section>
@@ -29,10 +22,10 @@ const t = useTranslations(locale);
 </PageLayout>
 
 <style>
-  /* One ground for the whole page, so the header band and the cards below it
-     no longer meet on a hard edge. Same four stops as the hero and The day —
-     this is the same water, it just scrolls — held to one viewport and then
-     settled into foam, which is the colour the footer's gradient starts on. */
+  /* One ground for the whole page, so the head and the cards below it never
+     meet on a hard edge. Same four stops as the hero and The day — this is
+     the same water, it just scrolls — held to one viewport and then settled
+     into foam, which is the colour the cards' shallow ground sits on. */
   .tips-page {
     background-color: var(--c-foam);
     background-image: linear-gradient(
@@ -44,23 +37,5 @@ const t = useTranslations(locale);
     );
     background-repeat: no-repeat;
     background-size: 100% 100dvh;
-  }
-
-  .tips-header {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-
-  .tips-header h1 {
-    color: var(--c-lagoon);
-    text-wrap: balance;
-  }
-
-  .tips-header p {
-    max-width: 52ch;
-    color: var(--c-lagoon);
-    font-weight: 400;
-    text-wrap: pretty;
   }
 </style>

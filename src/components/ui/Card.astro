@@ -2,7 +2,9 @@
 type Props = {
   as?: 'article' | 'section' | 'div' | 'li';
   href?: string;
-  elevation?: 'flat' | 'sm' | 'md';
+  /** `lift` is the layered card shadow plus a hover raise — for a card that
+      sits on a coloured ground and has to read as an object on top of it. */
+  elevation?: 'flat' | 'sm' | 'md' | 'lift';
   class?: string;
 };
 
@@ -27,7 +29,9 @@ const classes = ['card', `card--${elevation}`, href && 'card--link', className]
 <style>
   .card {
     display: block;
-    background: var(--bg-elevated);
+    /* Consumers repaint the ground by setting --card-bg on any ancestor —
+       the component stays dumb and nobody has to reach in at .card. */
+    background: var(--card-bg, var(--bg-elevated));
     border-radius: var(--radius-lg);
     padding: var(--space-6);
     border: 1px solid var(--border);
@@ -43,6 +47,16 @@ const classes = ['card', `card--${elevation}`, href && 'card--link', className]
   }
   .card--md {
     box-shadow: var(--shadow-md);
+  }
+  .card--lift {
+    box-shadow: var(--shadow-card);
+    transition:
+      transform var(--dur-base) var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out);
+  }
+  .card--lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
   }
 
   .card--link {

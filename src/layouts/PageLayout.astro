@@ -1,7 +1,6 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Header from '~/components/layout/Header.astro';
-import Footer from '~/components/layout/Footer.astro';
 import { useTranslations, type Locale } from '~/i18n';
 import { type RouteKey } from '~/lib/url';
 
@@ -12,20 +11,9 @@ interface Props {
   routeKey?: RouteKey;
   preloadImage?: string;
   ogImage?: string;
-  /** Home is a single-screen card that must not scroll, so it opts out —
-      there is nowhere to scroll a footer into view. Content pages keep it. */
-  showFooter?: boolean;
 }
 
-const {
-  locale,
-  title,
-  description,
-  routeKey,
-  preloadImage,
-  ogImage,
-  showFooter = true,
-} = Astro.props;
+const { locale, title, description, routeKey, preloadImage, ogImage } = Astro.props;
 const t = useTranslations(locale);
 ---
 
@@ -42,5 +30,4 @@ const t = useTranslations(locale);
   <main id="main">
     <slot />
   </main>
-  {showFooter && <Footer locale={locale} />}
 </BaseLayout>
