@@ -49,10 +49,10 @@ const t = useTranslations(locale);
         FAQ_ENTRIES.map((entry, i) => (
           <Accordion group="faq" class="faq__item" style={`--i:${i}`}>
             <Fragment slot="title">
-              <span id={entry.id}>{entry.question[locale]}</span>
+              <span id={entry.id}>{t(entry.question)}</span>
             </Fragment>
-            {entry.answer[locale].map((paragraph) => (
-              <p>{paragraph}</p>
+            {entry.answer.map((paragraph) => (
+              <p>{t(paragraph)}</p>
             ))}
           </Accordion>
         ))

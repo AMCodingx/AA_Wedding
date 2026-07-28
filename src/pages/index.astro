@@ -8,14 +8,20 @@
  * to the default-locale via the meta refresh.
  */
 import { DEFAULT_LOCALE, LOCALES } from '~/i18n/locales';
+import { t } from '~/i18n';
+
 const fallback = `/${DEFAULT_LOCALE}/`;
+// No locale is known yet — that is the whole point of this page — so the
+// shim's two strings come from the default dictionary rather than being
+// written inline.
+const title = t(DEFAULT_LOCALE, 'site.title');
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Wedding</title>
+    <title>{title}</title>
     <meta http-equiv="refresh" content={`0; url=${fallback}`} />
     <link rel="canonical" href={fallback} />
     <meta name="robots" content="noindex" />
@@ -37,7 +43,7 @@ const fallback = `/${DEFAULT_LOCALE}/`;
     </script>
     <noscript>
       <p>
-        <a href={fallback}>Continue</a>
+        <a href={fallback}>{title}</a>
       </p>
     </noscript>
   </body>

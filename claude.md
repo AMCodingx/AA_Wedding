@@ -8,8 +8,24 @@ Read me before touching code. The full design rationale lives in
 - **Tooling.** Use **Bun**, not npm/pnpm. `bun install`, `bun run dev`.
 - **Never hardcode colors, sizes, or spacing.** Reference CSS vars from
   `src/styles/tokens.css`. If you need a new token, add it there first.
-- **Never hardcode strings.** Add the key to `src/i18n/nl.json` (the
-  type-source — `TKey = keyof typeof nl`) and `es.json` + `en.json`, then use `t('your.key')`.
+- **Never hardcode strings — `src/i18n/*.json` is the only place copy
+  lives.** Add the key to `src/i18n/nl.json` (the type-source —
+  `TKey = keyof typeof nl`) and `es.json` + `en.json`, then use
+  `t('your.key')`. This holds for *every* user-visible string, not just
+  labels: `alt`, `title`, `aria-label`, `placeholder`, `<title>`, meta
+  descriptions, and long-form content (FAQ answers, tip blurbs) included.
+  Data files like `faq.data.ts` / `tips.data.ts` are **manifests, not
+  copy** — they carry ids, images and categories, and reference text as
+  `TKey`, never as inline strings or `Record<Locale, string>` maps.
+  Multi-paragraph copy gets one key per paragraph (`faq.<id>.a1`,
+  `faq.<id>.a2`, …) because `t()` returns a string.
+  The three dictionaries must stay key-for-key identical, and **every key
+  must be reachable from code** — delete a key the moment its last caller
+  goes. Deleting a component means deleting its keys in the same change.
+  Only exceptions: proper nouns that are never translated (`Curaçao`,
+  `Alex & Anouk`, venue and restaurant names).
+  Keys built from a template (`` t(`tips.filter.${id}`) ``) are live —
+  grep the prefix, not the full key, before deciding one is unused.
 - **Never hardcode hrefs.** Use `href(locale, 'routeKey')` from
   `src/lib/url.ts`. Adding a new page = one entry in the `ROUTES` map.
 - **Components are dumb, features are smart.** `src/components/ui/*`

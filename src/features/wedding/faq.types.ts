@@ -1,9 +1,10 @@
-import { type Locale } from '~/i18n/locales';
+import { type TKey } from '~/i18n';
 
 export interface FaqEntry {
   /** Stable identifier — used as the anchor and accordion key. */
   id: string;
-  question: Record<Locale, string>;
-  /** One string per paragraph. The card sets each as its own <p>. */
-  answer: Record<Locale, string[]>;
+  /** Translation key for the question. */
+  question: TKey;
+  /** One translation key per paragraph. The card renders each as its own <p>. */
+  answer: readonly TKey[];
 }

@@ -124,7 +124,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
                 </svg>
                 {t(`tips.filter.${cat.id}`)}
               </Badge>
-              <p>{tip.blurb[locale]}</p>
+              <p>{t(tip.blurb)}</p>
             </ImageCard>
           </li>
         );
@@ -152,7 +152,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
                   </svg>
                   {catLabel}
                 </Badge>
-                <p>{tip.blurb[locale]}</p>
+                <p>{t(tip.blurb)}</p>
               </ImageCard>
             </li>
           ))}
