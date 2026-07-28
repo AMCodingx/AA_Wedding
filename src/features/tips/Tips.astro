@@ -148,7 +148,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
                 >
                   <use href={`#${markId(cat.id)}`} />
                 </svg>
-                {t(`tips.filter.${cat.id}`)}
+                <span class="visually-hidden">{t(`tips.filter.${cat.id}`)}</span>
               </Badge>
               <p>{t(tip.blurb)}</p>
             </ImageCard>
@@ -176,7 +176,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
                   >
                     <use href={`#${markId(cat.id)}`} />
                   </svg>
-                  {catLabel}
+                  <span class="visually-hidden">{catLabel}</span>
                 </Badge>
                 <p>{t(tip.blurb)}</p>
               </ImageCard>
@@ -251,8 +251,10 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     height: calc(var(--art-h) * var(--art-unit));
   }
 
+  /* Icon-only on the card, so it can afford real size — the word lives in a
+     visually-hidden span beside it. */
   .tips__mark--badge {
-    --art-unit: 0.68px;
+    --art-unit: 1.2px;
   }
 
   /* ——— Head ——————————————————————————————————————————— */
@@ -358,10 +360,13 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
   .tips__menu-trigger {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     gap: var(--space-2);
-    /* Absolute floor for a touch target. The row spans the grid and nothing
-       sits beside it, so the extra reach is free. */
+    /* fit-content + auto margin, not a full-width flex-end row: a <summary>
+       is clickable across its whole box, and the row spanning the grid made
+       the entire strip a button. Only the label and chevron are now. */
+    inline-size: fit-content;
+    margin-inline-start: auto;
+    /* Absolute floor for a touch target. */
     min-block-size: 44px;
     cursor: pointer;
     list-style: none;
@@ -462,7 +467,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
      simply leaves the lane empty. */
   .tips__option {
     display: grid;
-    grid-template-columns: 1.05rem 1fr;
+    grid-template-columns: 1.8rem 1fr;
     align-items: center;
     gap: var(--space-3);
     /* The header menu's row height — both dropdowns, one hit area. */
@@ -483,7 +488,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
   }
 
   .tips__mark--option {
-    --art-unit: 0.6px;
+    --art-unit: 1px;
     justify-self: center;
   }
 

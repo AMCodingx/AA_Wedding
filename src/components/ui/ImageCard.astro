@@ -79,30 +79,15 @@ const hasBadge = Astro.slots.has('badge');
     transform: scale(1.04);
   }
 
-  /* Title and tag share the row, baseline to baseline, with the tag pushed to
-     the far edge — the couple's shape. `wrap` is the release valve rather than
-     a second permanent line: the label is one unbreakable word in some locales
-     (Dutch "Bezienswaardigheden"), so on a narrow column it drops below and
-     stays right-aligned there, which is why the tag carries `margin-inline-
-     start: auto` instead of the row carrying `space-between` — the latter
-     would fling it back to the left edge the moment it wrapped. */
-  /* Title and tag share the row, baseline to baseline, tag at the far edge.
-     `wrap` is a release valve, not the default shape: the tag is one
-     unbreakable word in some locales (Dutch "Bezienswaardigheden" is 167px)
-     and the three-column card is only ~218px wide, so on the narrowest columns
-     a long name and the tag genuinely cannot share a line — there it drops
-     below, still right-aligned. Everywhere it fits, it sits beside. */
+  /* Title left, tag pinned right on the same row. The tag is icon-only now,
+     so it always fits beside the title — no wrap release valve needed. */
   .image-card__header {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: var(--space-1) var(--space-3);
+    align-items: center;
+    gap: var(--space-3);
     margin-block-end: var(--space-2);
   }
 
-  /* `margin-inline-start: auto` rather than `justify-content: space-between` on
-     the row: space-between flings the tag back to the left edge the moment it
-     is alone on the second line. */
   .image-card__tag {
     flex: none;
     margin-inline-start: auto;
@@ -121,12 +106,6 @@ const hasBadge = Astro.slots.has('badge');
     line-height: 1.2;
     color: var(--c-lagoon);
     text-wrap: balance;
-    /* No `min-inline-size: 0` here, deliberately. It does let the tag hold its
-       lane on the narrowest column — but a flex item allowed below its
-       min-content width breaks *inside* words against the global
-       overflow-wrap, and "Amazonia" set as "Amazon / ia". The default
-       `min-width: auto` floors the title at its longest word instead, which
-       still leaves room for the tag on every locale and column. */
   }
 
   /* Lagoon, not the muted grey: the card system paints every piece of copy
@@ -144,6 +123,10 @@ const hasBadge = Astro.slots.has('badge');
 
   .image-card__body :global(p) {
     margin: 0;
+    /* inherit, not a value: typography.css's bare `p { font-size: var(--fs-base) }`
+       outranks inheritance from the body, so the card-relative size set above
+       never reached the blurb without this. */
+    font-size: inherit;
     text-wrap: pretty;
   }
 
