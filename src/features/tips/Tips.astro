@@ -138,7 +138,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
         const cat = metaFor(tip.category);
         return (
           <li>
-            <ImageCard image={tip.image} alt={tip.name} title={tip.name}>
+            <ImageCard image={tip.image} alt={tip.name} title={tip.name} position={tip.focus}>
               <Badge slot="badge" tone="bare">
                 <svg
                   class="tips__mark tips__mark--badge"
@@ -166,7 +166,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
         <ul class="tips__grid">
           {tips.map((tip) => (
             <li id={tip.id}>
-              <ImageCard image={tip.image} alt={tip.name} title={tip.name}>
+              <ImageCard image={tip.image} alt={tip.name} title={tip.name} position={tip.focus}>
                 <Badge slot="badge" tone="bare">
                   <svg
                     class="tips__mark tips__mark--badge"

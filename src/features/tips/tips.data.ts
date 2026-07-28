@@ -36,6 +36,11 @@ export interface Tip {
   /** Translation key for the blurb — the copy lives in src/i18n/*.json. */
   blurb: TKey;
   image: ImageMetadata;
+  /** Vertical focal point for the card's 16:10 cover crop. Portrait phone
+      photos only show ~a third of their height in the frame, so the ones
+      with people carry the object-position that keeps heads in view.
+      Omitted = centred. */
+  focus?: string;
 }
 
 export const TIPS: Tip[] = [
@@ -58,6 +63,7 @@ export const TIPS: Tip[] = [
     category: 'activities',
     name: 'Quad rijden',
     image: quadRijdenImg,
+    focus: '50% 35%',
     blurb: 'tips.quad-rijden.blurb',
   },
   {
@@ -86,6 +92,7 @@ export const TIPS: Tip[] = [
     category: 'food',
     name: 'Fort Nassau',
     image: fortNassauImg,
+    focus: '50% 48%',
     blurb: 'tips.fort-nassau.blurb',
   },
   {
@@ -93,6 +100,7 @@ export const TIPS: Tip[] = [
     category: 'beach',
     name: 'Playa Piskado',
     image: playaPiskadoImg,
+    focus: '50% 20%',
     blurb: 'tips.playa-piskado.blurb',
   },
   {
@@ -107,6 +115,7 @@ export const TIPS: Tip[] = [
     category: 'sights',
     name: 'Ostrich Farm',
     image: ostrichFarmImg,
+    focus: '50% 25%',
     blurb: 'tips.ostrich-farm.blurb',
   },
   {
@@ -114,6 +123,7 @@ export const TIPS: Tip[] = [
     category: 'beach',
     name: 'Pirate Bay',
     image: pirateBayImg,
+    focus: '50% 30%',
     blurb: 'tips.pirate-bay.blurb',
   },
   {
@@ -149,6 +159,7 @@ export const TIPS: Tip[] = [
     category: 'beach',
     name: 'Mambo Beach',
     image: mamboBeachImg,
+    focus: '50% 40%',
     blurb: 'tips.mambo-beach.blurb',
   },
   {
@@ -177,6 +188,7 @@ export const TIPS: Tip[] = [
     category: 'beach',
     name: 'Jan Thiel Beach',
     image: janThielBeachImg,
+    focus: '50% 45%',
     blurb: 'tips.jan-thiel-beach.blurb',
   },
   {

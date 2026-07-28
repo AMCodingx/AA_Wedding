@@ -8,10 +8,13 @@ interface Props {
   alt: string;
   title: string;
   loading?: 'lazy' | 'eager';
+  /** object-position for the cover crop (e.g. '50% 25%') — lets a consumer
+      slide the 16:10 window up or down a photo so faces stay in frame. */
+  position?: string;
   class?: string;
 }
 
-const { image, alt, title, loading = 'lazy', class: className = '' } = Astro.props;
+const { image, alt, title, loading = 'lazy', position, class: className = '' } = Astro.props;
 const hasBadge = Astro.slots.has('badge');
 ---
 
@@ -27,6 +30,7 @@ const hasBadge = Astro.slots.has('badge');
       loading={loading}
       decoding="async"
       class="image-card__img"
+      style={position && `object-position: ${position}`}
     />
   </div>
 
