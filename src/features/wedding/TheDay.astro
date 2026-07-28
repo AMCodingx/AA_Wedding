@@ -141,12 +141,14 @@ const beats = [
     color: var(--c-lagoon);
   }
 
-  /* 124.25 of the export's 310.5 — the artwork carries its own aspect, so
-     the width is the only number this needs. */
+  /* Sized to the hero's title height, not to the export's 124.25 of 310.5 —
+     see --card-title-h in tokens.css. The artwork carries its own aspect, so
+     the height is the only number this needs. The min() is what pins it to
+     the hero on desktop, where the hero's size stops tracking the card. */
   .day__title-art {
     display: block;
-    width: 40%;
-    height: auto;
+    block-size: min(var(--card-title-cap), calc(var(--card-w) * var(--card-title-h)));
+    inline-size: auto;
   }
 
   .day__intro {
@@ -154,7 +156,7 @@ const beats = [
     /* Gaps are measured ink-to-ink on the export, so each one here is that
        figure minus the leading the line box below it already contributes. */
     margin-block-start: calc(var(--card-h) * 0.045);
-    font-size: calc(var(--card-w) * 0.037);
+    font-size: calc(var(--card-w) * var(--card-fs-note));
     font-weight: 400;
     line-height: 1.31;
     color: var(--c-lagoon);
@@ -165,7 +167,7 @@ const beats = [
     display: flex;
     flex-direction: column;
     margin-block-start: calc(var(--card-h) * 0.044);
-    font-size: calc(var(--card-w) * 0.0495);
+    font-size: calc(var(--card-w) * var(--card-fs-body));
     font-weight: 400;
     line-height: 1.2;
     color: var(--c-lagoon);
@@ -258,7 +260,7 @@ const beats = [
   .day__note {
     width: 88%;
     margin-block-start: calc(var(--card-h) * 0.0693);
-    font-size: calc(var(--card-w) * 0.037);
+    font-size: calc(var(--card-w) * var(--card-fs-note));
     font-weight: 400;
     line-height: 1.3;
     color: var(--c-lagoon);

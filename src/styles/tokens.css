@@ -100,6 +100,32 @@
   --fs-xl: clamp(1.75rem, 1.4rem + 1.2vw, 2.5rem);
   --fs-2xl: clamp(2.5rem, 1.8rem + 3vw, 4.5rem);
 
+  /* —— Card type scale ——
+     The five Canva cards (hero, The day, Our tips, To RSVP, FAQ) size their
+     type against their own --card-w, so it scales with the card instead of
+     with the viewport. These three values ARE that scale and the reason the
+     pages read as one set: script title, body copy, note.
+
+     Bare numbers, multiplied at the use site — `calc(var(--card-w) * …)`.
+     They cannot carry that multiplication themselves: var() inside a custom
+     property is substituted where the property is *declared*, and --card-w
+     does not exist up here at :root, which would make all three invalid and
+     silently drop every size that reads them.
+
+     The title is a HEIGHT, not a font size: every wordmark is outlined
+     artwork with its own aspect, so matching widths would leave FAQ a third
+     the size of OUR TIPS. 0.1149 is what the hero's "Alex & Anouk" resolves
+     to on the phone card — the reference the couple picked. */
+  --card-title-h: 0.1149;
+  --card-fs-body: 0.0495;
+  --card-fs-note: 0.037;
+
+  /* Ceiling on that height, applied as `min(--card-title-cap, …)` at the use
+     site. On the card layout the ratio alone is the whole story, so this is
+     set to a value that can never bind. It earns its keep at 768px — see the
+     media query below. */
+  --card-title-cap: 100vh;
+
   /* —— Layout —— */
   --content-width: 72rem;
   --content-narrow: 48rem;
@@ -116,6 +142,44 @@
   --z-header: 50;
   --z-overlay: 60;
   --z-modal: 70;
+}
+
+/* At 768px the hero drops its single-card layout for two columns and sets the
+   names to the full 26rem of the right-hand one. That size is FIXED — it is a
+   fraction of the container, not of the card — while the other four stay on
+   the card, whose width is derived from the viewport *height*. A single ratio
+   therefore cannot hold them together: it matched the hero only on a window
+   about 890px tall and left the other four 16% smaller on a 780px one.
+
+   So the desktop rule is a cap, not a ratio. 4.874rem is 26rem ÷ 5.335, the
+   aspect of names.svg — i.e. exactly the height the hero's wordmark resolves
+   to, which is the reference the couple picked. The other four take that
+   height verbatim whenever their card is wide enough to hold it, and fall
+   back to the ratio when it is not.
+
+   The cap is the WHOLE story here — the ratio is raised past the point where
+   it can bind. It used to fall back to 0.19 on a card too narrow to carry the
+   hero's height, which is what left the other four ~13% short of the hero on a
+   768px-tall window. Nothing needs that fallback: above 768px the four titles
+   sit in the page container, not in the notional card, and the cap tops out at
+   7.678vw — so even OUR TIPS, the widest wordmark at 5.055:1, is at most
+   38.8vw across and cannot overflow.
+
+   The 7.678vw is the same reference below ~1016px wide, where the hero's own
+   grid column is narrower than 26rem and clamps the wordmark before the 26rem
+   does. The hero's column measures exactly 0.4096 of the viewport there, and
+   0.4096 / 5.335 is this. Without it the other four sat at the full 4.874rem
+   on a 820px-wide window while the hero was pinned to 63px — the same fault
+   this token exists to remove, pointing the other way. Re-derive both numbers
+   if .hero__inner's grid or .hero__names' 26rem ever changes: load /en/ at a
+   few widths and read .hero__title's box width off the viewport. */
+@media (min-width: 768px) {
+  :root {
+    /* One card-width — never smaller than the cap, so `min()` at the use
+       sites resolves to the cap and all five titles are the same height. */
+    --card-title-h: 1;
+    --card-title-cap: min(4.874rem, 7.678vw);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

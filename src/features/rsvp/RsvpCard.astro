@@ -121,23 +121,25 @@ const items = [
     color: var(--c-lagoon);
   }
 
-  /* 141.875 of the export's 310.5 — the artwork carries its own aspect. */
+  /* Sized to the hero's title height — see --card-title-h in tokens.css.
+     The artwork carries its own aspect. The min() is what pins it to the hero
+     on desktop, where the hero's size stops tracking the card. */
   .rsvp__title-art {
     display: block;
-    width: 45.7%;
-    height: auto;
+    block-size: min(var(--card-title-cap), calc(var(--card-w) * var(--card-title-h)));
+    inline-size: auto;
   }
 
-  /* Every line of copy on this card is one size. 0.0478 is not guessed from
-     the export's cap heights — it is calibrated so "Whether you are coming"
-     sets to the same advance width Canva gives it (183.9 of 310.5), which is
-     what decides whether the two- and three-line items wrap where the export
-     wraps them. Line height follows from the export's 20.9-unit baseline
-     pitch at that size. */
+  /* Every line of copy on this card is one size, and it is the set's shared
+     body size — see --card-fs-body in tokens.css. It replaces this card's own
+     0.0478, which was calibrated so "Whether you are coming" set to Canva's
+     advance width (183.9 of 310.5); the couple picked cross-page consistency
+     over that per-card wrap, so the items may break a word earlier than the
+     export does. Line height still follows the export's 20.9-unit pitch. */
   .rsvp__statement,
   .rsvp__cue,
   .checklist__text {
-    font-size: calc(var(--card-w) * 0.0478);
+    font-size: calc(var(--card-w) * var(--card-fs-body));
     font-weight: 400;
     line-height: 1.406;
     color: var(--c-lagoon);

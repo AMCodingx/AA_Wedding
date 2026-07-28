@@ -1,6 +1,7 @@
 ---
 import ImageCard from '~/components/ui/ImageCard.astro';
 import Badge from '~/components/ui/Badge.astro';
+import Icon from '~/components/ui/Icon.astro';
 import { TIPS, type TipCategory } from './tips.data';
 import { useTranslations, type Locale } from '~/i18n';
 
@@ -21,9 +22,8 @@ import Heart from '~/assets/brand/heart.svg';
 //
 // Imported raw and hoisted into one <symbol> sprite rather than dropped in as
 // components: each drawing is 3–6 kB of path data and the page renders 48 of
-// them (4 filter pills + 44 card badges). Inlined that is ~330 kB of HTML;
-// as a sprite the drawings ship once and every mark after that is a 60-byte
-// <use>.
+// them (4 menu rows + 44 card tags). Inlined that is ~330 kB of HTML; as a
+// sprite the drawings ship once and every mark after that is a 60-byte <use>.
 import cutleryRaw from '~/assets/day/cutlery.svg?raw';
 import sunRaw from '~/assets/tips/sun.svg?raw';
 import cameraRaw from '~/assets/tips/camera.svg?raw';
@@ -52,8 +52,8 @@ const metaFor = (id: TipCategory) => categories.find((c) => c.id === id)!;
 /** Re-tag an exported drawing as a <symbol>. The exports are hand-authored
     single-root SVGs (see src/assets/tips/), so the root tag is the only thing
     that has to change; `fill` moves across with it because the paths inside
-    rely on inheriting currentColor — that is what turns the mark white when
-    its filter pill is selected. */
+    rely on inheriting currentColor — that is what lets one drawing sit in the
+    menu and on a card tag in the same ink as the words beside it. */
 const markId = (id: TipCategory) => `tips-mark-${id}`;
 const sprite = categories
   .map(({ id, art }) => {
@@ -87,24 +87,50 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     <p class="tips__statement">{t('tips.intro')}</p>
   </header>
 
-  <fieldset class="tips__filters" aria-label={t('tips.filter.label')}>
-    <legend class="visually-hidden">{t('tips.filter.label')}</legend>
+  {/* The page's only control. It was a native <select>, which collapses itself
+      but draws its open list with the OS — a white sheet and a system-blue
+      highlight, on a page that has neither. A <details> is the same disclosure
+      built out of the card system's own ink, and the radios inside it drive the
+      same :has() rules the <option>s did, so the filtering itself still runs on
+      no JavaScript at all.
 
-    <input class="tips__radio" type="radio" id="tips-all" name="tips-filter" value="all" checked />
-    <label class="tips__pill" for="tips-all"><span>{t('tips.filter.all')}</span></label>
+      The radios live INSIDE the panel on purpose: a closed <details> keeps its
+      children in the DOM — so :has() still reads the checked one — while taking
+      them out of the tab order, which is what stops the keyboard landing on an
+      invisible control. */}
+  <details class="tips__menu">
+    <summary class="tips__menu-trigger">
+      {/* All five labels ship; :has() reveals the checked one. The trigger has
+          to name the live category, and without script that is the only way to
+          read a radio's state into text. */}
+      <span class="tips__menu-value" data-value="all">{t('tips.filter.all')}</span>
+      {categories.map(({ id }) => (
+        <span class="tips__menu-value" data-value={id}>{t(`tips.filter.${id}`)}</span>
+      ))}
+      <Icon name="chevronDown" size={12} class="tips__menu-chevron" />
+    </summary>
 
-    {categories.map(({ id, w, h }) => (
-      <>
-        <input class="tips__radio" type="radio" id={`tips-${id}`} name="tips-filter" value={id} />
-        <label class="tips__pill" for={`tips-${id}`} style={`--art-w:${w};--art-h:${h}`}>
-          <svg class="tips__mark tips__mark--pill" aria-hidden="true" focusable="false">
-            <use href={`#${markId(id)}`} />
-          </svg>
-          <span>{t(`tips.filter.${id}`)}</span>
-        </label>
-      </>
-    ))}
-  </fieldset>
+    <fieldset class="tips__menu-panel">
+      <legend class="visually-hidden">{t('tips.filter.label')}</legend>
+
+      <input class="tips__radio" type="radio" id="tips-all" name="tips-filter" value="all" checked />
+      <label class="tips__option" for="tips-all">
+        <span class="tips__option-label">{t('tips.filter.all')}</span>
+      </label>
+
+      {categories.map(({ id, w, h }) => (
+        <>
+          <input class="tips__radio" type="radio" id={`tips-${id}`} name="tips-filter" value={id} />
+          <label class="tips__option" for={`tips-${id}`} style={`--art-w:${w};--art-h:${h}`}>
+            <svg class="tips__mark tips__mark--option" aria-hidden="true" focusable="false">
+              <use href={`#${markId(id)}`} />
+            </svg>
+            <span class="tips__option-label">{t(`tips.filter.${id}`)}</span>
+          </label>
+        </>
+      ))}
+    </fieldset>
+  </details>
 
   <div class="tips__section" data-section="all">
     <ul class="tips__grid">
@@ -113,7 +139,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
         return (
           <li>
             <ImageCard image={tip.image} alt={tip.name} title={tip.name}>
-              <Badge slot="badge" tone="outline">
+              <Badge slot="badge" tone="bare">
                 <svg
                   class="tips__mark tips__mark--badge"
                   style={`--art-w:${cat.w};--art-h:${cat.h}`}
@@ -141,7 +167,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
           {tips.map((tip) => (
             <li id={tip.id}>
               <ImageCard image={tip.image} alt={tip.name} title={tip.name}>
-                <Badge slot="badge" tone="outline">
+                <Badge slot="badge" tone="bare">
                   <svg
                     class="tips__mark tips__mark--badge"
                     style={`--art-w:${cat.w};--art-h:${cat.h}`}
@@ -162,7 +188,51 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
   })}
 </div>
 
+{/* The second — and last — script on the site, after the RSVP form. Every
+    other page is static HTML and this one stays that way if the script never
+    runs: the <details> opens and shuts on its own, and the filtering itself is
+    the :has() rules above. What cannot be done in CSS is dismissal, and a menu
+    that stays open over the results it just changed is the thing that made the
+    native <select> worth keeping. Three gestures, no library.
+
+    `click` on the row rather than `change` on the radio: arrow-keying through a
+    radio group fires change on every step, which would shut the panel out from
+    under a keyboard user mid-choice. */}
+<script>
+  document.querySelectorAll<HTMLDetailsElement>('.tips__menu').forEach((menu) => {
+    const close = () => {
+      menu.open = false;
+    };
+
+    menu.addEventListener('click', (event) => {
+      if ((event.target as Element).closest('.tips__option')) close();
+    });
+
+    menu.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      close();
+      menu.querySelector('summary')?.focus();
+    });
+
+    document.addEventListener('click', (event) => {
+      if (menu.open && !menu.contains(event.target as Node)) close();
+    });
+  });
+</script>
+
 <style>
+  /* Same card derivation as its four siblings — see Hero.astro for why the
+     height leads and why the 37rem floor exists. svh rather than dvh for
+     FAQ's reason: this page scrolls, and dvh would resize the head the
+     moment a mobile URL bar retracted. The head used to size itself off
+     min(100vw, 34rem), which on a desktop window is ~30% wider than the
+     card the other four settle on — that gap was why this page's title and
+     statement read a size larger than everyone else's. */
+  .tips {
+    --card-h: max(37rem, min(100svh, 100vw / 0.4621));
+    --card-w: calc(var(--card-h) * 0.4621);
+  }
+
   /* Not display:none — a hidden sprite still has to be laid out for some
      engines to resolve <use> against it. Zero-sized and clipped instead. */
   .tips__sprite {
@@ -172,21 +242,15 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     overflow: hidden;
   }
 
-  /* One mark, two sizes. The px-per-export-unit scale is the only thing that
-     changes, so the fork stays twice the waves' height in both places. */
+  /* The drawings keep their drawn proportions against a shared px-per-export-
+     unit scale, so the fork stays twice the waves' height. 0.68 is that scale
+     against the badge's ~16px line box. */
   .tips__mark {
     flex: none;
     width: calc(var(--art-w) * var(--art-unit));
     height: calc(var(--art-h) * var(--art-unit));
   }
 
-  /* 1.2px per unit lands the tallest drawing (the fork, 20.05 units) inside
-     the pill's 40px floor once its padding is taken out. */
-  .tips__mark--pill {
-    --art-unit: 1.2px;
-  }
-
-  /* 0.68 against the badge's ~16px line box, for the same reason. */
   .tips__mark--badge {
     --art-unit: 0.68px;
   }
@@ -195,10 +259,10 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
 
   .tips__intro {
     /* The export is 310.5 units across and was drawn for a 414px phone, so
-       every measurement below is a fraction of this. Capped at 34rem: past
-       that the script title stops reading as a title and starts reading as
-       a banner, and the statement's measure runs long. */
-    --w: min(100vw, 34rem);
+       every measurement below is a fraction of this — and that fraction is
+       now the card the whole set shares, so the head is the same size here
+       as on The day, To RSVP and FAQ at every viewport. */
+    --w: var(--card-w);
 
     display: flex;
     flex-direction: column;
@@ -228,11 +292,15 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     color: var(--c-lagoon);
   }
 
-  /* 151.66 of the export's 310.5 — the artwork carries its own aspect. */
+  /* Sized to the hero's title height — see --card-title-h in tokens.css.
+     The artwork carries its own aspect. OUR TIPS is the widest wordmark in
+     the set at 5.055:1, so it is the one the ratio's ceiling is derived from;
+     the min() pins it to the hero on desktop, where the hero's size stops
+     tracking the card. */
   .tips__title-art {
     display: block;
-    width: calc(var(--w) * 0.4884);
-    height: auto;
+    block-size: min(var(--card-title-cap), calc(var(--card-w) * var(--card-title-h)));
+    inline-size: auto;
   }
 
   /* Same drawing the hero and RSVP dividers use, here on its own: the export
@@ -245,10 +313,11 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     color: var(--c-tide);
   }
 
-  /* Poppins 15 on a 20.9-unit baseline pitch in the export — the same spec
-     the RSVP card sets, so the two pages speak in one voice. The gap is the
-     export's 20.15 ink-to-ink less the ~6.7 units of half-leading and cap
-     inset the first line box already puts above its own ink. */
+  /* The set's shared body size — see --card-fs-body in tokens.css — on the
+     export's 20.9-unit baseline pitch, so this page speaks in the same voice
+     as The day, To RSVP and FAQ. The gap is the export's 20.15 ink-to-ink
+     less the ~6.7 units of half-leading and cap inset the first line box
+     already puts above its own ink. */
   .tips__statement {
     margin-block-start: calc(var(--w) * 0.0433);
     /* The export's *ink* runs 15.7 units in from each edge; the text box it
@@ -257,7 +326,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
        line one. Sized to the box, not to the ink. */
     width: calc(var(--w) * 0.913);
     max-width: 100%;
-    font-size: calc(var(--w) * 0.0483);
+    font-size: calc(var(--card-w) * var(--card-fs-body));
     font-weight: 400;
     line-height: 1.393;
     color: var(--c-lagoon);
@@ -268,16 +337,114 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     text-wrap: pretty;
   }
 
-  /* ——— Filters ———————————————————————————————————————— */
+  /* ——— Filter ————————————————————————————————————————— */
 
-  .tips__filters {
+  /* Anchor for the panel, and the reason the control sits at the grid's right
+     edge rather than centred over the card: this is a control, and the eye
+     should meet the tips first. */
+  .tips__menu {
+    position: relative;
+    /* The pills that used to sit here left --space-8 before the grid. This is
+       one line of small caps rather than a 40px row, so it needs less air
+       under it to read as separate from the cards. */
+    margin: 0 0 var(--space-6);
+    /* Above the cards, so the open panel is never cut by the next row. */
+    z-index: 1;
+  }
+
+  /* No fill, no border, no shadow — the category and a chevron, nothing else.
+     There is one control on the page: it does not need to announce that it is
+     pressable, only where it is. */
+  .tips__menu-trigger {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-end;
     gap: var(--space-2);
+    /* Absolute floor for a touch target. The row spans the grid and nothing
+       sits beside it, so the extra reach is free. */
+    min-block-size: 44px;
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-subtitle);
+    font-size: var(--fs-xs);
+    font-weight: var(--weight-subtitle);
+    letter-spacing: 0.18em;
+    /* The tracking adds a space after the last glyph too, which pushes the
+       chevron a whole space off the label. Pull it back. */
+    text-indent: 0;
+    text-transform: uppercase;
+    color: var(--c-lagoon);
+    transition: opacity var(--dur-fast) var(--ease-out);
+  }
+
+  .tips__menu-trigger::-webkit-details-marker {
+    display: none;
+  }
+  .tips__menu-trigger::marker {
+    content: '';
+  }
+
+  /* Nothing to fill, so the whole control dims — the same gesture the header's
+     hamburger makes on hover. */
+  .tips__menu-trigger:hover {
+    opacity: 0.65;
+  }
+
+  .tips__menu-trigger:focus-visible {
+    outline: 2px solid var(--c-tide);
+    outline-offset: 4px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* All five ship; the :has() block below reveals the checked one. */
+  .tips__menu-value {
+    display: none;
+    margin-inline-end: -0.18em;
+  }
+
+  .tips__menu :global(.tips__menu-chevron) {
+    flex: none;
+    /* Tide rather than lagoon: the category is the content, the chevron only
+       says there are more of them. */
+    color: var(--c-tide-deep);
+    transition: rotate var(--dur-base) var(--ease-out);
+  }
+
+  .tips__menu[open] :global(.tips__menu-chevron) {
+    rotate: 180deg;
+  }
+
+  /* ——— Panel ——————————————————————————————————————————— */
+
+  /* The same card the header's menu drops — shell-to-foam gradient, 20px
+     radius, the same layered lagoon shadow. There are two dropdowns on this
+     page and they were made of different materials: this one was white on a
+     page that has no white surface. One panel, one recipe. Radius stays
+     concentric with the rows inside: 20 = 12 + 8 padding. */
+  .tips__menu-panel {
+    position: absolute;
+    inset-inline-end: 0;
+    inset-block-start: calc(100% + var(--space-2));
+    z-index: 1;
+    /* max-content, and no min-inline-size: the trigger is a full-width row, so
+       a `min-inline-size: 100%` here resolves against that and stretches the
+       panel across the whole grid — min beats max in CSS, so the cap below
+       cannot pull it back. The longest label is Dutch "Bezienswaardigheden";
+       max-content keeps it on one line and the panel only as wide as it needs. */
+    inline-size: max-content;
+    max-inline-size: min(20rem, calc(100vw - var(--space-8)));
+    margin: 0;
+    padding: var(--space-2);
     border: 0;
-    margin: 0 0 var(--space-8);
-    padding: 0;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(
+      165deg,
+      var(--c-shell) 0%,
+      color-mix(in srgb, var(--c-shell) 55%, var(--c-foam)) 100%
+    );
+    box-shadow:
+      0 1px 2px color-mix(in srgb, var(--c-lagoon) 8%, transparent),
+      0 12px 28px -8px color-mix(in srgb, var(--c-lagoon) 22%, transparent);
   }
 
   .tips__radio {
@@ -288,82 +455,62 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     clip: rect(0, 0, 0, 0);
   }
 
-  /* Same tracked-uppercase treatment as the hero CTA — these are the page's
-     only buttons, so they wear the card system's button voice. */
-  .tips__pill {
-    display: inline-flex;
+  /* Grid, not flex: the five drawings are deliberately not normalised to a
+     common box (see .tips__mark), so under flex every label would start at a
+     different x. A fixed first track gives them one lane to be centred in and
+     lands every label on the same edge — including ALL, which has no mark and
+     simply leaves the lane empty. */
+  .tips__option {
+    display: grid;
+    grid-template-columns: 1.05rem 1fr;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-2);
-    white-space: nowrap;
-    /* Tap target floor: the label alone is ~17px tall. */
-    min-height: 40px;
-    padding: var(--space-2) var(--space-4);
-    border-radius: var(--radius-pill);
-    /* Shallow water, not white. Lagoon on it is 5.51:1, and the pills now
-       read as objects lying on the page rather than as holes cut in it. */
-    background: var(--c-shallow);
-    border: 1px solid color-mix(in srgb, var(--c-tide) 45%, transparent);
-    box-shadow: var(--shadow-pill);
+    gap: var(--space-3);
+    /* The header menu's row height — both dropdowns, one hit area. */
+    min-block-size: 44px;
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-md);
     cursor: pointer;
     font-family: var(--font-subtitle);
     font-size: var(--fs-xs);
     font-weight: var(--weight-subtitle);
-    letter-spacing: 0.18em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
+    /* Lagoon on shell is 7.2:1 — same ink, same contrast as the header menu. */
     color: var(--c-lagoon);
     transition:
       background var(--dur-fast) var(--ease-out),
-      color var(--dur-fast) var(--ease-out),
-      border-color var(--dur-fast) var(--ease-out),
-      box-shadow var(--dur-fast) var(--ease-out),
-      transform var(--dur-fast) var(--ease-out);
+      color var(--dur-fast) var(--ease-out);
   }
 
-  /* The tracking adds a space after the *last* glyph too, which throws a
-     centred label left by half of it. The hero pays this back with
-     text-indent; a flex container ignores that, so pull it off the label. */
-  .tips__pill > span {
-    margin-inline-end: -0.18em;
+  .tips__mark--option {
+    --art-unit: 0.6px;
+    justify-self: center;
   }
 
-  .tips__pill:hover {
-    background: color-mix(in srgb, var(--c-shallow) 62%, #fff);
-    border-color: var(--c-tide);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
+  /* Column 2 unconditionally, so ALL's label lines up with the other four
+     rather than sliding into the empty mark lane. */
+  .tips__option-label {
+    grid-column: 2;
   }
 
-  .tips__radio:focus-visible + .tips__pill {
-    outline: 2px solid var(--c-lagoon);
-    outline-offset: 2px;
+  .tips__option:hover {
+    background: color-mix(in srgb, var(--c-foam) 45%, transparent);
   }
 
-  /* Same fill as the hero CTA: --c-tide is the brand teal but only reaches
-     3.79:1 against white, and this is small type — --c-tide-deep is that
-     colour darkened to 4.52:1, which clears AA. */
-  .tips__radio:checked + .tips__pill {
-    background: var(--c-tide-deep);
-    color: var(--text-on-accent);
-    border-color: var(--c-tide-deep);
-    box-shadow: var(--shadow-cta);
-    transform: translateY(-1px);
+  .tips__radio:focus-visible + .tips__option {
+    outline: 2px solid var(--c-tide);
+    outline-offset: -2px;
   }
 
-  /* After the :checked rule — equal specificity, so the press wins. */
-  .tips__pill:active {
+  /* The wash, not a tick: the trigger already names the live category, so this
+     only has to say "you are here" while the panel is open. Foam, like the
+     header menu's current page. */
+  .tips__radio:checked + .tips__option {
+    background: var(--c-foam);
+  }
+
+  .tips__option:active {
     transform: scale(0.96);
-  }
-
-  @media (max-width: 599px) {
-    .tips__pill {
-      flex: 1 1 calc(50% - var(--space-2));
-      padding-inline: var(--space-3);
-    }
-
-    .tips__pill[for='tips-all'] {
-      flex-basis: 100%;
-    }
   }
 
   /* Show / hide sections based on selected filter */
@@ -371,6 +518,9 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     display: none;
   }
 
+  /* One rule drives both the visible section and the trigger's label. The
+     radios sit inside a closed <details>, which keeps them in the DOM — so
+     :checked still resolves — while taking them out of the tab order. */
   .tips:has(#tips-all:checked) .tips__section[data-section='all'],
   .tips:has(#tips-food:checked) .tips__section[data-section='food'],
   .tips:has(#tips-activities:checked) .tips__section[data-section='activities'],
@@ -379,12 +529,23 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     display: block;
   }
 
+  .tips:has(#tips-all:checked) .tips__menu-value[data-value='all'],
+  .tips:has(#tips-food:checked) .tips__menu-value[data-value='food'],
+  .tips:has(#tips-activities:checked) .tips__menu-value[data-value='activities'],
+  .tips:has(#tips-sights:checked) .tips__menu-value[data-value='sights'],
+  .tips:has(#tips-beach:checked) .tips__menu-value[data-value='beach'] {
+    display: inline;
+  }
+
   /* ——— Cards ————————————————————————————————————————— */
 
   /* Set on the grid rather than reached for at .card: Card.astro reads
      --card-bg off whatever ancestor supplies it. */
   .tips__grid {
     --card-bg: var(--c-shallow);
+    /* Same size The day sets its intro and closing note in — the blurbs are
+       the note voice of the set, not a component-local --fs-sm. */
+    --card-body-fs: calc(var(--card-w) * var(--card-fs-note));
 
     list-style: none;
     margin: 0;
@@ -397,13 +558,19 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     grid-template-columns: minmax(0, 1fr);
   }
 
-  @media (min-width: 600px) {
+  /* 680 and 1080, not 600 and 900. Each breakpoint adds a column at the moment
+     the viewport can pay for one, and at 600/900 it could not: the card fell to
+     ~213px of content — its narrowest at any width, immediately *after* getting
+     wider — which is too little for a 16:10 photo, a title and a paragraph, let
+     alone the title's tag beside it. These two floors put the narrowest card at
+     253px instead, and the card only ever grows from a breakpoint now. */
+  @media (min-width: 680px) {
     .tips__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (min-width: 900px) {
+  @media (min-width: 1080px) {
     .tips__grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
@@ -415,7 +582,7 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     .tips__title,
     .tips__heart,
     .tips__statement,
-    .tips__filters {
+    .tips__menu {
       opacity: 0;
       animation: tips-rise var(--dur-slow) var(--ease-out) forwards;
     }
@@ -423,7 +590,26 @@ const allTips = [...TIPS].sort((a, b) => a.name.localeCompare(b.name));
     .tips__title { animation-delay: 50ms; }
     .tips__heart { animation-delay: 150ms; }
     .tips__statement { animation-delay: 250ms; }
-    .tips__filters { animation-delay: 350ms; }
+    .tips__menu { animation-delay: 350ms; }
+
+    /* Softer than the page's own entrance: the panel is a response to a click,
+       not part of the card being read. Opacity and a short rise only — height
+       cannot be transitioned out of `auto`, and a fixed one would clip the
+       longest locale. */
+    .tips__menu[open] .tips__menu-panel {
+      animation: tips-menu var(--dur-fast) var(--ease-out) both;
+    }
+
+    @keyframes tips-menu {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
 
     @keyframes tips-rise {
       from {

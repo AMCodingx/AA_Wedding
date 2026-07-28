@@ -32,11 +32,15 @@ const hasBadge = Astro.slots.has('badge');
 
   <div class="image-card__header">
     {/* h2, not h3: the only consumer (Tips) puts these directly under the
-        page h1 — the filter pills group the cards, but they aren't headings,
-        so an h3 here skips a level. Take a `level` prop if a second consumer
-        ever nests these deeper. */}
+        page h1 — the filter groups the cards, but it isn't a heading, so an h3
+        here skips a level. Take a `level` prop if a second consumer ever nests
+        these deeper. */}
     <h2 class="image-card__title">{title}</h2>
-    {hasBadge && <slot name="badge" />}
+    {hasBadge && (
+      <div class="image-card__tag">
+        <slot name="badge" />
+      </div>
+    )}
   </div>
 
   <div class="image-card__body">
@@ -75,18 +79,33 @@ const hasBadge = Astro.slots.has('badge');
     transform: scale(1.04);
   }
 
-  /* Wraps because the badge label is a single unbreakable word in some
-     locales — Dutch "Bezienswaardigheden" is 218px on its own, and held on
-     one line with the title it pushes the card past its grid track and puts
-     a horizontal scrollbar on the page. Dropping it under the title is the
-     only place that width can go. */
+  /* Title and tag share the row, baseline to baseline, with the tag pushed to
+     the far edge — the couple's shape. `wrap` is the release valve rather than
+     a second permanent line: the label is one unbreakable word in some locales
+     (Dutch "Bezienswaardigheden"), so on a narrow column it drops below and
+     stays right-aligned there, which is why the tag carries `margin-inline-
+     start: auto` instead of the row carrying `space-between` — the latter
+     would fling it back to the left edge the moment it wrapped. */
+  /* Title and tag share the row, baseline to baseline, tag at the far edge.
+     `wrap` is a release valve, not the default shape: the tag is one
+     unbreakable word in some locales (Dutch "Bezienswaardigheden" is 167px)
+     and the three-column card is only ~218px wide, so on the narrowest columns
+     a long name and the tag genuinely cannot share a line — there it drops
+     below, still right-aligned. Everywhere it fits, it sits beside. */
   .image-card__header {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: var(--space-3);
+    align-items: baseline;
+    gap: var(--space-1) var(--space-3);
     margin-block-end: var(--space-2);
+  }
+
+  /* `margin-inline-start: auto` rather than `justify-content: space-between` on
+     the row: space-between flings the tag back to the left edge the moment it
+     is alone on the second line. */
+  .image-card__tag {
+    flex: none;
+    margin-inline-start: auto;
   }
 
   /* The subtitle treatment (Poppins 600 — what h4 wears), not the display
@@ -102,6 +121,12 @@ const hasBadge = Astro.slots.has('badge');
     line-height: 1.2;
     color: var(--c-lagoon);
     text-wrap: balance;
+    /* No `min-inline-size: 0` here, deliberately. It does let the tag hold its
+       lane on the narrowest column — but a flex item allowed below its
+       min-content width breaks *inside* words against the global
+       overflow-wrap, and "Amazonia" set as "Amazon / ia". The default
+       `min-width: auto` floors the title at its longest word instead, which
+       still leaves room for the tag on every locale and column. */
   }
 
   /* Lagoon, not the muted grey: the card system paints every piece of copy
@@ -109,7 +134,10 @@ const hasBadge = Astro.slots.has('badge');
      than the ExtraLight page default, matching The day. */
   .image-card__body {
     color: var(--c-lagoon);
-    font-size: var(--fs-sm);
+    /* Consumers on the card system override this with a card-relative size by
+       setting --card-body-fs on any ancestor, the way they repaint the ground
+       with --card-bg. The component stays dumb. */
+    font-size: var(--card-body-fs, var(--fs-sm));
     font-weight: 400;
     line-height: 1.6;
   }

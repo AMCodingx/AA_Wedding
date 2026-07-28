@@ -1,6 +1,6 @@
 ---
 interface Props {
-  tone?: 'sea' | 'sand' | 'mist' | 'outline';
+  tone?: 'sea' | 'sand' | 'mist' | 'outline' | 'bare';
   class?: string;
 }
 
@@ -43,5 +43,24 @@ const { tone = 'sea', class: className = '' } = Astro.props;
   .badge--outline {
     background: transparent;
     border-color: var(--c-tide);
+  }
+  /* No pill at all — the mark and the word, sitting in the type. On a card the
+     ring around this was a second rounded rectangle inside the card's own, and
+     two nested pills on a 340px column read as chrome rather than as a label.
+
+     Sentence case at the body weight, not the tracked caps the filled tones
+     wear. Two reasons, and they point the same way: the caps ran ~40% wider
+     than the words themselves, which pushed Dutch "Bezienswaardigheden" off
+     the title's line on 16 of 22 cards — and quiet is the whole point of this
+     tone. Ink stays lagoon; --c-tide-deep is only 2.94:1 on the tips cards'
+     --c-shallow ground and would fail at this size. */
+  .badge--bare {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    white-space: nowrap;
   }
 </style>

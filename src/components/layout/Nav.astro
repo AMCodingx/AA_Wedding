@@ -357,7 +357,7 @@ const items: Item[] = [
     top: calc(var(--header-h) - var(--space-2));
     right: var(--space-6);
     z-index: 2;
-    width: min(15rem, calc(100vw - var(--space-12)));
+    width: min(13rem, calc(100vw - var(--space-12)));
     padding: var(--space-2);
     /* Short gradient, low contrast — enough to give the card a light source,
        not enough to become a second background. */
@@ -454,11 +454,12 @@ const items: Item[] = [
     border-radius: var(--radius-md);
     text-decoration: none;
     color: var(--c-lagoon);
-    /* Roomier than the header's row, but well short of the card's 200px of
-       content width — at 1.1px the widest label (OUR TIPS, 151.66 units)
-       ran nearly edge to edge and the rows read as headings, not menu
-       items. 0.78px leaves the margin the card's own layout keeps. */
-    --nav-u: 0.78px;
+    /* The lettering is the whole row — there is no icon, no chevron, no rule
+       beside it — so its size is the only thing setting the menu's weight.
+       0.78px put the widest label (OUR TIPS, 151.66 units) at 118px in a 200px
+       row and the rows read as headings. 0.6px lands it at 91px inside 152px
+       of content, which leaves the air that makes a menu read as a menu. */
+    --nav-u: 0.6px;
     transition:
       color var(--dur-fast) var(--ease-out),
       background var(--dur-fast) var(--ease-out);

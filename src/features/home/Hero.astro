@@ -203,10 +203,14 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
     color: var(--c-lagoon);
   }
 
+  /* Height, not width — see --card-title-h in tokens.css. The token is the
+     61.3% width this used to carry, re-expressed as the height it resolved
+     to, so the hero is unchanged and the other four cards now measure their
+     own titles against it. */
   .hero__names {
     display: block;
-    width: 61.3%;
-    height: auto;
+    block-size: calc(var(--card-w) * var(--card-title-h));
+    inline-size: auto;
   }
 
   .hero__media {
@@ -400,9 +404,12 @@ const dateLabel = formatDotDate(WEDDING.ceremonyAt);
       align-self: end;
     }
 
-    /* Two-column layout: size against the column, not the viewport. */
+    /* Two-column layout: size against the column, not the card. 26rem is
+       what --card-title-h's 0.182 step is derived from — this stays width-led
+       so a narrow desktop column clamps the names instead of overflowing. */
     .hero__names {
-      width: min(26rem, 100%);
+      inline-size: min(26rem, 100%);
+      block-size: auto;
     }
 
     .hero__venue {

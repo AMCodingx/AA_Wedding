@@ -137,11 +137,14 @@ const t = useTranslations(locale);
     color: var(--c-lagoon);
   }
 
-  /* 51.94 of the export's 310.5 — the artwork carries its own aspect. */
+  /* Sized to the hero's title height — see --card-title-h in tokens.css.
+     "FAQ" is three glyphs where the others are two words, so matching widths
+     would have left it a fraction of their size; the height is what the eye
+     compares. The artwork carries its own aspect. */
   .faq__title-art {
     display: block;
-    inline-size: 16.73%;
-    block-size: auto;
+    block-size: min(var(--card-title-cap), calc(var(--card-w) * var(--card-title-h)));
+    inline-size: auto;
   }
 
   /* Alone here, with no rules either side: on this card the heart is the
@@ -159,9 +162,9 @@ const t = useTranslations(locale);
   .faq__list {
     inline-size: 64.38%;
     margin-block-start: calc(var(--card-h) * 0.0506);
-    /* One size for every line on the card, questions and answers alike.
-       15 of the export's 310.5 units. */
-    font-size: calc(var(--card-w) * 0.0483);
+    /* One size for every line on the card, questions and answers alike —
+       the set's shared body size, see --card-fs-body in tokens.css. */
+    font-size: calc(var(--card-w) * var(--card-fs-body));
   }
 
   /* Staged reveal, same grammar as the other three cards: the card is read
