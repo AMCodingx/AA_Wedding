@@ -162,9 +162,15 @@ const t = useTranslations(locale);
   .faq__list {
     inline-size: 64.38%;
     margin-block-start: calc(var(--card-h) * 0.0506);
-    /* One size for every line on the card, questions and answers alike —
-       the set's shared body size, see --card-fs-body in tokens.css. */
+    /* Questions in the set's shared body size, see --card-fs-body in
+       tokens.css. */
     font-size: calc(var(--card-w) * var(--card-fs-body));
+  }
+
+  /* Answers step down to the note size — the same voice the tips blurbs
+     speak in — so the question stays the line the eye lands on. */
+  .faq__list :global(.accordion__body) {
+    font-size: calc(var(--card-w) * var(--card-fs-note));
   }
 
   /* Staged reveal, same grammar as the other three cards: the card is read

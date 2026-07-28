@@ -29,11 +29,6 @@ export const FAQ_ENTRIES: readonly FaqEntry[] = [
     answer: ['faq.getting-there.a1', 'faq.getting-there.a2'],
   },
   {
-    id: 'gifts',
-    question: 'faq.gifts.q',
-    answer: ['faq.gifts.a1'],
-  },
-  {
     id: 'rsvp-deadline',
     question: 'faq.rsvp-deadline.q',
     answer: ['faq.rsvp-deadline.a1', 'faq.rsvp-deadline.a2'],
