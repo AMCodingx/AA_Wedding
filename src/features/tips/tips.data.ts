@@ -30,6 +30,8 @@ import mamboBeachImg from '~/assets/our_tips/beach/IMG_4691.jpg';
 import janThielBeachImg from '~/assets/our_tips/beach/jan-thiel-beach.jpg';
 import casAbaoBeachImg from '~/assets/our_tips/beach/IMG_4925.jpg';
 import playaDaaibooiImg from '~/assets/our_tips/beach/IMG_5335.jpg';
+import playaKalkiImg from '~/assets/our_tips/beach/playa-kalki.jpg';
+import watamulaBeachImg from '~/assets/our_tips/beach/watamula-beach.jpg';
 
 export type TipCategory = 'food' | 'activities' | 'sights' | 'beach';
 
@@ -238,5 +240,21 @@ export const TIPS: Tip[] = [
     name: 'Playa Daaibooi',
     image: playaDaaibooiImg,
     blurb: 'tips.playa-daaibooi.blurb',
+  },
+  {
+    id: 'playa-kalki',
+    category: 'beach',
+    name: 'Playa Kalki',
+    image: playaKalkiImg,
+    focus: '50% 50%',
+    blurb: 'tips.playa-kalki.blurb',
+  },
+  {
+    id: 'watamula-beach',
+    category: 'beach',
+    name: 'Watamula Beach',
+    image: watamulaBeachImg,
+    focus: '50% 60%',
+    blurb: 'tips.watamula-beach.blurb',
   },
 ];
