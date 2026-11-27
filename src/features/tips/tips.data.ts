@@ -1,10 +1,12 @@
 import { type ImageMetadata } from 'astro';
 import { type TKey } from '~/i18n';
 
-import flakosGrillImg from '~/assets/our_tips/food/20240218_210219.jpg';
+import flakosGrillImg from '~/assets/our_tips/food/flakos-grill.jpg';
 import deVisserijImg from '~/assets/our_tips/food/20230101_190159.jpg';
 import tokTokImg from '~/assets/our_tips/food/IMG_5404.jpg';
 import fortNassauImg from '~/assets/our_tips/food/IMG_5451.jpg';
+import tokoMoreAndMoreImg from '~/assets/our_tips/food/toko-more-and-more.jpg';
+import tokoCindyImg from '~/assets/our_tips/food/toko-cindy.jpg';
 
 import quadRijdenImg from '~/assets/our_tips/activities/IMG_9751.jpg';
 import sintChristoffelbergImg from '~/assets/our_tips/activities/IMG_3442.jpg';
@@ -49,6 +51,7 @@ export const TIPS: Tip[] = [
     category: 'food',
     name: "Flako's Grill",
     image: flakosGrillImg,
+    focus: '50% 55%',
     blurb: 'tips.flakos-grill.blurb',
   },
   {
@@ -109,6 +112,21 @@ export const TIPS: Tip[] = [
     name: 'TokTok',
     image: tokTokImg,
     blurb: 'tips.toktok.blurb',
+  },
+  {
+    id: 'toko-more-and-more',
+    category: 'food',
+    name: 'Toko More & More',
+    image: tokoMoreAndMoreImg,
+    blurb: 'tips.toko-more-and-more.blurb',
+  },
+  {
+    id: 'toko-cindy',
+    category: 'food',
+    name: 'Toko Cindy',
+    image: tokoCindyImg,
+    focus: '50% 45%',
+    blurb: 'tips.toko-cindy.blurb',
   },
   {
     id: 'ostrich-farm',
