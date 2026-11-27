@@ -27,6 +27,7 @@ import tomasitoCaveImg from '~/assets/our_tips/tourist_sight/tomasito-cave.jpg';
 import barquitoImg from '~/assets/our_tips/tourist_sight/barquito.jpg';
 import renaissanceRifFortImg from '~/assets/our_tips/tourist_sight/renaissance-rif-fort.jpg';
 import museoTulaImg from '~/assets/our_tips/tourist_sight/museo-tula.jpg';
+import marsheNoboImg from '~/assets/our_tips/tourist_sight/marshe-nobo.jpg';
 
 import groteKleineKnipImg from '~/assets/our_tips/beach/IMG_4631.jpg';
 import playaPiskadoImg from '~/assets/our_tips/beach/IMG_5423.jpg';
@@ -261,6 +262,14 @@ export const TIPS: Tip[] = [
     image: museoTulaImg,
     focus: '50% 45%',
     blurb: 'tips.museo-tula.blurb',
+  },
+  {
+    id: 'marshe-nobo',
+    category: 'sights',
+    name: 'Marshe Nobo',
+    image: marsheNoboImg,
+    focus: '50% 35%',
+    blurb: 'tips.marshe-nobo.blurb',
   },
   {
     id: 'jan-thiel-beach',
