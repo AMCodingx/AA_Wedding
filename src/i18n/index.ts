@@ -12,17 +12,25 @@ const dicts = { nl, es, en } as const;
  */
 export type TKey = keyof typeof nl;
 
-export function t(locale: Locale, key: TKey): string {
+/** Values for `{name}` placeholders in a translation, e.g. `{ deadline: '1 februari 2027' }`. */
+export type TVars = Readonly<Record<string, string>>;
+
+export function t(locale: Locale, key: TKey, vars?: TVars): string {
   const dict = dicts[locale] as Record<string, string>;
-  return dict[key] ?? (dicts[DEFAULT_LOCALE] as Record<string, string>)[key] ?? key;
+  const text = dict[key] ?? (dicts[DEFAULT_LOCALE] as Record<string, string>)[key] ?? key;
+  return vars ? fillPlaceholders(text, vars) : text;
+}
+
+function fillPlaceholders(text: string, vars: TVars): string {
+  return text.replace(/\{(\w+)\}/g, (placeholder, name: string) => vars[name] ?? placeholder);
 }
 
 /**
  * Bind a locale once and reuse the resulting `t` for an entire page.
  * Astro components grab this in their frontmatter.
  */
-export function useTranslations(locale: Locale): (key: TKey) => string {
-  return (key) => t(locale, key);
+export function useTranslations(locale: Locale): (key: TKey, vars?: TVars) => string {
+  return (key, vars) => t(locale, key, vars);
 }
 
 /** Extract the locale segment from a pathname like `/nl/de-bruiloft/`. */

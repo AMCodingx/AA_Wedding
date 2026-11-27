@@ -21,6 +21,7 @@ import Title from '~/assets/faq/faq.svg';
 import Heart from '~/assets/brand/heart.svg';
 import { FAQ_ENTRIES } from './faq.data';
 import { useTranslations, type Locale } from '~/i18n';
+import { rsvpDeadlineVars } from '~/lib/rsvp-deadline';
 
 interface Props {
   locale: Locale;
@@ -28,6 +29,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+const answerVars = rsvpDeadlineVars(locale);
 ---
 
 <section class="faq">
@@ -52,7 +54,7 @@ const t = useTranslations(locale);
               <span id={entry.id}>{t(entry.question)}</span>
             </Fragment>
             {entry.answer.map((paragraph) => (
-              <p>{t(paragraph)}</p>
+              <p>{t(paragraph, answerVars)}</p>
             ))}
           </Accordion>
         ))

@@ -21,5 +21,5 @@ export const WEDDING = {
     partnerTwo: 'Anouk',
   },
 
-  rsvpDeadline: new Date('2027-01-15T23:59:00-04:00'),
+  rsvpDeadline: new Date('2027-02-01T23:59:59-04:00'),
 } as const;

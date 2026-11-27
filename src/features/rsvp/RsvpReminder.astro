@@ -1,0 +1,192 @@
+---
+import Heart from '~/assets/brand/heart.svg';
+import { useTranslations, type Locale } from '~/i18n';
+import { rsvpDeadlineVars, splitAtDeadline } from '~/lib/rsvp-deadline';
+import { WEDDING } from '~/lib/wedding';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const { deadline } = rsvpDeadlineVars(locale);
+const [textBeforeDeadline, textAfterDeadline] = splitAtDeadline(t('rsvp.reminder.text'));
+const deadlineTimestamp = WEDDING.rsvpDeadline.getTime();
+---
+
+<dialog
+  class="rsvp-reminder"
+  data-rsvp-reminder
+  data-deadline={deadlineTimestamp}
+  aria-labelledby="rsvp-reminder-title"
+  aria-describedby="rsvp-reminder-text"
+>
+  <form class="rsvp-reminder__card" method="dialog">
+    <h2 class="rsvp-reminder__title" id="rsvp-reminder-title" tabindex="-1" autofocus>
+      {t('rsvp.reminder.title')}
+    </h2>
+    <Heart class="rsvp-reminder__heart" aria-hidden="true" />
+    <p class="rsvp-reminder__text" id="rsvp-reminder-text">
+      {textBeforeDeadline}<strong class="rsvp-reminder__date">{deadline}</strong>{textAfterDeadline}
+    </p>
+    <button class="rsvp-reminder__ok" type="submit">{t('rsvp.reminder.ok')}</button>
+  </form>
+</dialog>
+
+<script>
+  const STORAGE_KEY = 'wedding.rsvpReminderSeen';
+  const SHOW_DELAY_MS = 1000;
+
+  const reminder = document.querySelector<HTMLDialogElement>('[data-rsvp-reminder]');
+
+  if (reminder && isBeforeDeadline(reminder) && isUnseen()) {
+    reminder.addEventListener('close', rememberSeen, { once: true });
+    reminder.addEventListener('click', (event) => {
+      if (event.target === reminder) reminder.close();
+    });
+    window.setTimeout(() => reminder.showModal(), SHOW_DELAY_MS);
+  }
+
+  function isBeforeDeadline(dialog: HTMLDialogElement): boolean {
+    return Date.now() <= Number(dialog.dataset.deadline);
+  }
+
+  function isUnseen(): boolean {
+    try {
+      return localStorage.getItem(STORAGE_KEY) === null;
+    } catch {
+      return false;
+    }
+  }
+
+  function rememberSeen(): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, 'true');
+    } catch {
+      return;
+    }
+  }
+</script>
+
+<style>
+  .rsvp-reminder {
+    position: fixed;
+    inset: 0;
+    inline-size: fit-content;
+    block-size: fit-content;
+    max-inline-size: none;
+    max-block-size: none;
+    margin: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: visible;
+  }
+
+  .rsvp-reminder__title:focus {
+    outline: none;
+  }
+
+  .rsvp-reminder::backdrop {
+    background: color-mix(in srgb, var(--c-lagoon) 38%, transparent);
+    backdrop-filter: blur(3px);
+  }
+
+  .rsvp-reminder__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    inline-size: min(24rem, calc(100vw - var(--space-10)));
+    max-block-size: calc(100dvh - var(--space-8));
+    overflow-y: auto;
+    padding: var(--space-8) var(--space-6) var(--space-6);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(
+      165deg,
+      var(--c-shell) 0%,
+      color-mix(in srgb, var(--c-shell) 45%, var(--c-foam)) 100%
+    );
+    box-shadow: var(--shadow-card-hover);
+    text-align: center;
+  }
+
+  .rsvp-reminder__title {
+    color: var(--c-lagoon);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  .rsvp-reminder__heart {
+    display: block;
+    inline-size: var(--space-6);
+    block-size: auto;
+    color: var(--c-tide);
+  }
+
+  .rsvp-reminder__text {
+    text-wrap: pretty;
+  }
+
+  .rsvp-reminder__date {
+    font-weight: var(--weight-subtitle);
+    white-space: nowrap;
+  }
+
+  .rsvp-reminder__ok {
+    inline-size: 100%;
+    min-block-size: 44px;
+    margin-block-start: var(--space-2);
+    padding: var(--space-3) var(--space-6);
+    border: 0;
+    border-radius: var(--radius-pill);
+    background: var(--c-tide-deep);
+    color: var(--text-on-accent);
+    font-family: var(--font-subtitle);
+    font-weight: var(--weight-subtitle);
+    font-size: var(--fs-xs);
+    letter-spacing: 0.18em;
+    text-indent: 0.18em;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-cta);
+    cursor: pointer;
+    transition:
+      background var(--dur-fast) var(--ease-out),
+      transform var(--dur-fast) var(--ease-out);
+  }
+
+  .rsvp-reminder__ok:hover {
+    background: var(--c-lagoon);
+  }
+
+  .rsvp-reminder__ok:active {
+    transform: scale(0.96);
+  }
+
+  .rsvp-reminder__ok:focus-visible {
+    outline: 2px solid var(--c-lagoon);
+    outline-offset: 3px;
+  }
+
+  .rsvp-reminder[open] .rsvp-reminder__card {
+    animation: rsvp-reminder-rise var(--dur-base) var(--ease-out);
+  }
+
+  .rsvp-reminder[open]::backdrop {
+    animation: rsvp-reminder-fade var(--dur-base) var(--ease-out);
+  }
+
+  @keyframes rsvp-reminder-rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+  }
+
+  @keyframes rsvp-reminder-fade {
+    from {
+      opacity: 0;
+    }
+  }
+</style>

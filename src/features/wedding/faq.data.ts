@@ -9,6 +9,11 @@ import { type FaqEntry } from './faq.types';
  */
 export const FAQ_ENTRIES: readonly FaqEntry[] = [
   {
+    id: 'rsvp-deadline',
+    question: 'faq.rsvp-deadline.q',
+    answer: ['rsvp.reminder.text'],
+  },
+  {
     id: 'where-to-stay',
     question: 'faq.where-to-stay.q',
     answer: ['faq.where-to-stay.a1', 'faq.where-to-stay.a2', 'faq.where-to-stay.a3'],
@@ -27,11 +32,6 @@ export const FAQ_ENTRIES: readonly FaqEntry[] = [
     id: 'getting-there',
     question: 'faq.getting-there.q',
     answer: ['faq.getting-there.a1', 'faq.getting-there.a2'],
-  },
-  {
-    id: 'rsvp-deadline',
-    question: 'faq.rsvp-deadline.q',
-    answer: ['faq.rsvp-deadline.a1', 'faq.rsvp-deadline.a2'],
   },
   {
     id: 'another-question',

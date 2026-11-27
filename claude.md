@@ -26,6 +26,10 @@ Read me before touching code. The full design rationale lives in
   `Alex & Anouk`, venue and restaurant names).
   Keys built from a template (`` t(`tips.filter.${id}`) ``) are live —
   grep the prefix, not the full key, before deciding one is unused.
+- **Writing or translating copy? Follow `translation.md`.** Dutch leads,
+  Spanish is Dominican, English is British, requests are sentences.
+  Values from code (dates) go in as `{placeholders}`:
+  `t('rsvp.reminder.text', rsvpDeadlineVars(locale))`.
 - **Never hardcode hrefs.** Use `href(locale, 'routeKey')` from
   `src/lib/url.ts`. Adding a new page = one entry in the `ROUTES` map.
 - **Components are dumb, features are smart.** `src/components/ui/*`
@@ -42,6 +46,8 @@ Read me before touching code. The full design rationale lives in
 | Add / edit a tip                     | `src/features/tips/tips.data.ts`          |
 | Add a tip category photo             | `src/assets/our_tips/<category>/`         |
 | Change wedding date / venue          | `src/lib/wedding.ts`                      |
+| Change the RSVP deadline             | `src/lib/wedding.ts` (`rsvpDeadline`)     |
+| Write or translate copy              | `translation.md`                          |
 | Change a button label                | `src/i18n/{nl,es,en}.json`               |
 | Add a new colour                     | `src/styles/tokens.css` (+ `styles.ts`)   |
 | Add a new icon                       | `src/components/ui/Icon.astro` paths map  |
@@ -52,6 +58,10 @@ Read me before touching code. The full design rationale lives in
 - Endpoint is hardcoded in `RsvpForm.astro` — replace
   `https://formspree.io/f/your-id` with the real one before going live.
 - The form is the only JS island on the site; the rest is static HTML.
+- The deadline reminder (`src/features/rsvp/RsvpReminder.astro`) is a
+  native `<dialog>` on every page. It opens once per device, 1s after load,
+  until `WEDDING.rsvpDeadline`. "Seen" is stored in `localStorage` under
+  `wedding.rsvpReminderSeen` — delete that key to see it again.
 
 ## Quality gates
 

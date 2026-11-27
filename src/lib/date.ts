@@ -36,6 +36,16 @@ export function formatLongDate(date: Date, locale: Locale): string {
   }).format(date);
 }
 
+/** "1 februari 2027" / "1 February 2027" / "1 de febrero de 2027". */
+export function formatDayMonthYear(date: Date, locale: Locale): string {
+  return new Intl.DateTimeFormat(LOCALE_BCP47[locale], {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: VENUE_TZ,
+  }).format(date);
+}
+
 export function formatTime(date: Date, locale: Locale): string {
   return new Intl.DateTimeFormat(LOCALE_BCP47[locale], {
     hour: '2-digit',

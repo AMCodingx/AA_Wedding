@@ -1,6 +1,7 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Header from '~/components/layout/Header.astro';
+import RsvpReminder from '~/features/rsvp/RsvpReminder.astro';
 import { useTranslations, type Locale } from '~/i18n';
 import { type RouteKey } from '~/lib/url';
 
@@ -30,4 +31,5 @@ const t = useTranslations(locale);
   <main id="main">
     <slot />
   </main>
+  <RsvpReminder locale={locale} />
 </BaseLayout>
