@@ -27,7 +27,7 @@ export default defineConfig({
       filter: (page) => new URL(page).pathname !== '/',
       i18n: {
         defaultLocale: 'nl',
-        locales: { nl: 'nl-NL', es: 'es-ES', en: 'en-GB' },
+        locales: { nl: 'nl-NL', es: 'es-DO', en: 'en-GB' },
       },
     }),
   ],

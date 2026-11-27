@@ -26,7 +26,7 @@ export const FAQ_ENTRIES: readonly FaqEntry[] = [
   {
     id: 'what-to-wear',
     question: 'faq.what-to-wear.q',
-    answer: ['faq.what-to-wear.a1', 'faq.what-to-wear.a2'],
+    answer: ['faq.what-to-wear.a1', 'faq.what-to-wear.a2', 'faq.what-to-wear.a3'],
   },
   {
     id: 'getting-there',

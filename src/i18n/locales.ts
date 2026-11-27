@@ -11,7 +11,7 @@ export const LOCALE_LABELS: Record<Locale, string> = {
 
 export const LOCALE_BCP47: Record<Locale, string> = {
   nl: 'nl-NL',
-  es: 'es-ES',
+  es: 'es-DO',
   en: 'en-GB',
 };
 
