@@ -62,3 +62,10 @@ British spelling and dates: _1 February 2027_, _colour_, _favourite_.
 
 - Never translated: Alex & Anouk, venue names, restaurant and beach names.
 - Spanish writes _Curazao_. Dutch and English write _Curaçao_.
+
+## 8. Local words stay, no brackets
+
+- Keep the island's own words in every language: _loempia's / loempias_,
+  _coco_, _pastechi_, _Truki Pan_. Spanish writes _loempias_ too.
+- Never add an explanation in brackets, like "loempias (spring rolls)".
+  Brackets only appear where the Dutch text has them.

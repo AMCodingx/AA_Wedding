@@ -20,12 +20,14 @@ import sheteBokaImg from '~/assets/our_tips/tourist_sight/IMG_4842.jpg';
 import amazoniaImg from '~/assets/our_tips/tourist_sight/IMG_5267.jpg';
 import willemstadImg from '~/assets/our_tips/tourist_sight/IMG_4245.jpg';
 import otrobandaMuralsImg from '~/assets/our_tips/tourist_sight/20240208_112152.jpg';
+import tomasitoCaveImg from '~/assets/our_tips/tourist_sight/tomasito-cave.jpg';
+import barquitoImg from '~/assets/our_tips/tourist_sight/barquito.jpg';
 
 import groteKleineKnipImg from '~/assets/our_tips/beach/IMG_4631.jpg';
 import playaPiskadoImg from '~/assets/our_tips/beach/IMG_5423.jpg';
 import pirateBayImg from '~/assets/our_tips/beach/IMG_5319.jpg.jpeg';
 import mamboBeachImg from '~/assets/our_tips/beach/IMG_4691.jpg';
-import janThielBeachImg from '~/assets/our_tips/beach/IMG_4808.jpg';
+import janThielBeachImg from '~/assets/our_tips/beach/jan-thiel-beach.jpg';
 import casAbaoBeachImg from '~/assets/our_tips/beach/IMG_4925.jpg';
 import playaDaaibooiImg from '~/assets/our_tips/beach/IMG_5335.jpg';
 
@@ -202,11 +204,25 @@ export const TIPS: Tip[] = [
     blurb: 'tips.otrobanda-murals.blurb',
   },
   {
+    id: 'tomasito-cave',
+    category: 'sights',
+    name: 'Tomasito Cave',
+    image: tomasitoCaveImg,
+    blurb: 'tips.tomasito-cave.blurb',
+  },
+  {
+    id: 'barquito',
+    category: 'sights',
+    name: 'Barquito',
+    image: barquitoImg,
+    blurb: 'tips.barquito.blurb',
+  },
+  {
     id: 'jan-thiel-beach',
     category: 'beach',
     name: 'Jan Thiel Beach',
     image: janThielBeachImg,
-    focus: '50% 45%',
+    focus: '50% 40%',
     blurb: 'tips.jan-thiel-beach.blurb',
   },
   {
