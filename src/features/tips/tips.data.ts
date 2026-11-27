@@ -10,6 +10,7 @@ import tokoCindyImg from '~/assets/our_tips/food/toko-cindy.jpg';
 import zestBeachCafeImg from '~/assets/our_tips/food/zest-beach-cafe.jpg';
 import plasaBieuImg from '~/assets/our_tips/food/plasa-bieu.jpg';
 import batidos100Img from '~/assets/our_tips/food/batidos-100.jpg';
+import islandBreezeImg from '~/assets/our_tips/food/island-breeze.jpg';
 
 import quadRijdenImg from '~/assets/our_tips/activities/IMG_9751.jpg';
 import sintChristoffelbergImg from '~/assets/our_tips/activities/IMG_3442.jpg';
@@ -159,6 +160,13 @@ export const TIPS: Tip[] = [
     image: batidos100Img,
     focus: '50% 60%',
     blurb: 'tips.batidos-100.blurb',
+  },
+  {
+    id: 'island-breeze',
+    category: 'food',
+    name: 'Island Breeze',
+    image: islandBreezeImg,
+    blurb: 'tips.island-breeze.blurb',
   },
   {
     id: 'ostrich-farm',
