@@ -1,0 +1,51 @@
+---
+import { splitAtPlaceholder, useTranslations, type Locale } from '~/i18n';
+import { contactPhone, whatsappUrl, type ContactKey } from '~/lib/contact';
+
+interface Props {
+  locale: Locale;
+  text: string;
+  contact?: ContactKey;
+}
+
+const { locale, text, contact } = Astro.props;
+const t = useTranslations(locale);
+const mentionsPhone = text.includes('{phone}');
+
+if (mentionsPhone && !contact) {
+  throw new Error(`{phone} needs a contact on its FAQ entry: "${text}"`);
+}
+
+const [textBeforePhone, textAfterPhone] = mentionsPhone
+  ? splitAtPlaceholder(text, 'phone')
+  : [text, ''];
+const phone = mentionsPhone && contact ? contactPhone(contact) : undefined;
+const whatsappLink = phone && {
+  href: whatsappUrl(phone),
+  target: '_blank',
+  rel: 'noopener noreferrer',
+  'aria-label': `${phone} ${t('faq.contact.opensWhatsapp')}`,
+};
+---
+
+<p>
+  {textBeforePhone}{whatsappLink && <a class="answer__phone" {...whatsappLink} set:text={phone} />}{
+    textAfterPhone
+  }
+</p>
+
+<style>
+  .answer__phone {
+    color: var(--c-lagoon);
+    font-weight: var(--weight-subtitle);
+    text-decoration-color: currentColor;
+    text-underline-offset: 0.2em;
+    white-space: nowrap;
+  }
+
+  .answer__phone:focus-visible {
+    outline: 2px solid var(--c-tide);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+</style>

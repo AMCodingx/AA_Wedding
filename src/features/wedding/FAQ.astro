@@ -17,6 +17,7 @@
 // are — the face is Canva-licensed. The rule under each question is the
 // export's hand-drawn stroke, not a border; it tapers, and a border cannot.
 import Accordion from '~/components/ui/Accordion.astro';
+import AnswerParagraph from './AnswerParagraph.astro';
 import Title from '~/assets/faq/faq.svg';
 import Heart from '~/assets/brand/heart.svg';
 import { FAQ_ENTRIES } from './faq.data';
@@ -54,7 +55,11 @@ const answerVars = rsvpDeadlineVars(locale);
               <span id={entry.id}>{t(entry.question)}</span>
             </Fragment>
             {entry.answer.map((paragraph) => (
-              <p>{t(paragraph, answerVars)}</p>
+              <AnswerParagraph
+                locale={locale}
+                text={t(paragraph, answerVars)}
+                contact={entry.contact}
+              />
             ))}
           </Accordion>
         ))

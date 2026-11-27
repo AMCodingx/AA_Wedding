@@ -21,7 +21,8 @@ export const FAQ_ENTRIES: readonly FaqEntry[] = [
   {
     id: 'kids-welcome',
     question: 'faq.kids-welcome.q',
-    answer: ['faq.kids-welcome.a1', 'faq.kids-welcome.a2'],
+    answer: ['faq.kids-welcome.a1', 'faq.kids-welcome.a2', 'faq.kids-welcome.a3'],
+    contact: 'nanny',
   },
   {
     id: 'what-to-wear',
@@ -32,6 +33,18 @@ export const FAQ_ENTRIES: readonly FaqEntry[] = [
     id: 'getting-there',
     question: 'faq.getting-there.q',
     answer: ['faq.getting-there.a1', 'faq.getting-there.a2'],
+  },
+  {
+    id: 'car-rental',
+    question: 'faq.car-rental.q',
+    answer: ['faq.car-rental.a1'],
+    contact: 'carRental',
+  },
+  {
+    id: 'wedding-planner',
+    question: 'faq.wedding-planner.q',
+    answer: ['faq.wedding-planner.a1'],
+    contact: 'planner',
   },
   {
     id: 'another-question',

@@ -25,6 +25,16 @@ function fillPlaceholders(text: string, vars: TVars): string {
   return text.replace(/\{(\w+)\}/g, (placeholder, name: string) => vars[name] ?? placeholder);
 }
 
+/** The text before and after `{name}`, for a value that needs its own markup. Fails the build unless it appears exactly once. */
+export function splitAtPlaceholder(text: string, name: string): readonly [string, string] {
+  const placeholder = `{${name}}`;
+  const parts = text.split(placeholder);
+  if (parts.length !== 2) {
+    throw new Error(`Expected exactly one ${placeholder} in: "${text}"`);
+  }
+  return [parts[0], parts[1]];
+}
+
 /**
  * Bind a locale once and reuse the resulting `t` for an entire page.
  * Astro components grab this in their frontmatter.

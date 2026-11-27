@@ -22,4 +22,11 @@ export const WEDDING = {
   },
 
   rsvpDeadline: new Date('2027-02-01T23:59:59-04:00'),
+
+  /** Shown in the FAQ as WhatsApp links. Names live in the copy. */
+  contacts: {
+    planner: { phone: '+599 9 671 8401' },
+    nanny: { phone: '+599 9 675 2181' },
+    carRental: { phone: '+599 9 678 0302' },
+  },
 } as const;

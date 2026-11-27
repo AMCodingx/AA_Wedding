@@ -47,13 +47,16 @@ Not Spain Spanish.
 
 British spelling and dates: _1 February 2027_, _colour_, _favourite_.
 
-## 6. Dates
+## 6. Dates and phone numbers
 
-- Written out with the month name, in each language's own format:
+- Dates are written out with the month name, in each language's own format:
   _1 februari 2027_ · _1 February 2027_ · _1 de febrero de 2027_.
-- A date that comes from `src/lib/wedding.ts` is never typed into the copy.
-  Use a placeholder such as `{deadline}` and pass the value from code, so the
-  date lives in one place.
+- A date or phone number that comes from `src/lib/wedding.ts` is never typed
+  into the copy. Use a placeholder and pass the value from code, so it lives
+  in one place:
+  - `{deadline}` for the RSVP deadline.
+  - `{phone}` in an FAQ answer. The entry's `contact` in `faq.data.ts` picks
+    the number, and it shows as a WhatsApp link.
 
 ## 7. Names stay as they are
 

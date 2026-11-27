@@ -28,7 +28,7 @@ Read me before touching code. The full design rationale lives in
   grep the prefix, not the full key, before deciding one is unused.
 - **Writing or translating copy? Follow `translation.md`.** Dutch leads,
   Spanish is Dominican, English is British, requests are sentences.
-  Values from code (dates) go in as `{placeholders}`:
+  Values from code (dates, phone numbers) go in as `{placeholders}`:
   `t('rsvp.reminder.text', rsvpDeadlineVars(locale))`.
 - **Never hardcode hrefs.** Use `href(locale, 'routeKey')` from
   `src/lib/url.ts`. Adding a new page = one entry in the `ROUTES` map.
@@ -47,6 +47,7 @@ Read me before touching code. The full design rationale lives in
 | Add a tip category photo             | `src/assets/our_tips/<category>/`         |
 | Change wedding date / venue          | `src/lib/wedding.ts`                      |
 | Change the RSVP deadline             | `src/lib/wedding.ts` (`rsvpDeadline`)     |
+| Change a planner/nanny/car number    | `src/lib/wedding.ts` (`contacts`)         |
 | Write or translate copy              | `translation.md`                          |
 | Change a button label                | `src/i18n/{nl,es,en}.json`               |
 | Add a new colour                     | `src/styles/tokens.css` (+ `styles.ts`)   |

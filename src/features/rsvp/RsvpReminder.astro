@@ -1,7 +1,7 @@
 ---
 import Heart from '~/assets/brand/heart.svg';
-import { useTranslations, type Locale } from '~/i18n';
-import { rsvpDeadlineVars, splitAtDeadline } from '~/lib/rsvp-deadline';
+import { splitAtPlaceholder, useTranslations, type Locale } from '~/i18n';
+import { rsvpDeadlineVars } from '~/lib/rsvp-deadline';
 import { WEDDING } from '~/lib/wedding';
 
 interface Props {
@@ -11,7 +11,10 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 const { deadline } = rsvpDeadlineVars(locale);
-const [textBeforeDeadline, textAfterDeadline] = splitAtDeadline(t('rsvp.reminder.text'));
+const [textBeforeDeadline, textAfterDeadline] = splitAtPlaceholder(
+  t('rsvp.reminder.text'),
+  'deadline',
+);
 const deadlineTimestamp = WEDDING.rsvpDeadline.getTime();
 ---
 
