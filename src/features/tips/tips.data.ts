@@ -7,6 +7,9 @@ import tokTokImg from '~/assets/our_tips/food/IMG_5404.jpg';
 import fortNassauImg from '~/assets/our_tips/food/IMG_5451.jpg';
 import tokoMoreAndMoreImg from '~/assets/our_tips/food/toko-more-and-more.jpg';
 import tokoCindyImg from '~/assets/our_tips/food/toko-cindy.jpg';
+import zestBeachCafeImg from '~/assets/our_tips/food/zest-beach-cafe.jpg';
+import plasaBieuImg from '~/assets/our_tips/food/plasa-bieu.jpg';
+import batidos100Img from '~/assets/our_tips/food/batidos-100.jpg';
 
 import quadRijdenImg from '~/assets/our_tips/activities/IMG_9751.jpg';
 import sintChristoffelbergImg from '~/assets/our_tips/activities/IMG_3442.jpg';
@@ -22,6 +25,8 @@ import willemstadImg from '~/assets/our_tips/tourist_sight/IMG_4245.jpg';
 import otrobandaMuralsImg from '~/assets/our_tips/tourist_sight/20240208_112152.jpg';
 import tomasitoCaveImg from '~/assets/our_tips/tourist_sight/tomasito-cave.jpg';
 import barquitoImg from '~/assets/our_tips/tourist_sight/barquito.jpg';
+import renaissanceRifFortImg from '~/assets/our_tips/tourist_sight/renaissance-rif-fort.jpg';
+import museoTulaImg from '~/assets/our_tips/tourist_sight/museo-tula.jpg';
 
 import groteKleineKnipImg from '~/assets/our_tips/beach/IMG_4631.jpg';
 import playaPiskadoImg from '~/assets/our_tips/beach/IMG_5423.jpg';
@@ -133,6 +138,28 @@ export const TIPS: Tip[] = [
     blurb: 'tips.toko-cindy.blurb',
   },
   {
+    id: 'zest-beach-cafe',
+    category: 'food',
+    name: 'Zest Beach Cafe',
+    image: zestBeachCafeImg,
+    blurb: 'tips.zest-beach-cafe.blurb',
+  },
+  {
+    id: 'plasa-bieu',
+    category: 'food',
+    name: 'Plasa Bieu',
+    image: plasaBieuImg,
+    blurb: 'tips.plasa-bieu.blurb',
+  },
+  {
+    id: 'batidos-100',
+    category: 'food',
+    name: "100% Batido's",
+    image: batidos100Img,
+    focus: '50% 60%',
+    blurb: 'tips.batidos-100.blurb',
+  },
+  {
     id: 'ostrich-farm',
     category: 'sights',
     name: 'Ostrich Farm',
@@ -218,6 +245,22 @@ export const TIPS: Tip[] = [
     name: 'Barquito',
     image: barquitoImg,
     blurb: 'tips.barquito.blurb',
+  },
+  {
+    id: 'renaissance-rif-fort',
+    category: 'sights',
+    name: 'Renaissance Mall & Rif Fort',
+    image: renaissanceRifFortImg,
+    focus: '50% 70%',
+    blurb: 'tips.renaissance-rif-fort.blurb',
+  },
+  {
+    id: 'museo-tula',
+    category: 'sights',
+    name: 'Museo Tula',
+    image: museoTulaImg,
+    focus: '50% 45%',
+    blurb: 'tips.museo-tula.blurb',
   },
   {
     id: 'jan-thiel-beach',
