@@ -14,6 +14,7 @@ import islandBreezeImg from '~/assets/our_tips/food/island-breeze.jpg';
 
 import quadRijdenImg from '~/assets/our_tips/activities/IMG_9751.jpg';
 import sintChristoffelbergImg from '~/assets/our_tips/activities/IMG_3442.jpg';
+import seuImg from '~/assets/our_tips/activities/seu.jpg';
 import kleinCuracaoImg from '~/assets/our_tips/beach/20221228_100749.jpg';
 
 import sintWillibrordusImg from '~/assets/our_tips/tourist_sight/IMG_9797.jpg';
@@ -226,6 +227,14 @@ export const TIPS: Tip[] = [
     name: 'Sint Christoffelberg',
     image: sintChristoffelbergImg,
     blurb: 'tips.sint-christoffelberg.blurb',
+  },
+  {
+    id: 'seu',
+    category: 'activities',
+    name: 'Seú',
+    image: seuImg,
+    focus: '50% 45%',
+    blurb: 'tips.seu.blurb',
   },
   {
     id: 'willemstad',
